@@ -18,11 +18,6 @@ jobs:
     name: generate-ci
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Golang
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
-
       - name: Install prerequisites
         env:
           YQ_VERSION: 3.4.0
@@ -33,6 +28,11 @@ jobs:
 
       - name: Checkout openshift-pipelines/hack
         uses: actions/checkout@v4
+        
+      - name: Setup Golang
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
 
       - name: Checkout openshift/release
         uses: actions/checkout@v4
