@@ -211,7 +211,7 @@ func GenerateReleaseBuildConfigurationFromConfig(repo *Repository) ([]ReleaseBui
 					"*": cioperatorapi.ResourceRequirements{
 						Limits: cioperatorapi.ResourceList{
 							"cpu":    "100m",
-							"memory": "200Mi",
+							"memory": "500Mi",
 						},
 						Requests: cioperatorapi.ResourceList{
 							"memory": "4Gi",
