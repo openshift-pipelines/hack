@@ -1,6 +1,7 @@
 package prowgen
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -18,6 +19,7 @@ import (
 
 type Repository struct {
 	Repo               string             `json:"repository" yaml:"repository"`
+	Branches           []string           `json:"branches" yaml:"branches"`
 	OpenShift          OpenShift          `json:"openshift" yaml:"openshift"`
 	OpenShiftPipelines OpenShiftPipelines `json:"openshift-pipelines" yaml:"openshift-pipelines"`
 	E2E                E2E                `json:"e2e" yaml:"e2e"`
@@ -38,61 +40,145 @@ type OpenShiftPipelines struct {
 type ReleaseBuildconfiguration struct {
 	cioperatorapi.ReleaseBuildConfiguration
 
-	Path string
+	Filename string
 }
 
-func GenerateReleaseBuildConfigurationFromConfig(repo *Repository) (*ReleaseBuildconfiguration, error) {
+func Main() {
+	ctx := context.TODO()
+
+	inputConfig := flag.String("config", filepath.Join("config", "repository.yaml"), "Specify repository config")
+	outConfig := flag.String("output", filepath.Join("repos", "openshift", "release", "ci-operator", "config"), "Specify repositories config")
+	remote := flag.String("remote", "", "openshift/release remote fork (example: git@github.com:pierDipi/release.git)")
+	branch := flag.String("branch", "sync-openshift-pipelines-ci", "Branch for remote fork")
+	flag.Parse()
+
+	log.Println(*inputConfig, *outConfig, *remote, *branch)
+
+	in, err := os.ReadFile(*inputConfig)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	repo := &Repository{}
+	if err := yaml.UnmarshalStrict(in, repo); err != nil {
+		log.Fatalln("Unmarshal input config", err)
+	}
+	if len(repo.Branches) == 0 {
+		repo.Branches = []string{"main"}
+	}
+
+	// Generate configurations
+	cfgs, err := GenerateReleaseBuildConfigurationFromConfig(repo)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Clone openshift/release
+	if err := InitializeOpenShiftReleaseRepository(ctx, "openshift/release", repo, outConfig); err != nil {
+		log.Fatalln(err)
+	}
+	// Remove existing configuration
+	if err := DeleteReleaseConfiguration("openshift/release", repo, *outConfig); err != nil {
+		log.Fatalln(err)
+	}
+
+	// Add new configuration
+	if err := SaveReleaseBuildConfiguration(outConfig, cfgs); err != nil {
+		log.Fatalln(err)
+	}
+
+	// Run "job generation" (make make ci-operator-config jobs)
+}
+
+func filenameFromRepoAndBranch(repo *Repository, branch string) string {
+	return fmt.Sprintf("openshift-pipelines/%s/openshift-pipelines-%s-%s.yaml", repo.Repo, repo.Repo, branch)
+}
+
+func DeleteReleaseConfiguration(openShiftRelease string, repo *Repository, outConfig string) error {
+	paths := []string{}
+	for _, b := range repo.Branches {
+		paths = append(paths, filepath.Join(outConfig, filenameFromRepoAndBranch(repo, b)))
+	}
+	for _, p := range paths {
+		log.Println("Remove", p)
+		if err := os.Remove(p); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func GenerateReleaseBuildConfigurationFromConfig(repo *Repository) ([]ReleaseBuildconfiguration, error) {
 	tests, err := generateTestFromConfig(repo)
 	if err != nil {
 		return nil, err
 	}
-	return &ReleaseBuildconfiguration{
-		ReleaseBuildConfiguration: cioperatorapi.ReleaseBuildConfiguration{
-			InputConfiguration: cioperatorapi.InputConfiguration{
-				BaseImages: map[string]cioperatorapi.ImageStreamTagReference{
-					fmt.Sprintf("openshift_release_golang-%s", repo.GolangVersion): {
-						Name:      "release",
-						Namespace: "openshift",
-						Tag:       fmt.Sprintf("golang-%s", repo.GolangVersion),
-					},
-				},
-				BuildRootImage: &cioperatorapi.BuildRootImageConfiguration{
-					ImageStreamTagReference: &cioperatorapi.ImageStreamTagReference{
-						Name:      "builder",
-						Namespace: "ocp",
-						Tag:       fmt.Sprintf("rhel-8-golang-%s-openshift-%s", repo.GolangVersion, repo.OpenShift.Version),
-					},
-				},
-			},
-			Images: []cioperatorapi.ProjectDirectoryImageBuildStepConfiguration{{
-				ProjectDirectoryImageBuildInputs: cioperatorapi.ProjectDirectoryImageBuildInputs{
-					Inputs: map[string]cioperatorapi.ImageBuildInputs{
+	configs := []ReleaseBuildconfiguration{}
+	for _, b := range repo.Branches {
+		configs = append(configs, ReleaseBuildconfiguration{
+			Filename: filenameFromRepoAndBranch(repo, b),
+			ReleaseBuildConfiguration: cioperatorapi.ReleaseBuildConfiguration{
+				InputConfiguration: cioperatorapi.InputConfiguration{
+					BaseImages: map[string]cioperatorapi.ImageStreamTagReference{
 						fmt.Sprintf("openshift_release_golang-%s", repo.GolangVersion): {
-							As: []string{fmt.Sprintf("registry.ci.openshift.org/openshift/release:golang-%s", repo.GolangVersion)},
+							Name:      "release",
+							Namespace: "openshift",
+							Tag:       fmt.Sprintf("golang-%s", repo.GolangVersion),
+						},
+					},
+					BuildRootImage: &cioperatorapi.BuildRootImageConfiguration{
+						ImageStreamTagReference: &cioperatorapi.ImageStreamTagReference{
+							Name:      "builder",
+							Namespace: "ocp",
+							Tag:       fmt.Sprintf("rhel-8-golang-%s-openshift-%s", repo.GolangVersion, repo.OpenShift.Version),
+						},
+					},
+					Releases: map[string]cioperatorapi.UnresolvedRelease{
+						"initial": {
+							Integration: &cioperatorapi.Integration{
+								Name:      repo.OpenShift.Version,
+								Namespace: "ocp",
+							},
+						},
+						"latest": {
+							Integration: &cioperatorapi.Integration{
+								Name:               repo.OpenShift.Version,
+								IncludeBuiltImages: true,
+								Namespace:          "ocp",
+							},
 						},
 					},
 				},
-				To: cioperatorapi.PipelineImageStreamTagReference("base-tests"),
-			}},
-			Resources: cioperatorapi.ResourceConfiguration{
-				"*": cioperatorapi.ResourceRequirements{
-					Limits: cioperatorapi.ResourceList{
-						"cpu":    "100m",
-						"memory": "200Mi",
+				Images: []cioperatorapi.ProjectDirectoryImageBuildStepConfiguration{{
+					ProjectDirectoryImageBuildInputs: cioperatorapi.ProjectDirectoryImageBuildInputs{
+						Inputs: map[string]cioperatorapi.ImageBuildInputs{
+							fmt.Sprintf("openshift_release_golang-%s", repo.GolangVersion): {
+								As: []string{fmt.Sprintf("registry.ci.openshift.org/openshift/release:golang-%s", repo.GolangVersion)},
+							},
+						},
 					},
-					Requests: cioperatorapi.ResourceList{
-						"memory": "4Gi",
+					To: cioperatorapi.PipelineImageStreamTagReference("base-tests"),
+				}},
+				Resources: cioperatorapi.ResourceConfiguration{
+					"*": cioperatorapi.ResourceRequirements{
+						Limits: cioperatorapi.ResourceList{
+							"cpu":    "100m",
+							"memory": "200Mi",
+						},
+						Requests: cioperatorapi.ResourceList{
+							"memory": "4Gi",
+						},
 					},
 				},
+				Tests: tests,
+				Metadata: cioperatorapi.Metadata{
+					Org:    "openshift-pipelines",
+					Repo:   repo.Repo,
+					Branch: b,
+				},
 			},
-			Tests: tests,
-			Metadata: cioperatorapi.Metadata{
-				Org:    "openshift-pipelines",
-				Repo:   repo.Repo,
-				Branch: "main",
-			},
-		},
-	}, nil
+		})
+	}
+	return configs, nil
 }
 
 func generateTestFromConfig(repo *Repository) ([]cioperatorapi.TestStepConfiguration, error) {
@@ -216,53 +302,36 @@ func stringPtr(s string) *string {
 	return &s
 }
 
-func SaveReleaseBuildConfiguration(outConfig *string, cfg ReleaseBuildconfiguration) error {
-	dir := filepath.Join(*outConfig, filepath.Dir(cfg.Path))
+func SaveReleaseBuildConfiguration(outConfig *string, cfgs []ReleaseBuildconfiguration) error {
+	for _, cfg := range cfgs {
+		dir := filepath.Dir(filepath.Join(*outConfig, cfg.Filename))
 
-	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return err
-	}
-	// Going directly from struct to YAML produces unexpected configs (due to missing YAML tags),
-	// so we produce JSON and then convert it to YAML.
-	out, err := json.Marshal(cfg.ReleaseBuildConfiguration)
-	if err != nil {
-		return err
-	}
-	out, err = gyaml.JSONToYAML(out)
-	if err != nil {
-		return err
-	}
-	if err := os.WriteFile(filepath.Join(*outConfig, cfg.Path), out, os.ModePerm); err != nil {
-		return err
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+			return err
+		}
+		// Going directly from struct to YAML produces unexpected configs (due to missing YAML tags),
+		// so we produce JSON and then convert it to YAML.
+		out, err := json.Marshal(cfg.ReleaseBuildConfiguration)
+		if err != nil {
+			return err
+		}
+		out, err = gyaml.JSONToYAML(out)
+		if err != nil {
+			return err
+		}
+		if err := os.WriteFile(filepath.Join(*outConfig, cfg.Filename), out, os.ModePerm); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
-func Main() {
-	inputConfig := flag.String("config", filepath.Join("config", "repositories.yaml"), "Specify repositories config")
-	outConfig := flag.String("output", filepath.Join("openshift", "release", "ci-operator", "config"), "Specify repositories config")
-	remote := flag.String("remote", "", "openshift/release remote fork (example: git@github.com:pierDipi/release.git)")
-	branch := flag.String("branch", "sync-serverless-ci", "Branch for remote fork")
-	flag.Parse()
-
-	log.Println(*inputConfig, *outConfig, *remote, *branch)
-
-	in, err := os.ReadFile(*inputConfig)
-	if err != nil {
-		log.Fatalln(err)
+func InitializeOpenShiftReleaseRepository(ctx context.Context, openShiftRelease string, inConfig *Repository, outputConfig *string) error {
+	if err := GitMirror(ctx, openShiftRelease); err != nil {
+		return err
 	}
-	repo := &Repository{}
-	if err := yaml.UnmarshalStrict(in, repo); err != nil {
-		log.Fatalln("Unmarshal input config", err)
+	if err := GitCheckout(ctx, openShiftRelease, "master"); err != nil {
+		return err
 	}
-	cfg, err := GenerateReleaseBuildConfigurationFromConfig(repo)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	// FIXME: put the real file
-	cfg.Path = filepath.Join("openshift-pipelines", repo.Repo, "foo.yaml")
-	if err := SaveReleaseBuildConfiguration(outConfig, *cfg); err != nil {
-		log.Fatalln(err)
-	}
-	log.Printf("config: %+v\n", cfg)
+	return nil
 }

@@ -1,4 +1,4 @@
-repository: task-containers
+repository: task-git
 golang: 1.20
 openshift:
   version: 4.14
