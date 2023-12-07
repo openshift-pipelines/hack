@@ -1,0 +1,66 @@
+---
+name: Generate CI config
+
+on:
+  push:
+    branches:
+      - 'main'
+  # schedule:
+  #   - cron: "0 6 * * *" # Daily at 06:00.
+  workflow_dispatch: # Manual workflow trigger
+
+jobs:
+  generate-ci:
+    name: generate-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20.x
+
+      - name: Install prerequisites
+        env:
+          YQ_VERSION: 3.4.0
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+          sudo mv /usr/bin/yq /usr/local/bin/yq
+
+      - name: Checkout openshift-pipelines/hack
+        uses: actions/checkout@v3
+        with:
+          path: ./src/github.com/openshift-pipelines/hack
+
+      - name: Checkout openshift/release
+        uses: actions/checkout@v3
+        with:
+          branch: 'master'
+          repository: 'openshift/release'
+          path: ./src/github.com/openshift-pipelines/hack/openshift/release
+
+      - name: Configure Git user
+        run: |
+          git config --global user.email "pipelines-bot@redhat.com"
+          git config --global user.name "OpenShift Pipelines"
+
+      - name: Generate CI
+        working-directory: ./src/github.com/openshift-pipelines/hack
+        # Use master, see https://github.com/peter-evans/create-pull-request/issues/2108
+        run: make generate-openshift ARGS=--branch=master
+
+      # Check if using "gh" would be better.
+      - name: Create Pull Request
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref_name == 'main'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          path: ./src/github.com/openshift-pipelines/hack/openshift/release
+          base: master
+          branch: sync-pipelines-ci
+          title: "Sync OpenShift Pipelines CI"
+          commit-message: "Sync OpenShift Pipelines CI"
+          push-to-fork: serverless-qe/release
+          delete-branch: true
+          body: |
+            Sync OpenShift Pipelines CI using openshift-pipelines/hack.
