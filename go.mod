@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/openshift/ci-tools v0.0.0-20231129005518-2ec9d62902e9
-	golang.org/x/sync v0.2.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/test-infra v0.0.0-20230928115035-61f80eaf9972
 )
@@ -101,6 +100,7 @@ require (
 	golang.org/x/exp v0.0.0-20230307190834-24139beb5833 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.8.0 // indirect
+	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
