@@ -50,6 +50,7 @@ func Main() {
 	outConfig := flag.String("output", filepath.Join("repos", "openshift", "release", "ci-operator", "config"), "Specify repositories config")
 	remote := flag.String("remote", "", "openshift/release remote fork (example: git@github.com:pierDipi/release.git)")
 	branch := flag.String("branch", "sync-openshift-pipelines-ci", "Branch for remote fork")
+	podman := flag.Bool("podman", false, "Use podman instead of docker")
 	flag.Parse()
 
 	log.Println(*inputConfig, *outConfig, *remote, *branch)
@@ -87,10 +88,56 @@ func Main() {
 	}
 
 	// Run "job generation" (make make ci-operator-config jobs)
+	if err := RunOpenShiftReleaseGenerator(ctx, repositoryDirectory("openshift/release"), *podman); err != nil {
+		log.Fatalln(err)
+	}
+
+	// Commit and push
+	if err := PushBranch(ctx, repositoryDirectory("openshift/release"), remote, *branch, *inputConfig); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func PushBranch(ctx context.Context, release string, remote *string, branch string, config string) error {
+	// Ignore error since remote and branch might be already there
+	_, _ = run(ctx, release, "git", "checkout", "-b", branch)
+	_, _ = run(ctx, release, "git", "checkout", branch)
+
+	if _, err := run(ctx, release, "git", "add", "."); err != nil {
+		return err
+	}
+	if _, err := run(ctx, release, "git", "commit", "-m", "Sync OpenShift Pipelines CI "+config); err != nil {
+		// Ignore error since we could have nothing to commit
+		log.Println("Ignored error", err)
+	}
+
+	if remote == nil || *remote == "" {
+		return nil
+	}
+
+	log.Println("Pushing branch", branch, "to", *remote)
+
+	_, _ = run(ctx, release, "git", "remote", "add", "fork", *remote)
+	if _, err := run(ctx, release, "git", "push", "fork", fmt.Sprintf("%s:%s", branch, branch), "-f"); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func filenameFromRepoAndBranch(repo *Repository, branch string) string {
 	return fmt.Sprintf("openshift-pipelines/%s/openshift-pipelines-%s-%s.yaml", repo.Repo, repo.Repo, branch)
+}
+
+func RunOpenShiftReleaseGenerator(ctx context.Context, openShiftRelease string, usePodman bool) error {
+	containerEngine := "docker"
+	if usePodman {
+		containerEngine = "podman"
+	}
+	if _, err := run(ctx, openShiftRelease, "make", fmt.Sprintf("CONTAINER_ENGINE=%s", containerEngine), "ci-operator-config", "jobs"); err != nil {
+		return err
+	}
+	return nil
 }
 
 func DeleteReleaseConfiguration(openShiftRelease string, repo *Repository, outConfig string) error {
