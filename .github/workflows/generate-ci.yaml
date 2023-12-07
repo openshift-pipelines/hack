@@ -28,10 +28,10 @@ jobs:
           sudo mv /usr/bin/yq /usr/local/bin/yq
 
       - name: Checkout openshift-pipelines/hack
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout openshift/release
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           branch: 'master'
           repository: 'openshift/release'
