@@ -1,0 +1,12 @@
+repository: task-git
+golang: 1.20
+openshift:
+  version: 4.14
+openshift-pipelines:
+  versions:
+  - "1.11"
+  - "1.12"
+  - "1.13"
+  - "nightly"
+e2e:
+  workflow: "tasks"
