@@ -17,6 +17,8 @@ import (
 	prowv1 "k8s.io/test-infra/prow/apis/prowjobs/v1"
 )
 
+var skipIfOnlyChanged = "^(LICENSE|OWNERS|README\.md|\.gitignore|\.goreleaser\.yaml)$|^docs/|^subsystem/|^examples/\^.github/"
+
 type Repository struct {
 	Repo               string             `json:"repository" yaml:"repository"`
 	Branches           []string           `json:"branches" yaml:"branches"`
@@ -257,6 +259,7 @@ func generateTestFromConfig(repo *Repository) ([]cioperatorapi.TestStepConfigura
 					}},
 					Workflow: stringPtr("generic-claim"),
 				},
+				SkipIfOnlyChanged: skipIfOnlyChanged,
 			})
 		}
 	default:
