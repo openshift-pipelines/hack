@@ -21,6 +21,7 @@ var skipIfOnlyChanged = `^(LICENSE|OWNERS|README\.md|\.gitignore|\.goreleaser\.y
 
 type Repository struct {
 	Repo               string             `json:"repository" yaml:"repository"`
+	BaseDockerfile     string             `json:"dockerfile" yaml:"dockerfile"`
 	Branches           []string           `json:"branches" yaml:"branches"`
 	OpenShift          OpenShift          `json:"openshift" yaml:"openshift"`
 	OpenShiftPipelines OpenShiftPipelines `json:"openshift-pipelines" yaml:"openshift-pipelines"`
@@ -157,6 +158,10 @@ func DeleteReleaseConfiguration(openShiftRelease string, repo *Repository, outCo
 }
 
 func GenerateReleaseBuildConfigurationFromConfig(repo *Repository) ([]ReleaseBuildconfiguration, error) {
+	dockerfilepath := repo.BaseDockerfile
+	if dockerfilepath == "" {
+		dockerfilepath = "ci/ci.Dockerfile"
+	}
 	tests, err := generateTestFromConfig(repo)
 	if err != nil {
 		return nil, err
@@ -199,6 +204,7 @@ func GenerateReleaseBuildConfigurationFromConfig(repo *Repository) ([]ReleaseBui
 				},
 				Images: []cioperatorapi.ProjectDirectoryImageBuildStepConfiguration{{
 					ProjectDirectoryImageBuildInputs: cioperatorapi.ProjectDirectoryImageBuildInputs{
+						DockerfilePath: dockerfilepath,
 						Inputs: map[string]cioperatorapi.ImageBuildInputs{
 							fmt.Sprintf("openshift_release_golang-%s", repo.GolangVersion): {
 								As: []string{fmt.Sprintf("registry.ci.openshift.org/openshift/release:golang-%s", repo.GolangVersion)},
