@@ -4,7 +4,6 @@ openshift:
   version: 4.14
 openshift-pipelines:
   versions:
-  - "1.11"
   - "1.12"
   - "1.13"
   - "nightly"
