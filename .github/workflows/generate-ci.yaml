@@ -53,7 +53,7 @@ jobs:
       # Check if using "gh" would be better.
       - name: Create Pull Request
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref_name == 'main'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
           path: ./repos/openshift/release
