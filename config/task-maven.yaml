@@ -4,8 +4,8 @@ openshift:
   version: 4.14
 openshift-pipelines:
   versions:
-  - "1.12"
   - "1.13"
+  - "1.14"
   - "nightly"
 e2e:
   workflow: "tasks"
