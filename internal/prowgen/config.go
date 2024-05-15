@@ -326,8 +326,8 @@ func getClusterClaim(ocpVersion string) *cioperatorapi.ClusterClaim {
 	return &cioperatorapi.ClusterClaim{
 		Architecture: "amd64",
 		As:           "latest",
-		Cloud:        cioperatorapi.CloudAWS,
-		Owner:        "openshift-ci",
+		Cloud:        "psi-pipelines",
+		Owner:        "pipelines",
 		Product:      cioperatorapi.ReleaseProductOCP,
 		Timeout:      &prowv1.Duration{time.Duration(60) * time.Minute},
 		Version:      ocpVersion,
