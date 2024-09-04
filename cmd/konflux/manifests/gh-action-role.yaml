@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: tekton-ecosystem-tenant
+  name: gh-action-runner
+rules:
+- apiGroups:
+  - appstudio.redhat.com
+  resources:
+  - applications
+  - components
+  - imagerepositories
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - create
