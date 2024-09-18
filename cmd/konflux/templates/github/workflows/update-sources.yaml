@@ -44,7 +44,7 @@ jobs:
         [bot] Update from {{.Upstream}} to ${NEW_COMMIT}
 
             $ git diff --stat ${NEW_COMMIT}..${OLD_COMMIT}
-            $(cat /tmp/diff.txt)
+        $(cat /tmp/diff.txt | sed 's/^/    /')
         
         https://github.com/{{.Upstream}}/compare/${NEW_COMMIT}..${OLD_COMMIT}
         EOF
