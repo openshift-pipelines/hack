@@ -28,12 +28,13 @@ jobs:
         git config user.email github-actions@github.com
         git checkout -b actions/update/sources-main
         pushd upstream
-        echo Previous commit: $(cat ../head)
-        git show --stat HEAD
-        echo New commit: $(git rev-parse HEAD)
-        git show --stat $(cat ../head) || true
-        git diff --stat $(git rev-parse HEAD)..$(cat ../head) > /tmp/diff.txt || true
-        cp ../head ../head.old
+        OLD_COMMIT=$(cat ../head)
+        NEW_COMMIT=$(git rev-parse HEAD)
+        echo Previous commit: ${OLD_COMMIT}
+        git show --stat ${OLD_COMMIT}
+        echo New commit: ${NEW_COMMIT}
+        git show --stat ${NEW_COMMIT}
+        git diff --stat ${NEW_COMMIT}..${OLD_COMMIT} > /tmp/diff.txt
         git rev-parse HEAD > ../head
         popd
         rm -rf upstream/.git
@@ -44,7 +45,7 @@ jobs:
 
         $(cat /tmp/diff.txt)
         
-        https://github.com/{{.Repository}}/compare/$(cat ../head)..$(cat ../head.old)
+        https://github.com/{{.Upstream}}/compare/${NEW_COMMIT}..${OLD_COMMIT}
         EOF
         
         git push -f origin actions/update/sources-main
