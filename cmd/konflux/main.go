@@ -17,11 +17,12 @@ import (
 var templateFS embed.FS
 
 type Application struct {
-	Name       string
-	Repository string
-	Upstream   string
-	Branch     string
-	Components []string
+	Name           string
+	Repository     string
+	Upstream       string
+	Branch         string
+	UpstreamBranch string
+	Components     []string
 }
 
 type Component struct {
@@ -35,6 +36,12 @@ type Config struct {
 	Repository string
 	Upstream   string
 	Components []string
+	Branches   []Branch
+}
+
+type Branch struct {
+	Version  string
+	Upstream string
 }
 
 func main() {
@@ -52,31 +59,50 @@ func main() {
 	}
 
 	app := Application{
-		Name:       c.Repository,
-		Repository: path.Join("openshift-pipelines", c.Repository),
-		Upstream:   c.Upstream,
-		Components: c.Components,
-		Branch:     "main",
+		Name:           c.Repository,
+		Repository:     path.Join("openshift-pipelines", c.Repository),
+		Upstream:       c.Upstream,
+		Components:     c.Components,
+		Branch:         "main",
+		UpstreamBranch: "main",
 	}
 
-	// FIXME: support release branches next for konflux
-	if err := generateKonflux(app, "main", filepath.Join(*target, ".konflux")); err != nil {
+	log.Println("Generate configurations for main branch")
+	if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
 		log.Fatalln(err)
 	}
 	if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
 		log.Fatalln(err)
 	}
+	for _, branch := range c.Branches {
+		log.Printf("Generate configurations for %s branch\n", branch.Version)
+
+		app := Application{
+			Name:           c.Repository,
+			Repository:     path.Join("openshift-pipelines", c.Repository),
+			Upstream:       c.Upstream,
+			Components:     c.Components,
+			Branch:         fmt.Sprintf("release-v%s.x", branch.Version),
+			UpstreamBranch: branch.Upstream,
+		}
+		if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
+			log.Fatalln(err)
+		}
+		if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
+			log.Fatalln(err)
+		}
+	}
 }
 
-func generateKonflux(application Application, branch, target string) error {
+func generateKonflux(application Application, target string) error {
 	log.Printf("Generate konflux manifest in %s\n", target)
-	if err := os.MkdirAll(filepath.Join(target, branch), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(target, application.Branch), 0o755); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, branch, "application.yaml")); err != nil {
+	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, application.Branch, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, branch, "tests.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Branch, "tests.yaml")); err != nil {
 		return err
 	}
 	for _, c := range application.Components {
@@ -84,8 +110,8 @@ func generateKonflux(application Application, branch, target string) error {
 			Name:        c,
 			Application: application.Name,
 			Repository:  application.Repository,
-			Branch:      "main",
-		}, filepath.Join(target, branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
+			Branch:      application.Branch,
+		}, filepath.Join(target, application.Branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
 	}
@@ -97,13 +123,10 @@ func generateGitHub(application Application, target string) error {
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", "update-sources.yaml")); err != nil {
+	filename := fmt.Sprintf("update-sources.%s.yaml", application.Branch)
+	if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
 		return err
 	}
-	// FIXME: figure out how to map release branch with upstream release branches
-	// if err := generateFileFromTemplate("update-sources-branches.yaml", application, filepath.Join(target, "workflows", "update-sources-branches.yaml")); err != nil {
-	// 	return err
-	// }
 	return nil
 }
 

@@ -9,3 +9,6 @@ components:
 - sidecarlogresults
 - webhook
 - workingdirinit
+branches:
+- version: 1.16
+  upstream: release-v0.62.x

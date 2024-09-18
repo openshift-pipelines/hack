@@ -1,4 +1,4 @@
-name: update-sources
+name: update-sources-{{.Branch}}
 
 on:
   workflow_dispatch: {}
@@ -21,12 +21,15 @@ jobs:
       run: |
         rm -fR upstream
         git clone https://github.com/{{.Upstream}} upstream
+        pushd upstream
+        git checkout -b {{.UpstreamBranch}} origin/{{.UpstreamBranch}}
+        popd
 
     - name: Commit new changes
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git checkout -b actions/update/sources-main
+        git checkout -b actions/update/sources-{{.Branch}}
         pushd upstream
         OLD_COMMIT=$(cat ../head)
         NEW_COMMIT=$(git rev-parse HEAD)
@@ -49,13 +52,13 @@ jobs:
         https://github.com/{{.Upstream}}/compare/${NEW_COMMIT}..${OLD_COMMIT}
         EOF
         
-        git push -f origin actions/update/sources-main
+        git push -f origin actions/update/sources-{{.Branch}}
 
     - name: Create pull request
       run: |
-        if [ "$(gh pr list --base main --head actions/update/sources-main --json url --jq 'length')" = "0" ]; then
+        if [ "$(gh pr list --base {{.Branch}} --head actions/update/sources-{{.Branch}} --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
-          gh pr create -B main -H actions/update/sources-main --fill
+          gh pr create -B {{.Branch}} -H actions/update/sources-{{.Branch}} --fill
         else
           echo "a PR already exists, skipping..."
         fi
