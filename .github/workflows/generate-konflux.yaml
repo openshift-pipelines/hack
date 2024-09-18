@@ -52,6 +52,6 @@ jobs:
     - name: Generate configurations
       run: |
         go run ./cmd/konflux/ -target project -config config/konflux/${{matrix.project}}.yaml
-        pushd ${{matrix.project}}
+        pushd project
         git diff
         popd
