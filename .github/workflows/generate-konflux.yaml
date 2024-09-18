@@ -82,3 +82,4 @@ jobs:
         fi
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
