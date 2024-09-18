@@ -62,6 +62,7 @@ func main() {
 }
 
 func generateKonflux(application Application, target string) error {
+	log.Printf("Generate konflux manifest in %s\n", target)
 	if err := os.MkdirAll(target, 0o755); err != nil {
 		return err
 	}
@@ -84,6 +85,7 @@ func generateKonflux(application Application, target string) error {
 }
 
 func generateGitHub(application Application, target string) error {
+	log.Printf("Generate github manifests in %s\n", target)
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
 	}

@@ -51,7 +51,10 @@ jobs:
         go-version: 1.22.x
     - name: Generate configurations
       run: |
+        ls -la . project
         go run ./cmd/konflux/ -target project -config config/konflux/${{matrix.project}}.yaml
         pushd project
+        pwd
+        ls -la
         git diff
         popd
