@@ -100,9 +100,10 @@ func generateGitHub(application Application, target string) error {
 	if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", "update-sources.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("update-sources-branches.yaml", application, filepath.Join(target, "workflows", "update-sources-branches.yaml")); err != nil {
-		return err
-	}
+	// FIXME: figure out how to map release branch with upstream release branches
+	// if err := generateFileFromTemplate("update-sources-branches.yaml", application, filepath.Join(target, "workflows", "update-sources-branches.yaml")); err != nil {
+	// 	return err
+	// }
 	return nil
 }
 

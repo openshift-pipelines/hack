@@ -17,20 +17,24 @@ jobs:
     - name: Checkout the current repo
       uses: actions/checkout@v4
 
-    - name: Clone {{.Repository}}
-      uses: actions/checkout@v4
-      with:
-        repository: {{.Upstream}}
-        path: upstream
+    - name: Clone {{.Upstream}}
+      run: |
+        rm -fR upstream
+        git clone https://github.com/{{.Upstream}} upstream
 
     - name: Commit new changes
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git checkout -b actions/update/sources-main
-        git --git-dir=upstream/.git fetch -p --all
-        git --git-dir=upstream/.git diff --stat HEAD..$(cat head) > /tmp/diff.txt
-        git --git-dir=upstream/.git rev-parse HEAD > head
+        pushd upstream
+        echo Previous commit: $(cat ../head)
+        git show --stat HEAD
+        echo New commit: $(git rev-parse HEAD)
+        git show --stat $(cat ../head) || true
+        git diff --stat HEAD..$(cat ../head) > /tmp/diff.txt || true
+        git rev-parse HEAD > head
+        popd
         rm -rf upstream/.git
         git add upstream
         git commit -m "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}\n$(cat /tmp/diff.txt)"

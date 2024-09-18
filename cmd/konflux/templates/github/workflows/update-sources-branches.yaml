@@ -33,12 +33,11 @@ jobs:
     - name: Checkout the current repo
       uses: actions/checkout@v4
 
-    - name: Clone {{.Repository}}
+    - name: Clone {{.Upstream}} ({{"${{matrix.branch}}"}})
       uses: actions/checkout@v4
-      with:
-        repository: {{.Upstream}}
-        revision: {{"${{matrix.branch}}"}}
-        path: upstream
+      run: |
+        rm -fR upstream
+        git clone https://github.com/{{.Upstream}} upstream
 
     - name: Commit new changes
       run: |
