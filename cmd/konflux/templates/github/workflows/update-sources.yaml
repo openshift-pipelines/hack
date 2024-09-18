@@ -41,7 +41,7 @@ jobs:
         git add upstream head
 
         git commit -F- <<EOF
-        [bot] Update {{.Repository}}
+        [bot] Update from {{.Upstream}} (${NEW_COMMIT} -> ${OLD_COMMIT})
 
         $(cat /tmp/diff.txt)
         
@@ -54,7 +54,7 @@ jobs:
       run: |
         if [ "$(gh pr list --base main --head actions/update/sources-main --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
-          gh pr create -B main -H actions/update/sources-main --title "[bot] Update {{.Repository}}" --body "Auto-generated pull request by GitHub actions"
+          gh pr create -B main -H actions/update/sources-main --fill
         else
           echo "a PR already exists, skipping..."
         fi
