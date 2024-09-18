@@ -41,9 +41,12 @@ jobs:
         git add upstream head
 
         git commit -F- <<EOF
-        [bot] Update from {{.Upstream}} (${NEW_COMMIT} -> ${OLD_COMMIT})
+        [bot] Update from {{.Upstream}} to ${NEW_COMMIT}
 
+        ```bash
+        $ git diff --stat ${NEW_COMMIT}..${OLD_COMMIT}
         $(cat /tmp/diff.txt)
+        ```
         
         https://github.com/{{.Upstream}}/compare/${NEW_COMMIT}..${OLD_COMMIT}
         EOF
