@@ -29,8 +29,8 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git checkout -b actions/update/sources-main
-        git --git-dir=upstream diff --stat HEAD..$(cat head) > /tmp/diff.txt
-        git --git-dir=upstream rev-parse HEAD > head
+        git --git-dir=upstream/.git diff --stat HEAD..$(cat head) > /tmp/diff.txt
+        git --git-dir=upstream/.git rev-parse HEAD > head
         rm -rf upstream/.git
         git add upstream
         git commit -m "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}\n$(cat /tmp/diff.txt)"
