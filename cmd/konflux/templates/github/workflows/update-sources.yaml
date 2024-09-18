@@ -1,0 +1,45 @@
+name: update-sources
+
+on:
+  schedule:
+  - cron: "30 */3 * * *" # At minute 30 past every 3rd hour.
+
+jobs:
+
+  update-sources:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout the current repo
+      uses: actions/checkout@v4
+
+    - name: Clone {{.Repository}}
+      uses: actions/checkout@v4
+      with:
+        repository: {{.Repository}}
+        path: upstream
+
+    - name: Commit new changes
+      run: |
+        ls upstream/
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git checkout -b actions/update/sources-main
+        rm -rf upstream/.git
+        git add upstream
+        git commit -m "[bot] Update {{.Repository}}"
+        git push -f origin actions/update/sources-main
+
+    - name: Create pull request
+      run: |
+        if [ "$(gh pr list --base main --head actions/update/sources-main --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B main -H actions/update/sources-main --title "[bot] Update {{.Repository}}" --body "Auto-generated pull request by GitHub actions"
+        else
+          echo "a PR already exists, skipping..."
+        fi
+      env:
+        GH_TOKEN: {{"${{ secrets.GITHUB_TOKEN }}"}}

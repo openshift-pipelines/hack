@@ -1,0 +1,64 @@
+name: update-sources-branches
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: "30 */3 * * *" # At minute 30 past every 3rd hour.
+
+jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    steps:
+    - id: set-matrix
+      run: |
+        SUPPORTED_BRANCHES=$(git ls-remote --heads https://github.com/tektoncd/operator 'release-*' | grep -v 'v0.2[0-9].*\|v0.5[0-9]\.*\|v0.6[0-7]\.*' | awk '{ print $2 }' | cut -d/ -f3- | jq -cRs 'split("\n")[:-1]')
+        echo "Supported Branches: ${SUPPORTED_BRANCHES}"
+        echo "branches=${SUPPORTED_BRANCHES}" >> $GITHUB_OUTPUT
+    outputs:
+      branches: {{"${{ steps.set-matrix.outputs.branches }}"}}
+
+  update-sources:
+    needs: build-matrix
+    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: {{"${{ fromJSON(needs.build-matrix.outputs.branches) }}"}}
+        # branch: [release-v0.62.x, release-v0.63.x]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout the current repo
+      uses: actions/checkout@v4
+
+    - name: Clone {{.Repository}}
+      uses: actions/checkout@v4
+      with:
+        repository: {{.Repository}}
+        revision: {{"${{matrix.branch}}"}}
+        path: upstream
+
+    - name: Commit new changes
+      run: |
+        ls upstream/
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git checkout -b actions/update/sources-{{"${{matrix.branch}}"}}
+        rm -rf upstream/.git
+        git add upstream
+        git commit -m "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}"
+        git push -f origin actions/update/sources-{{"${{matrix.branch}}"}}
+
+    - name: Create pull request
+      run: |
+        if [ "$(gh pr list --base main --head actions/update/sources --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B main -H actions/update/sources-{{"${{matrix.branch}}"}} --title "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}" --body "Auto-generated pull request by GitHub actions"
+        else
+          echo "a PR already exists, skipping..."
+        fi
+      env:
+        GH_TOKEN: {{"${{ secrets.GITHUB_TOKEN }}"}}
+

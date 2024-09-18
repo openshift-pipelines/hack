@@ -1,0 +1,4 @@
+repository: tektoncd-chains
+components:
+- controller
+- webhook

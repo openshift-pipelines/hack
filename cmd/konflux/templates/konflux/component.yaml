@@ -1,0 +1,17 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    image.redhat.com/generate: "true"
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
+    image.redhat.com/generate: '{"visibility": "public"}'
+  name: {{.Name}}
+spec:
+  componentName: {{.Name}}
+  application: {{.Application}}
+  source:
+    git:
+      url: https://github.com/{{.Repository}}
+      dockerfileUrl: openshift/dockerfiles/{{.Name}}.Dockerfile
+      revision: main

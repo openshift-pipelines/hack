@@ -1,0 +1,10 @@
+repository: tektoncd-pipeline
+components:
+- controller
+- entrypoint
+- events
+- nop
+- resolvers
+- sidecarlogresults
+- webhook
+- workingdirinit
