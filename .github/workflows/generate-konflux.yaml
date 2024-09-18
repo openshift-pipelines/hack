@@ -51,10 +51,24 @@ jobs:
         go-version: 1.22.x
     - name: Generate configurations
       run: |
-        ls -la . project
         go run ./cmd/konflux/ -target project -config config/konflux/${{matrix.project}}.yaml
         pushd project
-        pwd
-        ls -la . .github/workflows .konflux
         git status
         popd
+    - name: Commit new changes
+      run: |
+        pushd project
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git checkout -b actions/update/konflux-configuration
+        git add .github .konflux
+        git commit -m "[bot] update konflux-ci related configuration"
+        git push -f origin actions/update/konflux-configuration
+        if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B main -H actions/update/konflux-configuration --fill
+        else
+          echo "a PR already exists, skipping..."
+        fi
+      env:
+        GH_TOKEN: {{"${{ secrets.GITHUB_TOKEN }}"}}
