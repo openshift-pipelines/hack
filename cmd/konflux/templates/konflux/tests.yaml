@@ -2,9 +2,9 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: "{{.Name}}-enterprise-contract"
+  name: {{.Name}}-enterprise-contract
 spec:
-  application: "{{.Name}}-main"
+  application: {{.Name}}-{{.Branch}}
   contexts:
     - description: Application testing
       name: application

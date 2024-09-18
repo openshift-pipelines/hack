@@ -19,6 +19,7 @@ var templateFS embed.FS
 type Application struct {
 	Name       string
 	Repository string
+	Branch     string
 	Components []string
 }
 
@@ -26,6 +27,7 @@ type Component struct {
 	Name        string
 	Application string
 	Repository  string
+	Branch      string
 }
 
 type Config struct {
@@ -51,10 +53,11 @@ func main() {
 		Name:       c.Repository,
 		Repository: path.Join("openshift-pipelines", c.Repository),
 		Components: c.Components,
+		Branch:     "main",
 	}
 
 	// FIXME: support release branches next for konflux
-	if err := generateKonflux(app, filepath.Join(*target, ".konflux/main")); err != nil {
+	if err := generateKonflux(app, "main", filepath.Join(*target, ".konflux")); err != nil {
 		log.Fatalln(err)
 	}
 	if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
@@ -62,15 +65,15 @@ func main() {
 	}
 }
 
-func generateKonflux(application Application, target string) error {
+func generateKonflux(application Application, branch, target string) error {
 	log.Printf("Generate konflux manifest in %s\n", target)
-	if err := os.MkdirAll(target, 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(target, branch), 0o755); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, "application.yaml")); err != nil {
+	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, branch, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, "tests.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, branch, "tests.yaml")); err != nil {
 		return err
 	}
 	for _, c := range application.Components {
@@ -78,6 +81,7 @@ func generateKonflux(application Application, target string) error {
 			Name:        c,
 			Application: application.Name,
 			Repository:  application.Repository,
+			Branch:      "main",
 		}, filepath.Join(target, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
