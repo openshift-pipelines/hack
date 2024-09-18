@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         branch: {{"${{ fromJSON(needs.build-matrix.outputs.branches) }}"}}
-        # branch: [release-v0.62.x, release-v0.63.x]
+        # branch: [release-v1.16.x, release-v1.17.x]
     permissions:
       contents: write
       pull-requests: write
