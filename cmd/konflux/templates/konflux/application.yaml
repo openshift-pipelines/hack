@@ -4,4 +4,4 @@ kind: Application
 metadata:
   name: {{.Name}}-{{.Branch}}
 spec:
-  displayName: {{.Name}}-{{.Branch}}
+  displayName: {{.Name}} {{.Branch}}
