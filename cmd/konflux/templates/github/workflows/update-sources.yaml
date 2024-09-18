@@ -37,7 +37,13 @@ jobs:
         popd
         rm -rf upstream/.git
         git add upstream
-        git commit -m "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}\n$(cat /tmp/diff.txt)"
+
+        git commit -F- <<EOF
+        [{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}
+
+        $(cat /tmp/diff.txt)
+        EOF
+        
         git push -f origin actions/update/sources-main
 
     - name: Create pull request
