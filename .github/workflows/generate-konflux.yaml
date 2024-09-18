@@ -65,6 +65,7 @@ jobs:
         git commit -m "[bot] update konflux-ci related configuration"
         gh auth status
         gh auth setup-git
+        gh repo fork
         git remote -v
         git push -f origin actions/update/konflux-configuration
         if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
