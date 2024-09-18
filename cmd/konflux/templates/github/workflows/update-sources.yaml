@@ -22,7 +22,7 @@ jobs:
         rm -fR upstream
         git clone https://github.com/{{.Upstream}} upstream
         pushd upstream
-        git checkout -b {{.UpstreamBranch}} origin/{{.UpstreamBranch}}
+        git checkout -B {{.UpstreamBranch}} origin/{{.UpstreamBranch}}
         popd
 
     - name: Commit new changes
