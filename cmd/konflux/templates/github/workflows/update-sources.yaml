@@ -29,9 +29,11 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git checkout -b actions/update/sources-main
+        git --git-dir=upstream diff --stat HEAD..$(cat head) > /tmp/diff.txt
+        git --git-dir=upstream rev-parse HEAD > head
         rm -rf upstream/.git
         git add upstream
-        git commit -m "[bot] Update {{.Repository}}"
+        git commit -m "[{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}\n$(cat /tmp/diff.txt)"
         git push -f origin actions/update/sources-main
 
     - name: Create pull request
