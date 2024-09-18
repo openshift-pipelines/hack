@@ -3,7 +3,7 @@ name: update-sources-branches
 on:
   workflow_dispatch: {}
   schedule:
-  - cron: "30 */3 * * *" # At minute 30 past every 3rd hour.
+  - cron: "0 */3 * * *" # At minute 0 past every 3rd hour.
 
 jobs:
   build-matrix:
