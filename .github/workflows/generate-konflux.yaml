@@ -62,20 +62,15 @@ jobs:
         git config user.email pipelines-extcomm@redhat.com
         git checkout -b actions/update/konflux-configuration
         git add .github .konflux
+        git commit -m "[bot] update konflux configuration"
 
         # unset extraheader...
         git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
 
+        git config --unset-all http.https://github.com/.extraheader
         gh auth status
         gh auth setup-git
-        gh repo fork
-        git remote rm origin || true
-        git remote rm upstream || true
-        git remote add upstream https://github.com/openshift-pipelines/${{matrix.project}}
-        git remote add origin https://github.com/openshift-pipelines-bot/${{matrix.project}}
-        git fetch -p --all
-        gh repo set-default openshift-pipelines/${{matrix.project}}
-        git remote -v
+
         git push -f origin actions/update/konflux-configuration
         if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
