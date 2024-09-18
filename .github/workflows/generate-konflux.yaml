@@ -55,6 +55,6 @@ jobs:
         go run ./cmd/konflux/ -target project -config config/konflux/${{matrix.project}}.yaml
         pushd project
         pwd
-        ls -la
-        git diff
+        ls -la . .github/workflows .konflux
+        git status
         popd
