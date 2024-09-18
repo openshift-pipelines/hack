@@ -67,7 +67,6 @@ jobs:
         # unset extraheader...
         git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
 
-        git config --unset-all http.https://github.com/.extraheader
         gh auth status
         gh auth setup-git
 
