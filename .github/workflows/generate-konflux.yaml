@@ -58,13 +58,14 @@ jobs:
     - name: Commit new changes
       run: |
         pushd project
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+        git config user.name openshift-pipelines-bot
+        git config user.email pipelines-extcomm@redhat.com
         git checkout -b actions/update/konflux-configuration
         git add .github .konflux
         git commit -m "[bot] update konflux-ci related configuration"
         gh auth status
         gh auth setup-git
+        git remote -v
         git push -f origin actions/update/konflux-configuration
         if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
