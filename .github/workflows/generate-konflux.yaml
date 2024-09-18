@@ -63,8 +63,8 @@ jobs:
         git checkout -b actions/update/konflux-configuration
         git add .github .konflux
         git commit -m "[bot] update konflux-ci related configuration"
-        git push -f origin actions/update/konflux-configuration
         gh auth status
+        git push -f origin actions/update/konflux-configuration
         if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
           gh pr create -B main -H actions/update/konflux-configuration --fill
