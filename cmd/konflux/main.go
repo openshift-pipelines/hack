@@ -53,7 +53,8 @@ func main() {
 		Components: c.Components,
 	}
 
-	if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
+	// FIXME: support release branches next for konflux
+	if err := generateKonflux(app, filepath.Join(*target, ".konflux/main")); err != nil {
 		log.Fatalln(err)
 	}
 	if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
