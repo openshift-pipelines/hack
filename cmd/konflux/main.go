@@ -82,7 +82,7 @@ func generateKonflux(application Application, branch, target string) error {
 			Application: application.Name,
 			Repository:  application.Repository,
 			Branch:      "main",
-		}, filepath.Join(target, fmt.Sprintf("component-%s.yaml", c))); err != nil {
+		}, filepath.Join(target, branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
 	}
