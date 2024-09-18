@@ -62,7 +62,10 @@ jobs:
         git config user.email pipelines-extcomm@redhat.com
         git checkout -b actions/update/konflux-configuration
         git add .github .konflux
-        git commit -m "[bot] update konflux-ci related configuration"
+
+        # unset extraheader...
+        git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+
         gh auth status
         gh auth setup-git
         gh repo fork
