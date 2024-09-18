@@ -19,6 +19,7 @@ var templateFS embed.FS
 type Application struct {
 	Name       string
 	Repository string
+	Upstream   string
 	Branch     string
 	Components []string
 }
@@ -32,6 +33,7 @@ type Component struct {
 
 type Config struct {
 	Repository string
+	Upstream   string
 	Components []string
 }
 
@@ -52,6 +54,7 @@ func main() {
 	app := Application{
 		Name:       c.Repository,
 		Repository: path.Join("openshift-pipelines", c.Repository),
+		Upstream:   c.Upstream,
 		Components: c.Components,
 		Branch:     "main",
 	}

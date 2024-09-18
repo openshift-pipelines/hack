@@ -1,4 +1,5 @@
 repository: tektoncd-pipeline
+upstream: tektoncd/pipeline
 components:
 - controller
 - entrypoint

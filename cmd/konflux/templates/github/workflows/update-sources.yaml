@@ -20,7 +20,7 @@ jobs:
     - name: Clone {{.Repository}}
       uses: actions/checkout@v4
       with:
-        repository: {{.Repository}}
+        repository: {{.Upstream}}
         path: upstream
 
     - name: Commit new changes
