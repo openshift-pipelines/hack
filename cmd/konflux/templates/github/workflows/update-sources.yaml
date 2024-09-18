@@ -32,16 +32,19 @@ jobs:
         git show --stat HEAD
         echo New commit: $(git rev-parse HEAD)
         git show --stat $(cat ../head) || true
-        git diff --stat HEAD..$(cat ../head) > /tmp/diff.txt || true
-        git rev-parse HEAD > head
+        git diff --stat $(git rev-parse HEAD)..$(cat ../head) > /tmp/diff.txt || true
+        cp ../head ../head.old
+        git rev-parse HEAD > ../head
         popd
         rm -rf upstream/.git
-        git add upstream
+        git add upstream head
 
         git commit -F- <<EOF
-        [{{"${{matrix.branch}}"}}/bot] Update {{.Repository}}
+        [bot] Update {{.Repository}}
 
         $(cat /tmp/diff.txt)
+        
+        https://github.com/{{.Repository}}/compare/$(cat ../head)..$(cat ../head.old)
         EOF
         
         git push -f origin actions/update/sources-main
