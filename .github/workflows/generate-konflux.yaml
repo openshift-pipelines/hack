@@ -41,17 +41,17 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-    - name: Clone {{.project}}
+    - name: Clone ${{.project}}
       uses: actions/checkout@v4
       with:
-        repository: openshift-pipelines/{{.project}}
+        repository: openshift-pipelines/${{.project}}
         path: project
     - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
     - name: Generate configurations
       run: |
-        go run ./cmd/konflux/ -target project -config config/konflux/{{.project}}.yaml
-        pushd {{.project}}
+        go run ./cmd/konflux/ -target project -config config/konflux/${{.project}}.yaml
+        pushd ${{.project}}
         git diff
         popd
