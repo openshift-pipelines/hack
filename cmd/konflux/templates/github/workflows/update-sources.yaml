@@ -43,6 +43,11 @@ jobs:
         rm -rf upstream/.git
         git add upstream head
 
+        if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+        fi
+
         git commit -F- <<EOF
         [bot] Update from {{.Upstream}} to ${NEW_COMMIT}
 
@@ -54,8 +59,6 @@ jobs:
         
         git push -f origin actions/update/sources-{{.Branch}}
 
-    - name: Create pull request
-      run: |
         if [ "$(gh pr list --base {{.Branch}} --head actions/update/sources-{{.Branch}} --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
           gh pr create -B {{.Branch}} -H actions/update/sources-{{.Branch}} --fill
