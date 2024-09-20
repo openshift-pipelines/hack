@@ -1,0 +1,7 @@
+repository: tektoncd-triggers
+upstream: tektoncd/triggers
+components:
+- controller
+- webhook
+- core-interceptors
+- eventlistenersink
