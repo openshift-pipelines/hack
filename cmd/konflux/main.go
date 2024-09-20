@@ -13,7 +13,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-//go:embed templates/konflux/*.yaml templates/github/*/*.yaml
+//go:embed templates/konflux/*.yaml templates/github/*/*.yaml templates/tekton/*.yaml
 var templateFS embed.FS
 
 type Application struct {
@@ -74,6 +74,9 @@ func main() {
 	if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
 		log.Fatalln(err)
 	}
+	if err := generateTekton(app, filepath.Join(*target, ".tekton")); err != nil {
+		log.Fatalln(err)
+	}
 	for _, branch := range c.Branches {
 		log.Printf("Generate configurations for %s branch\n", branch.Version)
 
@@ -91,7 +94,39 @@ func main() {
 		if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
 			log.Fatalln(err)
 		}
+
+		// if err := generateTekton(app, filepath.Join(*target, ".tekton")); err != nil {
+		// 	log.Fatalln(err)
+		// }
 	}
+}
+
+func generateTekton(application Application, target string) error {
+	log.Printf("Generate tekton manifest in %s\n", target)
+	if err := os.MkdirAll(target, 0o755); err != nil {
+		return err
+	}
+	if _, err := os.Stat(filepath.Join(target, "docker-build.yaml")); os.IsNotExist(err) {
+		// Create the pipeline if it doesn't exists, otherwise, keep is as is.
+		if err := generateFileFromTemplate("docker-build.yaml", application, filepath.Join(target, "docker-build.yaml")); err != nil {
+			return err
+		}
+	}
+	for _, c := range application.Components {
+		component := Component{
+			Name:        c,
+			Application: application.Name,
+			Repository:  application.Repository,
+			Branch:      application.Branch,
+		}
+		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-pull-request.yaml", c))); err != nil {
+			return err
+		}
+		if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-push.yaml", c))); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func generateKonflux(application Application, target string) error {
