@@ -61,7 +61,7 @@ jobs:
         git config user.name openshift-pipelines-bot
         git config user.email pipelines-extcomm@redhat.com
         git checkout -b actions/update/konflux-configuration
-        git add .github .konflux
+        git add .github .konflux .tekton
         git commit -m "[bot] update konflux configuration"
 
         # unset extraheader...
