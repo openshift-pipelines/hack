@@ -1,0 +1,12 @@
+repository: operator
+upstream: tektoncd/operator
+components:
+- controller
+- webhook
+- proxy
+- bundle
+- index
+branches:
+- version: 1.17
+  # upstream: …
+  upstream: main
