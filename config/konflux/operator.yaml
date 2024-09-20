@@ -4,8 +4,8 @@ components:
 - controller
 - webhook
 - proxy
-- bundle
-- index
+# - bundle
+# - index
 branches:
 - version: 1.17
   # upstream: …
