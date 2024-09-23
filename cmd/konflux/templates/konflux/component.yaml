@@ -6,7 +6,7 @@ metadata:
     image.redhat.com/generate: "true"
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
     image.redhat.com/generate: '{"visibility": "public"}'
-  name: {{.Name}}
+  name: {{.Repository}}-{{.Branch}}/{{.Name}}
 spec:
   componentName: {{.Name}}
   application: {{.Application}}-{{.Branch}}
