@@ -4,7 +4,7 @@ kind: IntegrationTestScenario
 metadata:
   name: {{.Name}}-enterprise-contract
 spec:
-  application: {{.Name}}-{{.Branch}}
+  application: {{.Name}}-{{hyphenize .Branch}}
   contexts:
     - description: Application testing
       name: application

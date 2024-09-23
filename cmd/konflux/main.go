@@ -8,10 +8,13 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"text/template"
 
 	"gopkg.in/yaml.v2"
 )
+
+var nameFieldInvalidCharPattern = regexp.MustCompile("[^a-z0-9]")
 
 //go:embed templates/konflux/*.yaml templates/github/*/*.yaml templates/tekton/*.yaml
 var templateFS embed.FS
@@ -166,7 +169,11 @@ func generateGitHub(application Application, target string) error {
 }
 
 func generateFileFromTemplate(templateFile string, o interface{}, filepath string) error {
-	tmpl, err := template.New(templateFile).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
+	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
+		"hyphenize": func(str string) string {
+			return nameFieldInvalidCharPattern.ReplaceAllString(str, "-")
+		},
+	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
 		return err
 	}
