@@ -127,10 +127,10 @@ func generateTekton(application Application, target string) error {
 			Branch:      application.Branch,
 			Version:     application.Version,
 		}
-		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-pull-request.yaml", c))); err != nil {
+		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
 			return err
 		}
-		if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-push.yaml", c))); err != nil {
+		if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
 			return err
 		}
 	}
@@ -176,12 +176,8 @@ func generateGitHub(application Application, target string) error {
 
 func generateFileFromTemplate(templateFile string, o interface{}, filepath string) error {
 	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
-		"hyphenize": func(str string) string {
-			return nameFieldInvalidCharPattern.ReplaceAllString(str, "-")
-		},
-		"basename": func(str string) string {
-			return path.Base(str)
-		},
+		"hyphenize": hyphenize,
+		"basename":  basename,
 	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
 		return err
@@ -196,6 +192,14 @@ func generateFileFromTemplate(templateFile string, o interface{}, filepath strin
 		return err
 	}
 	return nil
+}
+
+func hyphenize(str string) string {
+	return nameFieldInvalidCharPattern.ReplaceAllString(str, "-")
+}
+
+func basename(str string) string {
+	return path.Base(str)
 }
 
 type arrayFlags []string

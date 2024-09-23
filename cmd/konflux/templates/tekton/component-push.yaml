@@ -15,9 +15,9 @@ metadata:
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: {{.Application}}-{{.Branch}}
-    appstudio.openshift.io/component: {{.Name}}
+    appstudio.openshift.io/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
     pipelines.appstudio.openshift.io/type: build
-  name: {{.Name}}-on-push
+  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-on-push
   namespace: tekton-ecosystem-tenant
 spec:
   params:
@@ -26,7 +26,7 @@ spec:
   - name: revision
     value: '{{"{{revision}}"}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{.Application}}-{{.Branch}}/{{.Name}}:{{"{{revision}}"}}
+    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{.Application}}-{{.Branch}}/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}:{{"{{revision}}"}}
   - name: dockerfile
     value: openshift/dockerfiles/{{.Name}}.Dockerfile
   - name: build-source-image
