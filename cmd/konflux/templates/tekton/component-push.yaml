@@ -17,7 +17,7 @@ metadata:
     appstudio.openshift.io/application: {{.Application}}-{{.Branch}}
     appstudio.openshift.io/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
     pipelines.appstudio.openshift.io/type: build
-  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-on-push
+  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-on-push
   namespace: tekton-ecosystem-tenant
 spec:
   params:
