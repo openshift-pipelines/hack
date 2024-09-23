@@ -1,7 +1,7 @@
 repository: operator
 upstream: tektoncd/operator
 components:
-- controller
+- operator
 - webhook
 - proxy
 # - bundle
