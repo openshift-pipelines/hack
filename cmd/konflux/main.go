@@ -26,6 +26,7 @@ type Application struct {
 	Branch         string
 	UpstreamBranch string
 	Components     []string
+	Version        string
 }
 
 type Component struct {
@@ -33,6 +34,7 @@ type Component struct {
 	Application string
 	Repository  string
 	Branch      string
+	Version     string
 }
 
 type Config struct {
@@ -68,6 +70,7 @@ func main() {
 		Components:     c.Components,
 		Branch:         "main",
 		UpstreamBranch: "main",
+		Version:        "main",
 	}
 
 	log.Println("Generate configurations for main branch")
@@ -90,6 +93,7 @@ func main() {
 			Components:     c.Components,
 			Branch:         fmt.Sprintf("release-v%s.x", branch.Version),
 			UpstreamBranch: branch.Upstream,
+			Version:        branch.Version,
 		}
 		if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
 			log.Fatalln(err)
@@ -121,6 +125,7 @@ func generateTekton(application Application, target string) error {
 			Application: application.Name,
 			Repository:  application.Repository,
 			Branch:      application.Branch,
+			Version:     application.Version,
 		}
 		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-pull-request.yaml", c))); err != nil {
 			return err
@@ -149,6 +154,7 @@ func generateKonflux(application Application, target string) error {
 			Application: application.Name,
 			Repository:  application.Repository,
 			Branch:      application.Branch,
+			Version:     application.Version,
 		}, filepath.Join(target, application.Branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
@@ -172,6 +178,9 @@ func generateFileFromTemplate(templateFile string, o interface{}, filepath strin
 	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
 		"hyphenize": func(str string) string {
 			return nameFieldInvalidCharPattern.ReplaceAllString(str, "-")
+		},
+		"basename": func(str string) string {
+			return path.Base(str)
 		},
 	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
