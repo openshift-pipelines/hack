@@ -2,7 +2,7 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: EnterpriseContractPolicy
 metadata:
-  name: tekton-ecosystem-tentant-containers
+  name: tekton-ecosystem-tenant-containers
   namespace: tekton-ecosystem-tenant
 spec:
   description: 'Includes rules to set a standard for current OpenShift Pipelines build'
