@@ -1,0 +1,32 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: EnterpriseContractPolicy
+metadata:
+  name: tekton-ecosystem-tentant-containers
+  namespace: tekton-ecosystem-tenant
+spec:
+  description: 'Includes rules to set a standard for current OpenShift Pipelines build'
+  publicKey: 'k8s://openshift-pipelines/public-key'
+  sources:
+    - name: Release Policies
+      data:
+        - github.com/release-engineering/rhtap-ec-policy//data
+        - oci::quay.io/konflux-ci/tekton-catalog/data-acceptable-bundles:latest
+      policy:
+        - oci::quay.io/enterprise-contract/ec-release-policy:git-96f77c3@sha256:7c8b7651786a042f4b1295d134b167b05001686574e947b51cd70a365fe3ad22
+      ruleData:
+        allowed_registry_prefixes:
+          # Default
+          - registry.access.redhat.com/
+          - registry.redhat.io/
+          - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
+          # We may have a nudging relationship between components again
+          - quay.io/redhat-user-workloads/tekton-ecosystem-tenant
+          # It's ok to build on konflux-ci images, because they are subject to this policy too.
+          - quay.io/konflux-ci
+      config:
+        include:
+          - '@redhat'
+        exclude:
+          # The preflight check isn't really necessary for images we're not distributing directly to customers
+          - test.no_failed_tests:ecosystem-cert-preflight-checks
