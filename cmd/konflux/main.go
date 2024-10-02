@@ -158,6 +158,15 @@ func generateKonflux(application Application, target string) error {
 		}, filepath.Join(target, application.Branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
+		if err := generateFileFromTemplate("image.yaml", Component{
+			Name:        c,
+			Application: application.Name,
+			Repository:  application.Repository,
+			Branch:      application.Branch,
+			Version:     application.Version,
+		}, filepath.Join(target, application.Branch, fmt.Sprintf("image-%s.yaml", c))); err != nil {
+			return err
+		}
 	}
 	return nil
 }

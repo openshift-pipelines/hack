@@ -3,9 +3,7 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Component
 metadata:
   annotations:
-    image.redhat.com/generate: "true"
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
-    image.redhat.com/generate: '{"visibility": "public"}'
   name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
 spec:
   componentName: {{.Name}}

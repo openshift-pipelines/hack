@@ -1,0 +1,14 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+  labels:
+    appstudio.redhat.com/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
+    appstudio.redhat.com/application: {{.Application}}-{{hyphenize .Branch}}
+spec:
+  image:
+   name: {{.Application}}-{{hyphenize .Branch}}/{{.Name}}
+   visibility: public
