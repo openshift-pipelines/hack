@@ -9,7 +9,7 @@ spec:
   componentName: {{.Name}}
   application: {{.Application}}-{{hyphenize .Branch}}
   build-nudges-ref:
-  - operator--{{hyphenize .Branch}}-bundle
+  - operator-{{hyphenize .Branch}}-bundle
   source:
     git:
       url: https://github.com/{{.Repository}}
