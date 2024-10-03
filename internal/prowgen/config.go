@@ -242,6 +242,7 @@ func generateTestFromConfig(repo *Repository) ([]cioperatorapi.TestStepConfigura
 			version := version
 			tests = append(tests, cioperatorapi.TestStepConfiguration{
 				As:           fmt.Sprintf("osp-%s-ocp-%s-e2e", k8sNameString(version), k8sNameString(repo.OpenShift.Version)),
+				Cluster:      "build05",
 				ClusterClaim: clusterClaim,
 				MultiStageTestConfiguration: &cioperatorapi.MultiStageTestConfiguration{
 					AllowSkipOnSuccess:       pTrue(),
@@ -326,8 +327,8 @@ func getClusterClaim(ocpVersion string) *cioperatorapi.ClusterClaim {
 	return &cioperatorapi.ClusterClaim{
 		Architecture: "amd64",
 		As:           "latest",
-		Cloud:        cioperatorapi.CloudAWS,
-		Owner:        "openshift-ci",
+		Cloud:        "openstack",
+		Owner:        "pipelines",
 		Product:      cioperatorapi.ReleaseProductOCP,
 		Timeout:      &prowv1.Duration{time.Duration(60) * time.Minute},
 		Version:      ocpVersion,
