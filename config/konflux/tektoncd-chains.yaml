@@ -1,0 +1,4 @@
+repository: tektoncd-chains
+upstream: tektoncd/chains
+components:
+- controller
