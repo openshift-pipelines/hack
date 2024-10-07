@@ -1,0 +1,5 @@
+repository: tektoncd-chains
+upstream: tektoncd/chains
+components:
+- tkn
+- serve-tkn
