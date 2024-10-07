@@ -27,7 +27,7 @@ github:
         pip3 install -r requirements.txt
 
         # Update operator's payload and stuff
-        make sources/operator/fetch-payload
+        make fetch-payload update-reference
 branches:
 - version: 1.17
   # upstream: …
