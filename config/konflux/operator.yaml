@@ -8,9 +8,6 @@ components:
 # - index
 github:
   update-sources: |
-    - uses: actions/setup-go@v5
-      with:
-        go-version: 1.22.x
     - name: fetch-payload
       run: |
         # Operator SDK
