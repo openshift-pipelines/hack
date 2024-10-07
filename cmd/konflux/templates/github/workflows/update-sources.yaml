@@ -27,9 +27,7 @@ jobs:
         git checkout -B {{.UpstreamBranch}} origin/{{.UpstreamBranch}}
         popd
 {{if .GitHub.UpdateSources }}
-    - name: Extra steps
-      run: |
-{{ .GitHub.UpdateSources | indent 8}}
+{{ .GitHub.UpdateSources | indent 4}}
 {{end}}
     - name: Commit new changes
       run: |

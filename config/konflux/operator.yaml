@@ -8,21 +8,26 @@ components:
 # - index
 github:
   update-sources: |
-    # Operator SDK
-    export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/v1.37.0
-    curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
-    chmod +x operator-sdk_${OS}_${ARCH} && sudo mv operator-sdk_${OS}_${ARCH} /usr/local/bin/operator-sdk
+    - uses: actions/setup-go@v5
+      with:
+        go-version: 1.22.x
+    - name: fetch-payload
+      run: |
+        # Operator SDK
+        export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/v1.37.0
+        curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
+        chmod +x operator-sdk_${OS}_${ARCH} && sudo mv operator-sdk_${OS}_${ARCH} /usr/local/bin/operator-sdk
 
-    operator-sdk version
+        operator-sdk version
 
-    # Python with requirements (yaml here)
-    # We could migrate to go...
-    python3 -m venv sync-sources
-    source sync-sources/bin/activate
-    pip3 install -r requirements.txt
+        # Python with requirements (yaml here)
+        # We could migrate to go...
+        python3 -m venv sync-sources
+        source sync-sources/bin/activate
+        pip3 install -r requirements.txt
 
-    # Update operator's payload and stuff
-    make sources/operator/fetch-payload
+        # Update operator's payload and stuff
+        make sources/operator/fetch-payload
 branches:
 - version: 1.17
   # upstream: …
