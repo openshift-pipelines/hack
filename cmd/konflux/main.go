@@ -172,6 +172,10 @@ func generateKonflux(application Application, target string) error {
 }
 
 func generateGitHub(application Application, target string) error {
+	if application.Upstream == "" {
+		// Only generate the github workflows if there is an upstream
+		return nil
+	}
 	log.Printf("Generate github manifests in %s\n", target)
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
