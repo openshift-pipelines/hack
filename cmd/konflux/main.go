@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"text/template"
 
 	"gopkg.in/yaml.v2"
@@ -27,6 +28,7 @@ type Application struct {
 	UpstreamBranch string
 	Components     []string
 	Version        string
+	GitHub         GitHub
 }
 
 type Component struct {
@@ -40,8 +42,13 @@ type Component struct {
 type Config struct {
 	Repository string
 	Upstream   string
+	GitHub     GitHub
 	Components []string
 	Branches   []Branch
+}
+
+type GitHub struct {
+	UpdateSources string `json:"update-sources" yaml:"update-sources"`
 }
 
 type Branch struct {
@@ -71,6 +78,7 @@ func main() {
 		Branch:         "main",
 		UpstreamBranch: "main",
 		Version:        "main",
+		GitHub:         c.GitHub,
 	}
 
 	log.Println("Generate configurations for main branch")
@@ -191,6 +199,7 @@ func generateFileFromTemplate(templateFile string, o interface{}, filepath strin
 	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
 		"hyphenize": hyphenize,
 		"basename":  basename,
+		"indent":    indent,
 	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
 		return err
@@ -213,6 +222,11 @@ func hyphenize(str string) string {
 
 func basename(str string) string {
 	return path.Base(str)
+}
+
+func indent(spaces int, v string) string {
+	pad := strings.Repeat(" ", spaces)
+	return pad + strings.Replace(v, "\n", "\n"+pad, -1)
 }
 
 type arrayFlags []string

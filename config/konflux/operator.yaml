@@ -6,6 +6,10 @@ components:
 - proxy
 # - bundle
 # - index
+github:
+  update-sources: |
+    # Update operator's payload and stuff
+    make sources/operator/fetch-payload
 branches:
 - version: 1.17
   # upstream: …
