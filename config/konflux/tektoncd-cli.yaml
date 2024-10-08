@@ -1,5 +1,5 @@
-repository: tektoncd-chains
-upstream: tektoncd/chains
+repository: tektoncd-cli
+upstream: tektoncd/cli
 components:
 - tkn
 - serve-tkn
