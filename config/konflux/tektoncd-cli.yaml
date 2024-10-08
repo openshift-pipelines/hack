@@ -2,4 +2,3 @@ repository: tektoncd-cli
 upstream: tektoncd/cli
 components:
 - tkn
-- serve-tkn
