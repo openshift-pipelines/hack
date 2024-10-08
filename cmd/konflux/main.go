@@ -29,6 +29,7 @@ type Application struct {
 	Components     []string
 	Version        string
 	GitHub         GitHub
+	Tekton         Tekton
 }
 
 type Component struct {
@@ -37,18 +38,24 @@ type Component struct {
 	Repository  string
 	Branch      string
 	Version     string
+	Tekton      Tekton
 }
 
 type Config struct {
 	Repository string
 	Upstream   string
 	GitHub     GitHub
+	Tekton     Tekton
 	Components []string
 	Branches   []Branch
 }
 
 type GitHub struct {
 	UpdateSources string `json:"update-sources" yaml:"update-sources"`
+}
+
+type Tekton struct {
+	WatchedSources string `json:"watched-sources" yaml:"watched-sources"`
 }
 
 type Branch struct {
@@ -79,6 +86,7 @@ func main() {
 		UpstreamBranch: "main",
 		Version:        "main",
 		GitHub:         c.GitHub,
+		Tekton:         c.Tekton,
 	}
 
 	log.Println("Generate configurations for main branch")
@@ -127,6 +135,12 @@ func generateTekton(application Application, target string) error {
 			return err
 		}
 	}
+
+	// set defaults
+	if application.Tekton.WatchedSources == "" {
+		application.Tekton = Tekton{WatchedSources: `"upstream/***".pathChanged() || "openshift/***".pathChanged()`}
+	}
+
 	for _, c := range application.Components {
 		component := Component{
 			Name:        c,
@@ -134,6 +148,7 @@ func generateTekton(application Application, target string) error {
 			Repository:  application.Repository,
 			Branch:      application.Branch,
 			Version:     application.Version,
+			Tekton:      application.Tekton,
 		}
 		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
 			return err

@@ -6,6 +6,8 @@ components:
 - proxy
 # - bundle
 # - index
+tekton:
+  watched-sources: '"upstream/***".pathChanged() || "openshift/dockerfiles/***".pathChanged() || "openshift/rpms/***".pathChanged()'
 github:
   update-sources: |
     - name: fetch-payload
