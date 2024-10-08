@@ -25,6 +25,9 @@ github:
 
         # Update operator's payload and stuff
         make fetch-payload update-reference
+        pushd upstream
+        git co HEAD .
+        popd
 branches:
 - version: 1.17
   # upstream: …
