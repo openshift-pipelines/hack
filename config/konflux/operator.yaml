@@ -26,7 +26,8 @@ github:
         # Update operator's payload and stuff
         make fetch-payload update-reference
         pushd upstream
-        git co HEAD .
+        rm -fR cmd/openshift/operator/kodata operatorhub
+        git checkout HEAD .
         popd
 branches:
 - version: 1.17
