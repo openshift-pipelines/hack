@@ -10,8 +10,7 @@ metadata:
       == "main" &&
       ({{.Tekton.WatchedSources}} ||
       "openshift/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
-      ".tekton/{{.Name}}-pull-request.yaml".pathChanged() ||
-      ".tekton/{{.Name}}-push.yaml".pathChanged() ||
+      ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged() ||
       ".tekton/docker-build.yaml".pathChanged())
   creationTimestamp: null
   labels:
