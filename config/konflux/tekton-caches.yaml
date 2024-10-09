@@ -1,3 +1,5 @@
 repository: tekton-caches
 components:
 - cache
+tekton:
+  watched-sources: ''
