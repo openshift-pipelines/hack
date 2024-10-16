@@ -215,6 +215,7 @@ func generateFileFromTemplate(templateFile string, o interface{}, filepath strin
 		"hyphenize": hyphenize,
 		"basename":  basename,
 		"indent":    indent,
+		"contains":  strings.Contains,
 	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
 		return err

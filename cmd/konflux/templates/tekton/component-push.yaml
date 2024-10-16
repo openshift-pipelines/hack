@@ -36,7 +36,11 @@ spec:
     value: "true"
   - name: prefetch-input
     value: |
+      {{- if contains .Name "ui" }}
+      {"type": "npm", "path": "upstream/ui"}
+      {{- else }}
       {"type": "rpm", "path": "openshift/rpms"}
+      {{- end }}
   pipelineRef:
     name: docker-build
   workspaces:
