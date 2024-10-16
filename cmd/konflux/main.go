@@ -129,9 +129,9 @@ func generateTekton(application Application, target string) error {
 	if err := os.MkdirAll(target, 0o755); err != nil {
 		return err
 	}
-	if _, err := os.Stat(filepath.Join(target, "docker-build.yaml")); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(target, "docker-build-ta.yaml")); os.IsNotExist(err) {
 		// Create the pipeline if it doesn't exists, otherwise, keep is as is.
-		if err := generateFileFromTemplate("docker-build.yaml", application, filepath.Join(target, "docker-build.yaml")); err != nil {
+		if err := generateFileFromTemplate("docker-build-ta.yaml", application, filepath.Join(target, "docker-build-ta.yaml")); err != nil {
 			return err
 		}
 	}

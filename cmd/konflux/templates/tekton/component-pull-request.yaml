@@ -13,7 +13,7 @@ metadata:
       ({{.Tekton.WatchedSources}} ||
       "openshift/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
       ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-pull-request.yaml".pathChanged() ||
-      ".tekton/docker-build.yaml".pathChanged())
+      ".tekton/docker-build-ta.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: {{.Application}}-{{.Branch}}
@@ -33,10 +33,6 @@ spec:
     value: 5d
   - name: dockerfile
     value: openshift/dockerfiles/{{.Name}}.Dockerfile
-  - name: build-source-image
-    value: "true"
-  - name: hermetic
-    value: "true"
   - name: prefetch-input
     value: |
       {{- if contains .Name "ui" }}
@@ -45,19 +41,8 @@ spec:
       {"type": "rpm", "path": "openshift/rpms"}
       {{- end }}
   pipelineRef:
-    name: docker-build
+    name: docker-build-ta
   workspaces:
-  - name: workspace
-    volumeClaimTemplate:
-      metadata:
-        creationTimestamp: null
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-      status: {}
   - name: git-auth
     secret:
       secretName: '{{"{{ git_auth_secret }}"}}'
