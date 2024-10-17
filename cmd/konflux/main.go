@@ -207,6 +207,10 @@ func generateGitHub(application Application, target string) error {
 	if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
 		return err
 	}
+	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Branch)
+	if err := generateFileFromTemplate("auto-merge.yaml", application, filepath.Join(target, "workflows", amfilename)); err != nil {
+		return err
+	}
 	return nil
 }
 
