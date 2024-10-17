@@ -24,7 +24,7 @@ jobs:
           gh pr merge --rebase --delete-branch --auto $p
         done
       env:
-        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GH_TOKEN: {{"${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}"}}
     - name: auto-merge-upstream-{{.Branch}}
       run: |
         gh auth status
@@ -35,5 +35,5 @@ jobs:
           gh pr merge --rebase --delete-branch --auto $p
         done
       env:
-        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GH_TOKEN: {{"${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}"}}
 
