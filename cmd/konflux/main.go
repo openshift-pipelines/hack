@@ -195,17 +195,16 @@ func generateKonflux(application Application, target string) error {
 }
 
 func generateGitHub(application Application, target string) error {
-	if application.Upstream == "" {
-		// Only generate the github workflows if there is an upstream
-		return nil
-	}
 	log.Printf("Generate github manifests in %s\n", target)
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
 	}
-	filename := fmt.Sprintf("update-sources.%s.yaml", application.Branch)
-	if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
-		return err
+	if application.Upstream != "" {
+		// Only generate the github workflows if there is an upstream
+		filename := fmt.Sprintf("update-sources.%s.yaml", application.Branch)
+		if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
+			return err
+		}
 	}
 	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Branch)
 	if err := generateFileFromTemplate("auto-merge.yaml", application, filepath.Join(target, "workflows", amfilename)); err != nil {
