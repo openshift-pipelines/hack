@@ -1,0 +1,5 @@
+repository: console-plugin
+components:
+- console-plugin
+tekton:
+  watched-sources: '"***".pathChanged()'
