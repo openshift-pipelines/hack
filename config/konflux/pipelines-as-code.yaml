@@ -1,0 +1,8 @@
+repository: pipelines-as-code
+components:
+- controller
+- webhook
+- watcher
+tekton:
+  watched-sources: '"***".pathChanged()'
+  event_type: "push"
