@@ -1,0 +1,6 @@
+repository: manual-approval-gate
+components:
+- controller
+- webhook
+tekton:
+  watched-sources: '"***".pathChanged()'
