@@ -56,6 +56,7 @@ type GitHub struct {
 
 type Tekton struct {
 	WatchedSources string `json:"watched-sources" yaml:"watched-sources"`
+	EventType      string `json:"event_type" yaml:"event_type"`
 }
 
 type Branch struct {
@@ -117,10 +118,6 @@ func main() {
 		if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
 			log.Fatalln(err)
 		}
-
-		// if err := generateTekton(app, filepath.Join(*target, ".tekton")); err != nil {
-		// 	log.Fatalln(err)
-		// }
 	}
 }
 
@@ -138,7 +135,7 @@ func generateTekton(application Application, target string) error {
 
 	// set defaults
 	if application.Tekton.WatchedSources == "" {
-		application.Tekton = Tekton{WatchedSources: `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`}
+		application.Tekton.WatchedSources = `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`
 	}
 
 	for _, c := range application.Components {
@@ -150,11 +147,24 @@ func generateTekton(application Application, target string) error {
 			Version:     application.Version,
 			Tekton:      application.Tekton,
 		}
-		if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
-			return err
-		}
-		if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
-			return err
+		switch application.Tekton.EventType {
+		case "pull_request":
+			fmt.Println("first")
+			if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+				return err
+			}
+		case "push":
+			fmt.Println("second")
+			if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+				return err
+			}
+		default:
+			if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+				return err
+			}
+			if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
