@@ -10,7 +10,7 @@ metadata:
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "main" &&
       ({{.Tekton.WatchedSources}} ||
-      "openshift/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
+      ".konflux/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
       ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged() ||
       ".tekton/docker-build-ta.yaml".pathChanged())
   creationTimestamp: null
