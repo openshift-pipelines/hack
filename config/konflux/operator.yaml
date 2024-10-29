@@ -7,7 +7,7 @@ components:
 # - bundle
 # - index
 tekton:
-  watched-sources: '"upstream/***".pathChanged() || "openshift/patches/***".pathChanged() || "openshift/rpms/***".pathChanged()'
+  watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
   update-sources: |
     - name: fetch-payload

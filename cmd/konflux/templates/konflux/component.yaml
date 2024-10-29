@@ -14,5 +14,5 @@ spec:
   source:
     git:
       url: https://github.com/{{.Repository}}
-      dockerfileUrl: openshift/dockerfiles/{{.Name}}.Dockerfile
+      dockerfileUrl: .konflux/dockerfiles/{{.Name}}.Dockerfile
       revision: {{.Branch}}

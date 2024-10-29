@@ -138,7 +138,7 @@ func generateTekton(application Application, target string) error {
 
 	// set defaults
 	if application.Tekton.WatchedSources == "" {
-		application.Tekton = Tekton{WatchedSources: `"upstream/***".pathChanged() || "openshift/patches/***".pathChanged() || "openshift/rpms/***".pathChanged()`}
+		application.Tekton = Tekton{WatchedSources: `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`}
 	}
 
 	for _, c := range application.Components {
