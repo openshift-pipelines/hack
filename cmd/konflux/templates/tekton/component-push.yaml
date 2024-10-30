@@ -35,7 +35,7 @@ spec:
       {{- if contains .Name "ui" }}
       {"type": "npm", "path": "upstream/ui"}
       {{- else }}
-      {"type": "rpm", "path": "openshift/rpms"}
+      {"type": "rpm", "path": ".konflux/rpms"}
       {{- end }}
   pipelineRef:
     name: docker-build-ta
