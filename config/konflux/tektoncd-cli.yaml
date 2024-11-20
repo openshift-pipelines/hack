@@ -1,4 +1,7 @@
 repository: tektoncd-cli
 upstream: tektoncd/cli
 components:
-- tkn
+  - tkn
+branches:
+  - upstream: release-v0.38.1
+    version: next

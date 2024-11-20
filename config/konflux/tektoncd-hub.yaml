@@ -1,6 +1,9 @@
 repository: tektoncd-hub
 upstream: tektoncd/hub
 components:
-- db-migration
-- hub-api
-- hub-ui
+  - db-migration
+  - hub-api
+  - hub-ui
+branches:
+  - upstream: release-v1.19.0
+    version: next

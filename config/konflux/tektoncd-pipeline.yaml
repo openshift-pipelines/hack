@@ -1,15 +1,15 @@
 repository: tektoncd-pipeline
 upstream: tektoncd/pipeline
 components:
-- controller
-- entrypoint
-- events
-- nop
-- resolvers
-- sidecarlogresults
-- webhook
-- workingdirinit
+  - controller
+  - entrypoint
+  - events
+  - nop
+  - resolvers
+  - sidecarlogresults
+  - webhook
+  - workingdirinit
 branches:
-- upstream: release-v0.65.x
-  version: next
+  - upstream: release-v0.65.x
+    version: next
 
