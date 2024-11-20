@@ -79,7 +79,7 @@ jobs:
         git push -f origin actions/update/konflux-configuration
         if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
-          gh pr create -B main -H actions/update/konflux-configuration --fill
+          gh pr create -B main -H actions/update/konflux-configuration --label=hack --label=automated --fill
         else
           echo "a PR already exists, skipping..."
         fi
