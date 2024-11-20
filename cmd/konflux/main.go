@@ -103,12 +103,17 @@ func main() {
 	for _, branch := range c.Branches {
 		log.Printf("Generate configurations for %s branch\n", branch.Version)
 
+		version := branch.Version
+		if version != "next" {
+			version = fmt.Sprintf("release-v%s.x", branch.Version)
+		}
+
 		app := Application{
 			Name:           c.Repository,
 			Repository:     path.Join("openshift-pipelines", c.Repository),
 			Upstream:       c.Upstream,
 			Components:     c.Components,
-			Branch:         fmt.Sprintf("release-v%s.x", branch.Version),
+			Branch:         version,
 			UpstreamBranch: branch.Upstream,
 			Version:        branch.Version,
 		}
