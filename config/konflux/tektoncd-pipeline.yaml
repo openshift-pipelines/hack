@@ -11,5 +11,5 @@ components:
 - workingdirinit
 branches:
 - upstream: release-v0.65.x
-  version: 5.0.5
+  version: next
 
