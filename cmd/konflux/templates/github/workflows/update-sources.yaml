@@ -66,9 +66,10 @@ jobs:
 
         if [ "$(gh pr list --base {{.Branch}} --head actions/update/sources-{{.Branch}} --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
-          gh pr create -B {{.Branch}} -H actions/update/sources-{{.Branch}} --fill
+          gh pr create -B {{.Branch}} -H actions/update/sources-{{.Branch}} --label=automated --label=upstream --fill
         else
-          echo "a PR already exists, skipping..."
+          echo "a PR already exists, editing..."
+          gh pr edit --title "[bot] Update from {{.Upstream}} to ${NEW_COMMIT}" --body "$(cat /tmp/diff.txt | sed 's/^/    /')"
         fi
       env:
         GH_TOKEN: {{"${{ secrets.GITHUB_TOKEN }}"}}
