@@ -86,3 +86,9 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+    - name: Synchronize labels
+      run: |
+        gh label clone openshift-pipelines/hack
+      env:
+        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
