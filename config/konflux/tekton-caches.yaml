@@ -1,5 +1,7 @@
 repository: tekton-caches
 components:
-- cache
+  - cache
 tekton:
   watched-sources: '"***".pathChanged()'
+branches:
+  - version: next

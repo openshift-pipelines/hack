@@ -1,4 +1,7 @@
 repository: tektoncd-chains
 upstream: tektoncd/chains
 components:
-- controller
+  - controller
+branches:
+  - upstream: release-v0.23.x
+    version: next
