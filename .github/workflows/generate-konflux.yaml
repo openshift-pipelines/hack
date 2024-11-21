@@ -41,6 +41,11 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
+    - name: Clone ${{matrix.project}}
+      uses: actions/checkout@v4
+      with:
+        repository: openshift-pipelines/${{matrix.project}}
+        path: project
     - name: Synchronize labels
       run: |
         pushd project
@@ -49,11 +54,6 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
-    - name: Clone ${{matrix.project}}
-      uses: actions/checkout@v4
-      with:
-        repository: openshift-pipelines/${{matrix.project}}
-        path: project
     - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
