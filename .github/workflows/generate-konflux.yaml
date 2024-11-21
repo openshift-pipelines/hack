@@ -41,6 +41,14 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
+    - name: Synchronize labels
+      run: |
+        pushd project
+        gh label clone openshift-pipelines/hack
+        popd
+      env:
+        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
     - name: Clone ${{matrix.project}}
       uses: actions/checkout@v4
       with:
@@ -86,11 +94,3 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
-    - name: Synchronize labels
-      run: |
-        pushd project
-        gh label clone openshift-pipelines/hack
-        popd
-      env:
-        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
-        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
