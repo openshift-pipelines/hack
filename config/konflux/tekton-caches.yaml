@@ -5,3 +5,4 @@ tekton:
   watched-sources: '"***".pathChanged()'
 branches:
   - version: next
+    branch: main
