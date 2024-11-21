@@ -186,6 +186,9 @@ func generateKonflux(application Application, target string) error {
 	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Branch, "tests.yaml")); err != nil {
 		return err
 	}
+	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Branch, "tests-on-push.yaml")); err != nil {
+		return err
+	}
 	for _, c := range application.Components {
 		if err := generateFileFromTemplate("component.yaml", Component{
 			Name:        c,
