@@ -1,4 +1,4 @@
-name: auto-merge-{{.Branch}}
+name: auto-merge-{{.Version}}
 
 on:
   workflow_dispatch: {}
@@ -20,18 +20,18 @@ jobs:
         git config user.name openshift-pipelines-bot
         git config user.email pipelines-extcomm@redhat.com
         # Approve and merge pull-request with no reviews
-        for p in $(gh pr list --search "author:app/red-hat-konflux head:konflux/references/{{.Branch}}" --json "number" | jq ".[].number"); do
+        for p in $(gh pr list --search "author:app/red-hat-konflux head:konflux/references/{{.Version}}" --json "number" | jq ".[].number"); do
           gh pr merge --rebase --delete-branch --auto $p
         done
       env:
         GH_TOKEN: {{"${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}"}}
-    - name: auto-merge-upstream-{{.Branch}}
+    - name: auto-merge-upstream-{{.Version}}
       run: |
         gh auth status
         git config user.name openshift-pipelines-bot
         git config user.email pipelines-extcomm@redhat.com
         # Approve and merge pull-request with no reviews
-        for p in $(gh pr list --search "head:actions/update/sources-{{.Branch}}" --json "number" | jq ".[].number"); do
+        for p in $(gh pr list --search "head:actions/update/sources-{{.Version}}" --json "number" | jq ".[].number"); do
           gh pr merge --rebase --delete-branch --auto $p
         done
       env:
