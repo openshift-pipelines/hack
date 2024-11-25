@@ -225,12 +225,12 @@ func generateGitHub(application Application, target string) error {
 	}
 	if application.Upstream != "" {
 		// Only generate the github workflows if there is an upstream
-		filename := fmt.Sprintf("update-sources.%s.yaml", application.Branch)
+		filename := fmt.Sprintf("update-sources.%s.yaml", application.Version)
 		if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
 			return err
 		}
 	}
-	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Branch)
+	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Version)
 	if err := generateFileFromTemplate("auto-merge.yaml", application, filepath.Join(target, "workflows", amfilename)); err != nil {
 		return err
 	}
