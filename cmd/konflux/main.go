@@ -183,16 +183,16 @@ func generateTekton(application Application, target string) error {
 
 func generateKonflux(application Application, target string) error {
 	log.Printf("Generate konflux manifest in %s\n", target)
-	if err := os.MkdirAll(filepath.Join(target, application.Branch), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(target, application.Version), 0o755); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, application.Branch, "application.yaml")); err != nil {
+	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, application.Version, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Branch, "tests.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Branch, "tests-on-push.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Version, "tests-on-push.yaml")); err != nil {
 		return err
 	}
 	for _, c := range application.Components {
@@ -202,7 +202,7 @@ func generateKonflux(application Application, target string) error {
 			Repository:  application.Repository,
 			Branch:      application.Branch,
 			Version:     application.Version,
-		}, filepath.Join(target, application.Branch, fmt.Sprintf("component-%s.yaml", c))); err != nil {
+		}, filepath.Join(target, application.Version, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
 		if err := generateFileFromTemplate("image.yaml", Component{
@@ -211,7 +211,7 @@ func generateKonflux(application Application, target string) error {
 			Repository:  application.Repository,
 			Branch:      application.Branch,
 			Version:     application.Version,
-		}, filepath.Join(target, application.Branch, fmt.Sprintf("image-%s.yaml", c))); err != nil {
+		}, filepath.Join(target, application.Version, fmt.Sprintf("image-%s.yaml", c))); err != nil {
 			return err
 		}
 	}
