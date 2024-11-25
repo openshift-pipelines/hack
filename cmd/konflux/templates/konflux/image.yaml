@@ -8,8 +8,8 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
   labels:
     appstudio.redhat.com/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
-    appstudio.redhat.com/application: {{.Application}}-{{hyphenize .Branch}}
+    appstudio.redhat.com/application: {{.Application}}-{{hyphenize .Version}}
 spec:
   image:
-   name: {{.Application}}-{{hyphenize .Branch}}/{{.Name}}
+   name: {{.Application}}-{{hyphenize .Version}}/{{.Name}}
    visibility: public
