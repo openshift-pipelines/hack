@@ -62,6 +62,7 @@ type Tekton struct {
 type Branch struct {
 	Version  string
 	Upstream string
+	Branch   string
 }
 
 func main() {
@@ -108,12 +109,17 @@ func main() {
 			version = fmt.Sprintf("release-v%s.x", branch.Version)
 		}
 
+		b := version
+		if branch.Upstream == "" && branch.Branch != "" {
+			b = branch.Branch
+		}
+
 		app := Application{
 			Name:           c.Repository,
 			Repository:     path.Join("openshift-pipelines", c.Repository),
 			Upstream:       c.Upstream,
 			Components:     c.Components,
-			Branch:         version,
+			Branch:         b,
 			UpstreamBranch: branch.Upstream,
 			Version:        branch.Version,
 		}
