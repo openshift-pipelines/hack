@@ -7,8 +7,8 @@ patches: &patches
   script: |
     sed -i "s%go 1.22.*%go 1.22%g" go.mod
     sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
-    git diff > .konflux/patches/0000-go1.22.patch
+    git diff > ../.konflux/patches/0000-go1.22.patch
 branches:
-  - upstream: release-v0.38.1
+  - upstream: release-v0.39.0
     version: next
     patches: *patches
