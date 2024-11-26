@@ -4,3 +4,6 @@ components:
 - controller
 - webhook
 - watcher
+branches:
+- upstream: release-v0.29.x
+  version: next
