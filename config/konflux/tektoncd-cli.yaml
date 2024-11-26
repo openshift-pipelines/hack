@@ -2,6 +2,13 @@ repository: tektoncd-cli
 upstream: tektoncd/cli
 components:
   - tkn
+patches: &patches
+- name: go1.22
+  script: |
+    sed -i "s%go 1.22.*%go 1.22%g" go.mod
+    sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
+    git diff > .konflux/patches/0000-go1.22.patch
 branches:
   - upstream: release-v0.38.1
     version: next
+    patches: *patches

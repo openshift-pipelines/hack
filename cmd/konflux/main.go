@@ -30,6 +30,7 @@ type Application struct {
 	Version        string
 	GitHub         GitHub
 	Tekton         Tekton
+	Patches        []Patch
 }
 
 type Component struct {
@@ -48,6 +49,7 @@ type Config struct {
 	Tekton     Tekton
 	Components []string
 	Branches   []Branch
+	Patches    []Patch
 }
 
 type GitHub struct {
@@ -63,6 +65,12 @@ type Branch struct {
 	Version  string
 	Upstream string
 	Branch   string
+	Patches  []Patch
+}
+
+type Patch struct {
+	Name   string
+	Script string
 }
 
 func main() {
@@ -79,6 +87,8 @@ func main() {
 		log.Fatalln("Unmarshal config", err)
 	}
 
+	fmt.Println("patches", c.Patches)
+
 	app := Application{
 		Name:           c.Repository,
 		Repository:     path.Join("openshift-pipelines", c.Repository),
@@ -89,6 +99,7 @@ func main() {
 		Version:        "main",
 		GitHub:         c.GitHub,
 		Tekton:         c.Tekton,
+		Patches:        c.Patches,
 	}
 
 	log.Println("Generate configurations for main branch")
@@ -122,6 +133,7 @@ func main() {
 			Branch:         b,
 			UpstreamBranch: branch.Upstream,
 			Version:        branch.Version,
+			Patches:        branch.Patches,
 		}
 		if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
 			log.Fatalln(err)
@@ -228,6 +240,9 @@ func generateGitHub(application Application, target string) error {
 		filename := fmt.Sprintf("update-sources.%s.yaml", application.Version)
 		if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
 			return err
+		}
+		if len(application.Patches) > 0 {
+			fmt.Println("generate patches...")
 		}
 	}
 	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Version)
