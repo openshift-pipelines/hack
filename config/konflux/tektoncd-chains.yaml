@@ -9,7 +9,7 @@ patches: &patches
     sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
     git diff > ../.konflux/patches/0000-go1.22.patch
     # clean after yourself >:D
-    git co HEAD go.mod vendor/modules.txt
+    git checkout HEAD go.mod vendor/modules.txt
 branches:
   - upstream: release-v0.23.x
     version: next
