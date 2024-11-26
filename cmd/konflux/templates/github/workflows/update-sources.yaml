@@ -33,9 +33,11 @@ jobs:
 {{if .Patches}}
     - name: Generate patches
       run: |
+        pushd upstream
 {{range .Patches}}
 {{.Script | indent 8}}
 {{end}}
+        popd
 {{end}}
     - name: Commit new changes
       run: |
