@@ -10,6 +10,18 @@ rules:
   - applications
   - components
   - imagerepositories
+  - integrationtestscenarios
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - create
+- apiGroups:
+  - tekton.dev
+  resources:
+  - pipelineruns
   verbs:
   - get
   - list
