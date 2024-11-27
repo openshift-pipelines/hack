@@ -12,6 +12,7 @@ import (
 	"strings"
 	"text/template"
 
+	k "github.com/openshift-pipelines/hack/internal/konflux"
 	"gopkg.in/yaml.v2"
 )
 
@@ -19,59 +20,6 @@ var nameFieldInvalidCharPattern = regexp.MustCompile("[^a-z0-9]")
 
 //go:embed templates/konflux/*.yaml templates/github/*/*.yaml templates/tekton/*.yaml
 var templateFS embed.FS
-
-type Application struct {
-	Name           string
-	Repository     string
-	Upstream       string
-	Branch         string
-	UpstreamBranch string
-	Components     []string
-	Version        string
-	GitHub         GitHub
-	Tekton         Tekton
-	Patches        []Patch
-}
-
-type Component struct {
-	Name        string
-	Application string
-	Repository  string
-	Branch      string
-	Version     string
-	Tekton      Tekton
-}
-
-type Config struct {
-	Repository string
-	Upstream   string
-	GitHub     GitHub
-	Tekton     Tekton
-	Components []string
-	Branches   []Branch
-	Patches    []Patch
-}
-
-type GitHub struct {
-	UpdateSources string `json:"update-sources" yaml:"update-sources"`
-}
-
-type Tekton struct {
-	WatchedSources string `json:"watched-sources" yaml:"watched-sources"`
-	EventType      string `json:"event_type" yaml:"event_type"`
-}
-
-type Branch struct {
-	Version  string
-	Upstream string
-	Branch   string
-	Patches  []Patch
-}
-
-type Patch struct {
-	Name   string
-	Script string
-}
 
 func main() {
 	config := flag.String("config", filepath.Join("config", "konflux", "repository.yaml"), "specify the repository configuration")
@@ -82,14 +30,14 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	c := &Config{}
+	c := &k.Config{}
 	if err := yaml.UnmarshalStrict(in, c); err != nil {
 		log.Fatalln("Unmarshal config", err)
 	}
 
 	fmt.Println("patches", c.Patches)
 
-	app := Application{
+	app := k.Application{
 		Name:           c.Repository,
 		Repository:     path.Join("openshift-pipelines", c.Repository),
 		Upstream:       c.Upstream,
@@ -125,7 +73,7 @@ func main() {
 			b = branch.Branch
 		}
 
-		app := Application{
+		app := k.Application{
 			Name:           c.Repository,
 			Repository:     path.Join("openshift-pipelines", c.Repository),
 			Upstream:       c.Upstream,
@@ -144,7 +92,7 @@ func main() {
 	}
 }
 
-func generateTekton(application Application, target string) error {
+func generateTekton(application k.Application, target string) error {
 	log.Printf("Generate tekton manifest in %s\n", target)
 	if err := os.MkdirAll(target, 0o755); err != nil {
 		return err
@@ -162,7 +110,7 @@ func generateTekton(application Application, target string) error {
 	}
 
 	for _, c := range application.Components {
-		component := Component{
+		component := k.Component{
 			Name:        c,
 			Application: application.Name,
 			Repository:  application.Repository,
@@ -193,7 +141,7 @@ func generateTekton(application Application, target string) error {
 	return nil
 }
 
-func generateKonflux(application Application, target string) error {
+func generateKonflux(application k.Application, target string) error {
 	log.Printf("Generate konflux manifest in %s\n", target)
 	if err := os.MkdirAll(filepath.Join(target, application.Version), 0o755); err != nil {
 		return err
@@ -208,7 +156,7 @@ func generateKonflux(application Application, target string) error {
 		return err
 	}
 	for _, c := range application.Components {
-		if err := generateFileFromTemplate("component.yaml", Component{
+		if err := generateFileFromTemplate("component.yaml", k.Component{
 			Name:        c,
 			Application: application.Name,
 			Repository:  application.Repository,
@@ -217,7 +165,7 @@ func generateKonflux(application Application, target string) error {
 		}, filepath.Join(target, application.Version, fmt.Sprintf("component-%s.yaml", c))); err != nil {
 			return err
 		}
-		if err := generateFileFromTemplate("image.yaml", Component{
+		if err := generateFileFromTemplate("image.yaml", k.Component{
 			Name:        c,
 			Application: application.Name,
 			Repository:  application.Repository,
@@ -230,7 +178,7 @@ func generateKonflux(application Application, target string) error {
 	return nil
 }
 
-func generateGitHub(application Application, target string) error {
+func generateGitHub(application k.Application, target string) error {
 	log.Printf("Generate github manifests in %s\n", target)
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
