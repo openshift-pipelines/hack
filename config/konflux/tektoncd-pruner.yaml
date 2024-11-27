@@ -1,0 +1,9 @@
+repository: tektoncd-pruner
+components:
+  - controller
+  - webhook
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - version: next
+    branch: main
