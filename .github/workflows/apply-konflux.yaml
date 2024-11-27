@@ -58,4 +58,4 @@ jobs:
         kubectl get pr
         go run ./cmd/konflux-apply/ -config config/konflux/${{matrix.project}}.yaml
       env:
-        KONFLUX_TOKEN: ${{ KONFLUX_SA_TOKEN }}
+        KONFLUX_TOKEN: ${{ secrets.KONFLUX_SA_TOKEN }}
