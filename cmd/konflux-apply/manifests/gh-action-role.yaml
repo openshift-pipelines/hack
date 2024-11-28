@@ -11,6 +11,8 @@ rules:
   - components
   - imagerepositories
   - integrationtestscenarios
+  - releaseplans
+  - releaseplanadmissions
   verbs:
   - get
   - list
