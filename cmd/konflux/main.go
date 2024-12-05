@@ -79,6 +79,7 @@ func main() {
 			Upstream:       c.Upstream,
 			Components:     c.Components,
 			Branch:         b,
+			GitHub:         c.GitHub,
 			UpstreamBranch: branch.Upstream,
 			Version:        branch.Version,
 			Patches:        branch.Patches,
