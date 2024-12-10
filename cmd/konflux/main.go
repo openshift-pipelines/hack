@@ -77,7 +77,7 @@ func main() {
 		}
 		platforms := branch.Platforms
 		if len(platforms) == 0 {
-			branch.Platforms = mainPlatforms
+			platforms = mainPlatforms
 		}
 
 		app := k.Application{
@@ -96,6 +96,9 @@ func main() {
 			log.Fatalln(err)
 		}
 		if err := generateGitHub(app, filepath.Join(*target, ".github")); err != nil {
+			log.Fatalln(err)
+		}
+		if err := generateTekton(app, filepath.Join(*target, ".konflux", "tekton", branch.Version, ".tekton")); err != nil {
 			log.Fatalln(err)
 		}
 	}
