@@ -30,6 +30,11 @@ spec:
     value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{.Application}}-{{hyphenize .Branch}}/{{.Name}}:{{"{{revision}}"}}
   - name: dockerfile
     value: .konflux/dockerfiles/{{.Name}}.Dockerfile
+  - name: build-platforms
+    value:
+{{- range $platform := .Platforms }}
+    - {{ $platform }}
+{{- end }}
   - name: prefetch-input
     value: |
       {{- if contains .Name "ui" }}

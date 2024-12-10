@@ -34,8 +34,10 @@ func main() {
 	if err := yaml.UnmarshalStrict(in, c); err != nil {
 		log.Fatalln("Unmarshal config", err)
 	}
-
-	fmt.Println("patches", c.Patches)
+	mainPlatforms := c.Platforms
+	if len(mainPlatforms) == 0 {
+		mainPlatforms = []string{"linux/x86_64", "linux/arm64"}
+	}
 
 	app := k.Application{
 		Name:           c.Repository,
@@ -48,6 +50,7 @@ func main() {
 		GitHub:         c.GitHub,
 		Tekton:         c.Tekton,
 		Patches:        c.Patches,
+		Platforms:      mainPlatforms,
 	}
 
 	log.Println("Generate configurations for main branch")
@@ -72,6 +75,10 @@ func main() {
 		if branch.Upstream == "" && branch.Branch != "" {
 			b = branch.Branch
 		}
+		platforms := branch.Platforms
+		if len(platforms) == 0 {
+			branch.Platforms = mainPlatforms
+		}
 
 		app := k.Application{
 			Name:           c.Repository,
@@ -83,6 +90,7 @@ func main() {
 			UpstreamBranch: branch.Upstream,
 			Version:        branch.Version,
 			Patches:        branch.Patches,
+			Platforms:      platforms,
 		}
 		if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
 			log.Fatalln(err)
@@ -118,15 +126,14 @@ func generateTekton(application k.Application, target string) error {
 			Branch:      application.Branch,
 			Version:     application.Version,
 			Tekton:      application.Tekton,
+			Platforms:   application.Platforms,
 		}
 		switch application.Tekton.EventType {
 		case "pull_request":
-			fmt.Println("first")
 			if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
 				return err
 			}
 		case "push":
-			fmt.Println("second")
 			if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
 				return err
 			}
@@ -190,9 +197,6 @@ func generateGitHub(application k.Application, target string) error {
 		if err := generateFileFromTemplate("update-sources.yaml", application, filepath.Join(target, "workflows", filename)); err != nil {
 			return err
 		}
-		if len(application.Patches) > 0 {
-			fmt.Println("generate patches...")
-		}
 	}
 	amfilename := fmt.Sprintf("auto-merge.%s.yaml", application.Version)
 	if err := generateFileFromTemplate("auto-merge.yaml", application, filepath.Join(target, "workflows", amfilename)); err != nil {
@@ -248,3 +252,7 @@ func (i *arrayFlags) Set(value string) error {
 	*i = append(*i, value)
 	return nil
 }
+
+// Local Variables:
+// compile-command: "go run . -target /tmp/foo -config ../../config/konflux/operator.yaml"
+// End:

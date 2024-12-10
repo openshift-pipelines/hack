@@ -11,6 +11,7 @@ type Application struct {
 	GitHub         GitHub
 	Tekton         Tekton
 	Patches        []Patch
+	Platforms      []string
 }
 
 type Component struct {
@@ -20,6 +21,7 @@ type Component struct {
 	Branch      string
 	Version     string
 	Tekton      Tekton
+	Platforms   []string
 }
 
 type Config struct {
@@ -30,6 +32,7 @@ type Config struct {
 	Components []string
 	Branches   []Branch
 	Patches    []Patch
+	Platforms  []string
 }
 
 type GitHub struct {
@@ -42,10 +45,11 @@ type Tekton struct {
 }
 
 type Branch struct {
-	Version  string
-	Upstream string
-	Branch   string
-	Patches  []Patch
+	Version   string
+	Upstream  string
+	Branch    string
+	Patches   []Patch
+	Platforms []string
 }
 
 type Patch struct {
