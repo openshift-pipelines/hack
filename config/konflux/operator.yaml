@@ -6,6 +6,9 @@ components:
 - proxy
 # - bundle
 # - index
+platforms:
+- linux/arm64
+- linux/amd64
 tekton:
   watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
@@ -38,3 +41,4 @@ github:
 branches:
 - version: next
   upstream: main
+
