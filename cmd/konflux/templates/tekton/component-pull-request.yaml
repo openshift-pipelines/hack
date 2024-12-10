@@ -35,9 +35,7 @@ spec:
     value: .konflux/dockerfiles/{{.Name}}.Dockerfile
   - name: build-platforms
     value:
-{{- range $platform := .Platforms }}
-    - {{ $platform }}
-{{- end }}
+    - linux/x86_64
   - name: prefetch-input
     value: |
       {{- if contains .Name "ui" }}
