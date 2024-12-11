@@ -8,7 +8,7 @@ components:
 # - index
 platforms:
 - linux-m2xlarge/arm64
-- linux/amd64
+- linux/x86_64
 tekton:
   watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
