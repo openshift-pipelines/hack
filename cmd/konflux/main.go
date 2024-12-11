@@ -36,7 +36,7 @@ func main() {
 	}
 	mainPlatforms := c.Platforms
 	if len(mainPlatforms) == 0 {
-		mainPlatforms = []string{"linux/x86_64", "linux/arm64"}
+		mainPlatforms = []string{"linux/x86_64", "linux-m2xlarge/arm64"}
 	}
 
 	app := k.Application{
