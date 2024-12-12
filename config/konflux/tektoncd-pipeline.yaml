@@ -12,4 +12,5 @@ components:
 branches:
   - upstream: release-v0.65.x
     version: next
+    release: auto
 

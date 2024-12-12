@@ -91,6 +91,7 @@ func main() {
 			Version:        branch.Version,
 			Patches:        branch.Patches,
 			Platforms:      platforms,
+			ReleasePlan:    (branch.Release == "auto"),
 		}
 		if err := generateKonflux(app, filepath.Join(*target, ".konflux")); err != nil {
 			log.Fatalln(err)
@@ -165,6 +166,11 @@ func generateKonflux(application k.Application, target string) error {
 	}
 	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Version, "tests-on-push.yaml")); err != nil {
 		return err
+	}
+	if application.ReleasePlan {
+		if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(target, application.Version, "release-plan.yaml")); err != nil {
+			return err
+		}
 	}
 	for _, c := range application.Components {
 		if err := generateFileFromTemplate("component.yaml", k.Component{

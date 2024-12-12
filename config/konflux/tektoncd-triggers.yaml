@@ -8,4 +8,5 @@ components:
 branches:
   - upstream: release-v0.30.x
     version: next
+    release: auto
 

@@ -7,3 +7,4 @@ tekton:
 branches:
   - version: next
     branch: release-v0.4.0
+    release: auto

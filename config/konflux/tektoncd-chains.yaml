@@ -21,3 +21,4 @@ branches:
   - upstream: release-v0.23.x
     version: next
     patches: *patches
+    release: auto

@@ -12,6 +12,7 @@ type Application struct {
 	Tekton         Tekton
 	Patches        []Patch
 	Platforms      []string
+	ReleasePlan    bool
 }
 
 type Component struct {
@@ -50,6 +51,7 @@ type Branch struct {
 	Branch    string
 	Patches   []Patch
 	Platforms []string
+	Release   string
 }
 
 type Patch struct {

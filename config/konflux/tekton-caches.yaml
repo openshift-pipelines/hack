@@ -6,3 +6,4 @@ tekton:
 branches:
   - version: next
     branch: main
+    release: auto

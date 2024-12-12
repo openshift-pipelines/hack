@@ -7,3 +7,4 @@ components:
 branches:
   - upstream: release-v1.19.0
     version: next
+    release: auto
