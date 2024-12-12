@@ -9,6 +9,7 @@ metadata:
   name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-rp
 spec:
   application: {{.Name}}-{{hyphenize .Version}}
+  target: tekton-ecosystem-tenant
   tenantPipeline:
     serviceAccountName: release-registry-openshift-pipelines-next
     pipelineRef:
