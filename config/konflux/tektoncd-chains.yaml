@@ -7,14 +7,24 @@ patches: &patches
   script: |
     sed -i "s%go 1.22.*%go 1.22%g" go.mod
     sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
-    git diff > ../.konflux/patches/0000-go1.22.patch
+    if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+    else
+      git diff > ../.konflux/patches/0000-go1.22.patch
+    fi
     # clean after yourself >:D
     git checkout HEAD go.mod vendor/modules.txt
 - name: go1.23
   script: |
     sed -i "s%go 1.23.*%go 1.22%g" go.mod
     sed -i "s%go 1.23.*%go 1.22%g" vendor/modules.txt
-    git diff > ../.konflux/patches/0000-go1.23.patch
+    if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+    else
+      git diff > ../.konflux/patches/0000-go1.23.patch
+    fi
     # clean after yourself >:D
     git checkout HEAD go.mod vendor/modules.txt
 branches:
