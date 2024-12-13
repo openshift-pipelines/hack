@@ -5,6 +5,7 @@ components:
 patches: &patches
 - name: go1.22
   script: |
+    rm ../.konflux/patches/0000-go1.22.patch || true
     sed -i "s%go 1.22.*%go 1.22%g" go.mod
     sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
     if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
@@ -17,6 +18,7 @@ patches: &patches
     git checkout HEAD go.mod vendor/modules.txt
 - name: go1.23
   script: |
+    rm ../.konflux/patches/0000-go1.23.patch || true
     sed -i "s%go 1.23.*%go 1.22%g" go.mod
     sed -i "s%go 1.23.*%go 1.22%g" vendor/modules.txt
     if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
