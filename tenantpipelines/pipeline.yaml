@@ -48,5 +48,6 @@ spec:
                 # split the word with "/" to combine words using "-"
                 IFS="/" read -r -a parts <<< "$image_no_sha"
                 new_image="quay.io/openshift-pipeline/${parts[2]}-${parts[3]}:next"
+                echo "copying the image from $container_image to $new_image with all tags and preserving digests."
                 skopeo copy docker://"$container_image" docker://"$new_image" --all --preserve-digests
               done
