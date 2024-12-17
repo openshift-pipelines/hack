@@ -2,35 +2,35 @@ repository: tektoncd-chains
 upstream: tektoncd/chains
 components:
   - controller
-patches: &patches
-- name: go1.22
-  script: |
-    rm ../.konflux/patches/0000-go1.22.patch || true
-    sed -i "s%go 1.22.*%go 1.22%g" go.mod
-    sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
-    if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
-          echo "No change, exiting"
-          exit 0
-    else
-      git diff > ../.konflux/patches/0000-go1.22.patch
-    fi
-    # clean after yourself >:D
-    git checkout HEAD go.mod vendor/modules.txt
-- name: go1.23
-  script: |
-    rm ../.konflux/patches/0000-go1.23.patch || true
-    sed -i "s%go 1.23.*%go 1.22%g" go.mod
-    sed -i "s%go 1.23.*%go 1.22%g" vendor/modules.txt
-    if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
-          echo "No change, exiting"
-          exit 0
-    else
-      git diff > ../.konflux/patches/0000-go1.23.patch
-    fi
-    # clean after yourself >:D
-    git checkout HEAD go.mod vendor/modules.txt
+# patches: &patches
+# - name: go1.22
+#   script: |
+#     rm ../.konflux/patches/0000-go1.22.patch || true
+#     sed -i "s%go 1.22.*%go 1.22%g" go.mod
+#     sed -i "s%go 1.22.*%go 1.22%g" vendor/modules.txt
+#     if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+#           echo "No change, exiting"
+#           exit 0
+#     else
+#       git diff > ../.konflux/patches/0000-go1.22.patch
+#     fi
+#     # clean after yourself >:D
+#     git checkout HEAD go.mod vendor/modules.txt
+# - name: go1.23
+#   script: |
+#     rm ../.konflux/patches/0000-go1.23.patch || true
+#     sed -i "s%go 1.23.*%go 1.22%g" go.mod
+#     sed -i "s%go 1.23.*%go 1.22%g" vendor/modules.txt
+#     if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+#           echo "No change, exiting"
+#           exit 0
+#     else
+#       git diff > ../.konflux/patches/0000-go1.23.patch
+#     fi
+#     # clean after yourself >:D
+#     git checkout HEAD go.mod vendor/modules.txt
 branches:
   - upstream: release-v0.23.x
     version: next
-    patches: *patches
+    # patches: *patches
     release: auto
