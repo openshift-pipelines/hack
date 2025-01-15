@@ -44,7 +44,14 @@ spec:
       {"type": "rpm", "path": ".konflux/rpms"}
       {{- end }}
   pipelineRef:
-    name: docker-build-ta
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/openshift-pipelines/operator.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: .tekton/docker-build-ta.yaml
   workspaces:
   - name: git-auth
     secret:
