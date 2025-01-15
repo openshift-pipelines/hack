@@ -36,9 +36,7 @@ jobs:
         go-version: 1.22.x
     - name: Generate configurations and pull-requests
       run: |
-        echo foo
-        # unset extraheader...
-        git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --global --unset-all
+        echo "Let's go"
 
         gh auth status
         gh auth setup-git
