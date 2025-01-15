@@ -36,11 +36,10 @@ jobs:
         go-version: 1.22.x
     - name: Generate configurations and pull-requests
       run: |
-        git config user.name openshift-pipelines-bot
-        git config user.email pipelines-extcomm@redhat.com
-        git checkout -b actions/update/konflux-configuration
+        git config --global user.name openshift-pipelines-bot
+        git config --global user.email pipelines-extcomm@redhat.com
         # unset extraheader...
-        git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+        git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --global --unset-all
 
         gh auth status
         gh auth setup-git
