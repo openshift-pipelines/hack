@@ -13,8 +13,7 @@ metadata:
       == "{{.Branch}}" &&
       ({{.Tekton.WatchedSources}} ||
       ".konflux/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
-      ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged() ||
-      ".tekton/docker-build-ta.yaml".pathChanged())
+      ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: {{.Application}}-{{.Version}}
