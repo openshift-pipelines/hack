@@ -45,7 +45,7 @@ jobs:
         gh auth status
         gh auth setup-git
         
-        go run ./cmd/konflux/ -config config/konflux/*
+        go run ./cmd/konflux/ config/konflux/*
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
