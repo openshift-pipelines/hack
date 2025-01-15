@@ -3,6 +3,7 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/{{.Version}}/.tekton/docker-build-ta.yaml"
     build.appstudio.openshift.io/repo: https://github.com/{{.Repository}}?rev={{"{{revision}}"}}
     build.appstudio.redhat.com/commit_sha: '{{"{{revision}}"}}'
     build.appstudio.redhat.com/pull_request_number: '{{"{{pull_request_number}}"}}'
@@ -44,14 +45,7 @@ spec:
       {"type": "rpm", "path": ".konflux/rpms"}
       {{- end }}
   pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/openshift-pipelines/operator.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: .tekton/docker-build-ta.yaml
+    name: docker-build-ta
   workspaces:
   - name: git-auth
     secret:
