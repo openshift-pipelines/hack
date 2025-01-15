@@ -238,7 +238,7 @@ func commitAndPullRequest(ctx context.Context, dir, branch string) error {
 		log.Printf("[%s] No changes, skipping commit and PR", dir)
 		return nil
 	}
-	if out, err := run(ctx, dir, "bash", "-c", "git config user.name openshift-pipelines-bot; git config user.email pipelines-extcomm@redhat.com; git config  -l | grep 'http\\..*\\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all"); err != nil {
+	if out, err := run(ctx, dir, "bash", "-c", "\"git config user.name openshift-pipelines-bot; git config user.email pipelines-extcomm@redhat.com; git config  -l | grep 'http\\..*\\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all\""); err != nil {
 		return fmt.Errorf("failed to set some git configurations: %s, %s", err, out)
 	}
 	if out, err := run(ctx, dir, "git", "add", "."); err != nil {
