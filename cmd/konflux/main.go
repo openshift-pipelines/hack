@@ -51,11 +51,12 @@ func main() {
 		}
 	}
 
-	var g errgroup.Group
+	// var g errgroup.Group
 
 	for _, config := range configs {
 		config := config
-		g.Go(func() error {
+		// g.Go(func() error {
+		f := func() error {
 			in, err := os.ReadFile(config)
 			if err != nil {
 				return err
@@ -72,15 +73,19 @@ func main() {
 				return err
 			}
 			return nil
-		})
+		}
+		if err := f(); err != nil {
+			log.Fatal(err)
+		}
+		// })
 	}
 
 	// g.Wait waits for all goroutines to complete
 	// and returns the first non-nil error returned
 	// by one of the goroutines.
-	if err := g.Wait(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := g.Wait(); err != nil {
+	// log.Fatal(err)
+	// }
 }
 
 func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool) error {
