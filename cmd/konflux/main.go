@@ -209,7 +209,7 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 		if err := os.MkdirAll(checkoutDir, os.ModePerm); err != nil {
 			return err
 		}
-		if err := cloneAndCheckout(ctx, repo, version, checkoutDir); err != nil {
+		if err := cloneAndCheckout(ctx, repo, b, checkoutDir); err != nil {
 			return err
 		}
 
@@ -223,7 +223,7 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 		}
 
 		if !dryRun {
-			if err := commitAndPullRequest(ctx, checkoutDir, version); err != nil {
+			if err := commitAndPullRequest(ctx, checkoutDir, b); err != nil {
 				return err
 			}
 		}
