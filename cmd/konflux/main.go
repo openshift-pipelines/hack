@@ -17,7 +17,7 @@ import (
 	"text/template"
 
 	k "github.com/openshift-pipelines/hack/internal/konflux"
-	"golang.org/x/sync/errgroup"
+	// "golang.org/x/sync/errgroup"
 	"gopkg.in/yaml.v2"
 )
 
