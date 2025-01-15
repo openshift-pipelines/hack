@@ -287,6 +287,9 @@ func cloneAndCheckout(ctx context.Context, repo, branch, dir string) error {
 	if out, err := run(ctx, dir, "git", "checkout", "-B", branch); err != nil {
 		return fmt.Errorf("failed to checkout %s branch: %s, %s", branch, err, out)
 	}
+	if out, err := run(ctx, dir, "git", "checkout", "-B", "actions/update/konflux-configuration-"+branch); err != nil {
+		return fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
+	}
 	return nil
 }
 
