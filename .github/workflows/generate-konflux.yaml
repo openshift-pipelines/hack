@@ -14,84 +14,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-matrix:
-    runs-on: ubuntu-latest
-    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
-    steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v4
-    - uses: actions/setup-go@v5
-      with:
-        go-version: 1.22.x
-    - id: set-matrix
-      run: |
-        echo "projects=$(go run ./cmd/matrix config/konflux/*)" >> $GITHUB_OUTPUT
-    outputs:
-      projects: ${{ steps.set-matrix.outputs.projects }}
-  update-project:
-    needs: build-matrix
+  update-projects:
     if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        project: ${{ fromJSON(needs.build-matrix.outputs.projects) }}
     permissions:
       contents: write
       pull-requests: write
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-    - name: Clone ${{matrix.project}}
-      uses: actions/checkout@v4
-      with:
-        repository: openshift-pipelines/${{matrix.project}}
-        path: project
-    - name: Synchronize labels
-      run: |
-        pushd project
-        gh label clone openshift-pipelines/hack
-        popd
-      env:
-        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
-        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
+    # - name: Synchronize labels
+    #   run: |
+    #     pushd project
+    #     gh label clone openshift-pipelines/hack
+    #     popd
+    #   env:
+    #     GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+    #     GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
     - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
-    - name: Generate configurations
+    - name: Generate configurations and pull-requests
       run: |
-        go run ./cmd/konflux/ -target project -config config/konflux/${{matrix.project}}.yaml
-        pushd project
-        git status
-        popd
-    - name: Commit new changes
-      run: |
-        pushd project
         git config user.name openshift-pipelines-bot
         git config user.email pipelines-extcomm@redhat.com
         git checkout -b actions/update/konflux-configuration
-        git add .github .konflux .tekton
-
-        if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
-          echo "No change, exiting"
-          exit 0
-        fi
-
-        git commit -m "[bot] update konflux configuration"
-
         # unset extraheader...
         git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
 
         gh auth status
         gh auth setup-git
-
-        git push -f origin actions/update/konflux-configuration
-        if [ "$(gh pr list --base main --head actions/update/konflux-configuration --json url --jq 'length')" = "0" ]; then
-          echo "creating PR..."
-          gh pr create -B main -H actions/update/konflux-configuration --label=hack --label=automated --fill
-        else
-          echo "a PR already exists, skipping..."
-        fi
+        
+        go run ./cmd/konflux/ -config config/konflux/*
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
