@@ -238,6 +238,9 @@ func commitAndPullRequest(ctx context.Context, dir, branch string) error {
 		log.Printf("[%s] No changes, skipping commit and PR", dir)
 		return nil
 	}
+	if out, err := run(ctx, dir, "bash", "-c", "git config user.name openshift-pipelines-bot; git config user.email pipelines-extcomm@redhat.com"); err != nil {
+		return fmt.Errorf("failed to set some git configurations: %s, %s", err, out)
+	}
 	if out, err := run(ctx, dir, "git", "add", "."); err != nil {
 		return fmt.Errorf("failed to add: %s, %s", err, out)
 	}

@@ -36,8 +36,7 @@ jobs:
         go-version: 1.22.x
     - name: Generate configurations and pull-requests
       run: |
-        git config --global user.name openshift-pipelines-bot
-        git config --global user.email pipelines-extcomm@redhat.com
+        echo foo
         # unset extraheader...
         git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --global --unset-all
 
