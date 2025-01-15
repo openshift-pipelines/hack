@@ -37,6 +37,7 @@ jobs:
     - name: Generate configurations and pull-requests
       run: |
         echo "Let's go"
+        # git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
 
         gh auth status
         gh auth setup-git
