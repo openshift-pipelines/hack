@@ -151,6 +151,12 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 		if err := generateGitHub(app, filepath.Join(checkoutDir, ".github")); err != nil {
 			log.Fatalln(err)
 		}
+		// If a branch is using main, we need to also generate the branches tekton config in here
+		if branch.Branch == "main" {
+			if err := generateTekton(app, filepath.Join(checkoutDir, ".tekton")); err != nil {
+				log.Fatalln(err)
+			}
+		}
 	}
 
 	if !dryRun {
@@ -163,6 +169,10 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 
 func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun bool) error {
 	for _, branch := range c.Branches {
+		// If a branch is using main, we should just skip the generation for this one
+		if branch.Branch == "main" {
+			continue
+		}
 		version := branch.Version
 		if version != "next" {
 			version = fmt.Sprintf("release-v%s.x", branch.Version)
