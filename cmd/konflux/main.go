@@ -51,41 +51,25 @@ func main() {
 		}
 	}
 
-	// var g errgroup.Group
-
 	for _, config := range configs {
-		config := config
-		// g.Go(func() error {
-		f := func() error {
-			in, err := os.ReadFile(config)
-			if err != nil {
-				return err
-			}
-			c := &k.Config{}
-			if err := yaml.UnmarshalStrict(in, c); err != nil {
-				return err
-			}
-
-			if err := generateMainConfig(ctx, *c, dir, *dryRun); err != nil {
-				return err
-			}
-			if err := generateBranchesConfig(ctx, *c, dir, *dryRun); err != nil {
-				return err
-			}
-			return nil
-		}
-		if err := f(); err != nil {
+		in, err := os.ReadFile(config)
+		if err != nil {
 			log.Fatal(err)
 		}
-		// })
-	}
+		c := &k.Config{}
+		if err := yaml.UnmarshalStrict(in, c); err != nil {
+			log.Fatal(err)
+		}
 
-	// g.Wait waits for all goroutines to complete
-	// and returns the first non-nil error returned
-	// by one of the goroutines.
-	// if err := g.Wait(); err != nil {
-	// log.Fatal(err)
-	// }
+		log.Printf("::group:: generating konflux configuration for %s\n", c.Repository)
+		if err := generateMainConfig(ctx, *c, dir, *dryRun); err != nil {
+			log.Fatal(err)
+		}
+		if err := generateBranchesConfig(ctx, *c, dir, *dryRun); err != nil {
+			log.Fatal(err)
+		}
+		log.Println("::endgroup::")
+	}
 }
 
 func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool) error {
