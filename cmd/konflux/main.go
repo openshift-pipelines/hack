@@ -61,14 +61,14 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Printf("::group:: generating konflux configuration for %s\n", c.Repository)
+		fmt.Printf("::group:: generating konflux configuration for %s\n", c.Repository)
 		if err := generateMainConfig(ctx, *c, dir, *dryRun); err != nil {
 			log.Fatal(err)
 		}
 		if err := generateBranchesConfig(ctx, *c, dir, *dryRun); err != nil {
 			log.Fatal(err)
 		}
-		log.Println("::endgroup::")
+		fmt.Println("::endgroup::")
 	}
 }
 
