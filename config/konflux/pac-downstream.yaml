@@ -6,6 +6,6 @@ components:
   - watcher
   - cli
 branches:
-  - upstream: release-v0.30.x
+  - upstream: release-v0.32.x
     version: next
     release: auto
