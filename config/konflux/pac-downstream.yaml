@@ -9,3 +9,5 @@ branches:
   - upstream: release-v0.32.x
     version: next
     release: auto
+  - upstream: release-v0.32.x
+    version: release-v1.18.x
