@@ -349,8 +349,14 @@ func generateKonflux(application k.Application, target string) error {
 	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, application.Version, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
-		return err
+	if len(application.Components) == 1 {
+		if err := generateFileFromTemplate("tests_pr.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
+			return err
+		}
+	} else {
+		if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
+			return err
+		}
 	}
 	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Version, "tests-on-push.yaml")); err != nil {
 		return err
