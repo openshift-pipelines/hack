@@ -5,5 +5,5 @@ tekton:
   watched-sources: '"***".pathChanged()'
 branches:
   - version: next
-    branch: 0.1.0
+    branch: release-v0.1.0
     release: auto
