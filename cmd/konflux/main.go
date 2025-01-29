@@ -119,9 +119,6 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 		log.Printf("Generate configurations for %s branch\n", branch.Version)
 
 		version := branch.Version
-		if version != "next" {
-			version = fmt.Sprintf("release-v%s.x", branch.Version)
-		}
 
 		b := version
 		if branch.Upstream == "" && branch.Branch != "" {
@@ -174,9 +171,6 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 			continue
 		}
 		version := branch.Version
-		if version != "next" {
-			version = fmt.Sprintf("release-v%s.x", branch.Version)
-		}
 
 		b := version
 		if branch.Upstream == "" && branch.Branch != "" {
