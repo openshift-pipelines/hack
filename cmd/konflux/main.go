@@ -231,7 +231,7 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 }
 
 func commitAndPullRequest(ctx context.Context, dir, branch string) error {
-	if out, err := run(ctx, dir, "git", "status", "--porcelain", "--untracked-files=no"); err != nil {
+	if out, err := run(ctx, dir, "git", "status", "--porcelain"); err != nil {
 		return fmt.Errorf("failed to check git status: %s, %s", err, out)
 	} else if string(out) == "" {
 		log.Printf("[%s] No changes, skipping commit and PR", dir)
