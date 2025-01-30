@@ -75,7 +75,7 @@ jobs:
 
         if [ "$(gh pr list --base {{.Version}} --head actions/update/sources-{{.Version}} --json url --jq 'length')" = "0" ]; then
           echo "creating PR..."
-          gh pr create -B {{.Version}} -H actions/update/sources-{{.Version}} --label=automated --label=upstream --fill
+          gh pr create -B {{.Branch}} -H actions/update/sources-{{.Version}} --label=automated --label=upstream --fill
         else
           echo "a PR already exists, editing..."
           gh pr edit --title "[bot] Update {{.Version}} from {{.Upstream}} to ${NEW_COMMIT}" --body "$(cat /tmp/diff.txt | sed 's/^/    /' | head -c 55555)"
