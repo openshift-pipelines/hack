@@ -45,4 +45,5 @@ github:
 branches:
 - version: next
   upstream: main
-
+- upstream: main
+  version: "1.18"
