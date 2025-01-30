@@ -18,7 +18,7 @@ jobs:
     - name: Checkout the current repo
       uses: actions/checkout@v4
       with:
-        ref: {{.Version}}
+        ref: {{.Branch}}
 
     - name: Clone {{.Upstream}}
       run: |
