@@ -217,6 +217,11 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 			return err
 		}
 
+		// generate .konflux for non main branch to avoid manual copy
+		if err := generateKonflux(app, filepath.Join(checkoutDir, ".konflux")); err != nil {
+			log.Fatalln(err)
+		}
+
 		if err := generateTekton(app, filepath.Join(checkoutDir, ".tekton")); err != nil {
 			log.Fatalln(err)
 		}
