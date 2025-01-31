@@ -8,7 +8,7 @@ spec:
   application: {{.Name}}-{{hyphenize .Version}}
   contexts:
 {{- $name :=  .Name }}
-{{- $version :=  .Version }}
+{{- $version :=  hyphenize .Version }}
 {{- range $component := .Components }}
     - description: Application testing for {{$name}}-{{$version}}-{{$component}}
       name: component_{{$name}}-{{$version}}-{{$component}}
