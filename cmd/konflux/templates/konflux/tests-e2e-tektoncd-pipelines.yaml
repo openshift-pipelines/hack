@@ -1,0 +1,18 @@
+apiVersion: appstudio.redhat.com/v1beta2
+kind: IntegrationTestScenario
+metadata:
+  name: {{.Name}}-{{hyphenize .Version}}-e2e-tektoncd-pipelines
+spec:
+  application: {{.Name}}-{{hyphenize .Version}}
+  contexts:
+    - description: Application testing
+      name: component_{{.Name}}-{{hyphenize .Version}}-bundle
+  resolverRef:
+    params:
+      - name: url
+        value: https://github.com/openshift-pipelines/operator
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: .konflux/tekton/bundle-e2e-pipeline.yaml
+    resolver: git

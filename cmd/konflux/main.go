@@ -280,7 +280,7 @@ func cloneAndCheckout(ctx context.Context, repo, branch, dir string) error {
 			return fmt.Errorf("failed to clone repository: %s, %s", err, out)
 		}
 	}
-	if out, err := run(ctx, dir, "git", "reset", "--hard", "HEAD"); err != nil {
+	if out, err := run(ctx, dir, "git", "reset", "--hard", "HEAD", "--"); err != nil {
 		return fmt.Errorf("failed to reset %s branch: %s, %s", branch, err, out)
 	}
 	if out, err := run(ctx, dir, "git", "checkout", "origin/"+branch, "-B", branch); err != nil {
@@ -349,10 +349,18 @@ func generateKonflux(application k.Application, target string) error {
 	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(target, application.Version, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
-		return err
+
+	//As the 'bundle' component is not included in the operator configuration in hack, we need to add it to the test context scenario with a condition.
+	testApplication := application
+	if strings.HasPrefix(testApplication.Name, "operator") {
+		testApplication.Components = append(testApplication.Components, "bundle")
+		log.Println("Adding 'bundle' component in testApplication to generate IntegrationTestScenarios", testApplication.Components)
+		// For Operator Application we need to generate e2e as well.
+		if err := generateFileFromTemplate("tests-e2e-tektoncd-pipelines.yaml", testApplication, filepath.Join(target, application.Version, "tests-e2e-tektoncd-pipelines.yaml")); err != nil {
+			return err
+		}
 	}
-	if err := generateFileFromTemplate("tests-on-push.yaml", application, filepath.Join(target, application.Version, "tests-on-push.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests.yaml", testApplication, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
 		return err
 	}
 	if application.ReleasePlan {
