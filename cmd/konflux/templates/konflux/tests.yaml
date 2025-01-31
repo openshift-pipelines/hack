@@ -11,7 +11,7 @@ spec:
 {{- $version :=  .Version }}
 {{- range $component := .Components }}
     - description: Application testing for {{$name}}-{{$version}}-{{$component}}
-      name: component_{{.Name}}-{{$version}}-{{$component}}
+      name: component_{{$name}}-{{$version}}-{{$component}}
 {{- end }}
   params:
     - name: POLICY_CONFIGURATION
