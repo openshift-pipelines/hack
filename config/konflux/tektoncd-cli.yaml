@@ -11,7 +11,7 @@ components:
 #     # clean after yourself >:D
 #     git checkout HEAD go.mod vendor/modules.txt
 branches:
-  - upstream: release-v0.39.0
+  - upstream: release-v0.39.1
     version: next
     # patches: *patches
     release: auto
