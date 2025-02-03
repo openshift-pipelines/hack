@@ -8,3 +8,5 @@ branches:
   - version: next
     branch: release-v0.4.1
     release: auto
+  - version: "1.18"
+    branch: main

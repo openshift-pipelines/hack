@@ -46,5 +46,5 @@ branches:
 - version: next
   upstream: main
   release: auto
-- upstream: release-v0.32.x
+- upstream: main
   version: "1.18"
