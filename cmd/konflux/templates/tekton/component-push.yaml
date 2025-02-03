@@ -18,7 +18,7 @@ metadata:
       ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged())
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: {{.Application}}-{{.Version}}
+    appstudio.openshift.io/application: {{.Application}}-{{hyphenize .Version}}
     appstudio.openshift.io/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
     pipelines.appstudio.openshift.io/type: build
   name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-on-push
