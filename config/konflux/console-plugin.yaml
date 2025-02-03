@@ -7,3 +7,5 @@ branches:
   - version: next
     branch: release-v1.17.x
     release: auto
+  - version: "1.18"
+    branch: main
