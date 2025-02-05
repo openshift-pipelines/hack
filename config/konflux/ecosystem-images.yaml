@@ -1,0 +1,12 @@
+repository: ecosystem-images
+components:
+  - opc
+  - git-init
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - version: next
+    branch: main
+    release: auto
+  - version: "1.18"
+    branch: main
