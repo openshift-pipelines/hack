@@ -310,6 +310,11 @@ func generateTekton(application k.Application, target string) error {
 		application.Tekton.WatchedSources = `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`
 	}
 
+	prowfilename := fmt.Sprintf("prow.yaml")
+	if err := generateFileFromTemplate("prow.yaml", application, filepath.Join(target, prowfilename)); err != nil {
+		return err
+	}
+
 	for _, c := range application.Components {
 		component := k.Component{
 			Name:        c,
@@ -350,7 +355,7 @@ func generateKonflux(application k.Application, target string) error {
 		return err
 	}
 
-	//As the 'bundle' component is not included in the operator configuration in hack, we need to add it to the test context scenario with a condition.
+	// As the 'bundle' component is not included in the operator configuration in hack, we need to add it to the test context scenario with a condition.
 	testApplication := application
 	if strings.HasPrefix(testApplication.Name, "operator") {
 		testApplication.Components = append(testApplication.Components, "bundle")
