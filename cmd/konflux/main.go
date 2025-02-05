@@ -115,6 +115,11 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 		log.Fatalln(err)
 	}
 
+	prowfilename := fmt.Sprintf("prow.yaml")
+	if err := generateFileFromTemplate("prow.yaml", app, filepath.Join(filepath.Join(checkoutDir, ".tekton"), prowfilename)); err != nil {
+		return err
+	}
+
 	for _, branch := range c.Branches {
 		log.Printf("Generate configurations for %s branch\n", branch.Version)
 
@@ -308,11 +313,6 @@ func generateTekton(application k.Application, target string) error {
 	// set defaults
 	if application.Tekton.WatchedSources == "" {
 		application.Tekton.WatchedSources = `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`
-	}
-
-	prowfilename := fmt.Sprintf("prow.yaml")
-	if err := generateFileFromTemplate("prow.yaml", application, filepath.Join(target, prowfilename)); err != nil {
-		return err
 	}
 
 	for _, c := range application.Components {
