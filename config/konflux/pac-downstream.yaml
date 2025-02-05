@@ -1,10 +1,10 @@
 repository: pac-downstream
 upstream: openshift-pipelines/pipelines-as-code
 components:
-  - controller
-  - webhook
-  - watcher
-  - cli
+  - name: controller
+  - name: webhook
+  - name: watcher
+  - name: cli
 branches:
   - upstream: release-v0.32.x
     version: next

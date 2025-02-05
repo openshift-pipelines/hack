@@ -1,7 +1,7 @@
 repository: tektoncd-pruner
 components:
-  - controller
-  - webhook
+  - name: controller
+  - name: webhook
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:

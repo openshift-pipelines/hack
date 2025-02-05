@@ -1,7 +1,7 @@
 repository: ecosystem-images
 components:
-  - opc
-  - git-init
+  - name: opc
+  - name: git-init
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
