@@ -1,7 +1,7 @@
 repository: tektoncd-cli
 upstream: tektoncd/cli
 components:
-  - tkn
+  - name: tkn
 # patches: &patches
 # - name: go1.22
 #   script: |

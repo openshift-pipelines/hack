@@ -1,14 +1,23 @@
 repository: operator
 upstream: tektoncd/operator
 components:
-- operator
-- webhook
-- proxy
-# - bundle
+  - name: operator
+  - name: webhook
+  - name: proxy
+  - name: bundle
+    dockerfile: .konflux/olm-catalog/bundle/Dockerfile
+    prefetch-input: |-
+      [{"type": "rpm", "path": ".konflux/rpms"},{"type": "generic", "path": ".konflux/prefetch"}]
+    nudges:
+      - operator-{{hyphenize .Version}}-index-4-15
+      - operator-{{hyphenize .Version}}-index-4-16
+      - operator-{{hyphenize .Version}}-index-4-17
+    tekton:
+      watched-sources:  ( "project.yaml".pathChanged() ||  ".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged() )
 # - index
 platforms:
-- linux-m2xlarge/arm64
-- linux/x86_64
+  - linux-m2xlarge/arm64
+  - linux/x86_64
 tekton:
   watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
@@ -43,8 +52,8 @@ github:
         git checkout HEAD .
         popd
 branches:
-- version: next
-  upstream: main
-  release: auto
-- upstream: main
-  version: "1.18"
+  - version: next
+    upstream: main
+    release: auto
+  - upstream: main
+    version: "1.18"

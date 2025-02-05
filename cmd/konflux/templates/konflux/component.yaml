@@ -10,9 +10,16 @@ spec:
   componentName: {{.Name}}
   application: {{.Application}}-{{hyphenize .Version}}
   build-nudges-ref:
+  {{- $dot := .}}
+  {{- if .Nudges }}
+  {{- range $nudge := .Nudges }}
+  - {{eval $nudge $dot}}
+  {{- end }}
+  {{- else }}
   - operator-{{hyphenize .Version}}-bundle
+  {{- end }}
   source:
     git:
       url: https://github.com/{{.Repository}}
-      dockerfileUrl: .konflux/dockerfiles/{{.Name}}.Dockerfile
+      dockerfileUrl: {{ .Dockerfile }}
       revision: {{.Branch}}

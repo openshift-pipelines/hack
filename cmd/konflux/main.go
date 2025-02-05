@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"embed"
 	"errors"
@@ -113,11 +114,6 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 	}
 	if err := generateTekton(app, filepath.Join(checkoutDir, ".tekton")); err != nil {
 		log.Fatalln(err)
-	}
-
-	prowfilename := fmt.Sprintf("prow.yaml")
-	if err := generateFileFromTemplate("prow.yaml", app, filepath.Join(filepath.Join(checkoutDir, ".tekton"), prowfilename)); err != nil {
-		return err
 	}
 
 	for _, branch := range c.Branches {
@@ -318,34 +314,46 @@ func generateTekton(application k.Application, target string) error {
 	}
 
 	for _, c := range application.Components {
-		component := k.Component{
-			Name:        c,
-			Application: application.Name,
-			Repository:  application.Repository,
-			Branch:      application.Branch,
-			Version:     application.Version,
-			Tekton:      application.Tekton,
-			Platforms:   application.Platforms,
-		}
+		updateComponent(application, &c)
 		switch application.Tekton.EventType {
 		case "pull_request":
-			if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+			if err := generateFileFromTemplate("component-pull-request.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c.Name))); err != nil {
 				return err
 			}
 		case "push":
-			if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+			if err := generateFileFromTemplate("component-push.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c.Name))); err != nil {
 				return err
 			}
 		default:
-			if err := generateFileFromTemplate("component-pull-request.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+			if err := generateFileFromTemplate("component-pull-request.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c.Name))); err != nil {
 				return err
 			}
-			if err := generateFileFromTemplate("component-push.yaml", component, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c))); err != nil {
+			if err := generateFileFromTemplate("component-push.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(application.Repository)), hyphenize(application.Version), c.Name))); err != nil {
 				return err
 			}
 		}
 	}
 	return nil
+}
+
+// This function can modified in future if we want to override the fields at component level.
+func updateComponent(application k.Application, c *k.Component) {
+	c.Application = application.Name
+	c.Repository = application.Repository
+	c.Branch = application.Branch
+	c.Version = application.Version
+	c.Platforms = application.Platforms
+	if c.Tekton == (k.Tekton{}) {
+		c.Tekton = application.Tekton
+	}
+	if c.Dockerfile == "" {
+		c.Dockerfile, _ = eval(".konflux/dockerfiles/{{.Name}}.Dockerfile", c)
+	}
+	if c.PrefetchInput == "" {
+		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
+	}
+	log.Printf("Updated component c to %v", c)
+
 }
 
 func generateKonflux(application k.Application, target string) error {
@@ -357,7 +365,17 @@ func generateKonflux(application k.Application, target string) error {
 		return err
 	}
 
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
+	//As the 'bundle' component is not included in the operator configuration in hack, we need to add it to the test context scenario with a condition.
+	testApplication := application
+	if strings.HasPrefix(testApplication.Name, "operator") {
+		//testApplication.Components = append(testApplication.Components, "bundle")
+		log.Println("Adding 'bundle' component in testApplication to generate IntegrationTestScenarios", testApplication.Components)
+		// For Operator Application we need to generate e2e as well.
+		if err := generateFileFromTemplate("tests-e2e-tektoncd-pipelines.yaml", testApplication, filepath.Join(target, application.Version, "tests-e2e-tektoncd-pipelines.yaml")); err != nil {
+			return err
+		}
+	}
+	if err := generateFileFromTemplate("tests.yaml", testApplication, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
 		return err
 	}
 	if application.ReleasePlan {
@@ -366,22 +384,11 @@ func generateKonflux(application k.Application, target string) error {
 		}
 	}
 	for _, c := range application.Components {
-		if err := generateFileFromTemplate("component.yaml", k.Component{
-			Name:        c,
-			Application: application.Name,
-			Repository:  application.Repository,
-			Branch:      application.Branch,
-			Version:     application.Version,
-		}, filepath.Join(target, application.Version, fmt.Sprintf("component-%s.yaml", c))); err != nil {
+		updateComponent(application, &c)
+		if err := generateFileFromTemplate("component.yaml", c, filepath.Join(target, application.Version, fmt.Sprintf("component-%s.yaml", c.Name))); err != nil {
 			return err
 		}
-		if err := generateFileFromTemplate("image.yaml", k.Component{
-			Name:        c,
-			Application: application.Name,
-			Repository:  application.Repository,
-			Branch:      application.Branch,
-			Version:     application.Version,
-		}, filepath.Join(target, application.Version, fmt.Sprintf("image-%s.yaml", c))); err != nil {
+		if err := generateFileFromTemplate("image.yaml", c, filepath.Join(target, application.Version, fmt.Sprintf("image-%s.yaml", c.Name))); err != nil {
 			return err
 		}
 	}
@@ -407,13 +414,35 @@ func generateGitHub(application k.Application, target string) error {
 	return nil
 }
 
-func generateFileFromTemplate(templateFile string, o interface{}, filepath string) error {
-	tmpl, err := template.New(templateFile).Funcs(template.FuncMap{
+func eval(tmpl string, data interface{}) (string, error) {
+	var funcMap = template.FuncMap{
 		"hyphenize": hyphenize,
 		"basename":  basename,
 		"indent":    indent,
 		"contains":  strings.Contains,
-	}).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
+		"eval":      eval,
+	}
+	t, err := template.New("inner").Funcs(funcMap).Parse(tmpl)
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	err = t.Execute(&buf, data)
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
+func generateFileFromTemplate(templateFile string, o interface{}, filepath string) error {
+	var funcMap = template.FuncMap{
+		"hyphenize": hyphenize,
+		"basename":  basename,
+		"indent":    indent,
+		"contains":  strings.Contains,
+		"eval":      eval,
+	}
+	tmpl, err := template.New(templateFile).Funcs(funcMap).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {
 		return err
 	}
@@ -431,7 +460,7 @@ func generateFileFromTemplate(templateFile string, o interface{}, filepath strin
 
 func cleanupAutogenerated(ctx context.Context, dir string) error {
 	if out, err := run(ctx, dir, "bash", "-c", "grep -l -r '# Generated by openshift-pipelines/hack. DO NOT EDIT.' .tekton .konflux .github"); err != nil {
-		fmt.Printf("Couldn't grep for autogenerated content: %s, %s", err, out)
+		return fmt.Errorf("Couldn't grep for autogenerated content: %s, %s", err, out)
 	} else {
 		for _, f := range strings.Split(string(out), "\n") {
 			if f == "" {

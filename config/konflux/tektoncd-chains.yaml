@@ -1,7 +1,7 @@
 repository: tektoncd-chains
 upstream: tektoncd/chains
 components:
-  - controller
+  - name: controller
 # patches: &patches
 # - name: go1.22
 #   script: |

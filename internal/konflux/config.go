@@ -6,7 +6,7 @@ type Application struct {
 	Upstream       string
 	Branch         string
 	UpstreamBranch string
-	Components     []string
+	Components     []Component
 	Version        string
 	GitHub         GitHub
 	Tekton         Tekton
@@ -16,13 +16,16 @@ type Application struct {
 }
 
 type Component struct {
-	Name        string
-	Application string
-	Repository  string
-	Branch      string
-	Version     string
-	Tekton      Tekton
-	Platforms   []string
+	Name          string
+	Application   string
+	Repository    string
+	Branch        string
+	Version       string
+	Tekton        Tekton
+	Platforms     []string
+	Nudges        []string
+	Dockerfile    string
+	PrefetchInput string `json:"prefetch-input" yaml:"prefetch-input"`
 }
 
 type Config struct {
@@ -30,7 +33,7 @@ type Config struct {
 	Upstream   string
 	GitHub     GitHub
 	Tekton     Tekton
-	Components []string
+	Components []Component
 	Branches   []Branch
 	Patches    []Patch
 	Platforms  []string

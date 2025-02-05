@@ -1,7 +1,7 @@
 repository: manual-approval-gate
 components:
-  - controller
-  - webhook
+  - name: controller
+  - name: webhook
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:

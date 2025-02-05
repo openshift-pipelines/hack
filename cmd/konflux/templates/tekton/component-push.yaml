@@ -14,7 +14,7 @@ metadata:
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "{{.Branch}}" &&
       ({{.Tekton.WatchedSources}} ||
-      ".konflux/dockerfiles/{{.Name}}.Dockerfile".pathChanged() ||
+      "{{.Dockerfile}}".pathChanged() ||
       ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-push.yaml".pathChanged())
   creationTimestamp: null
   labels:
@@ -32,7 +32,7 @@ spec:
   - name: output-image
     value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{.Application}}-{{hyphenize .Version}}/{{.Name}}:{{"{{revision}}"}}
   - name: dockerfile
-    value: .konflux/dockerfiles/{{.Name}}.Dockerfile
+    value: {{.Dockerfile}}
   - name: build-platforms
     value:
 {{- range $platform := .Platforms }}
@@ -40,11 +40,7 @@ spec:
 {{- end }}
   - name: prefetch-input
     value: |
-      {{- if contains .Name "ui" }}
-      {"type": "npm", "path": "upstream/ui"}
-      {{- else }}
-      {"type": "rpm", "path": ".konflux/rpms"}
-      {{- end }}
+      {{ .PrefetchInput }}
   pipelineRef:
     name: docker-build-ta
   workspaces:

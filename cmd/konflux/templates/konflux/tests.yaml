@@ -10,8 +10,8 @@ spec:
 {{- $name :=  .Name }}
 {{- $version :=  hyphenize .Version }}
 {{- range $component := .Components }}
-    - description: Application testing for {{$name}}-{{$version}}-{{$component}}
-      name: component_{{$name}}-{{$version}}-{{$component}}
+    - description: Application testing for {{$name}}-{{$version}}-{{$component.Name}}
+      name: component_{{$name}}-{{$version}}-{{$component.Name}}
 {{- end }}
   params:
     - name: POLICY_CONFIGURATION
