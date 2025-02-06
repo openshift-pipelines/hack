@@ -148,6 +148,7 @@ func generateMainConfig(ctx context.Context, c k.Config, dir string, dryRun bool
 			Version:        branch.Version,
 			Patches:        branch.Patches,
 			Platforms:      platforms,
+			Tekton:         c.Tekton,
 			ReleasePlan:    (branch.Release == "auto"),
 		}
 		if err := generateKonflux(app, filepath.Join(checkoutDir, ".konflux")); err != nil {
@@ -203,6 +204,7 @@ func generateBranchesConfig(ctx context.Context, c k.Config, dir string, dryRun 
 			Version:        branch.Version,
 			Patches:        branch.Patches,
 			Platforms:      platforms,
+			Tekton:         c.Tekton,
 			ReleasePlan:    (branch.Release == "auto"),
 		}
 
