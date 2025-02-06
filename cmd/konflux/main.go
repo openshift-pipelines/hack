@@ -362,10 +362,6 @@ func generateKonflux(application k.Application, target string) error {
 	if strings.HasPrefix(testApplication.Name, "operator") {
 		testApplication.Components = append(testApplication.Components, "bundle")
 		log.Println("Adding 'bundle' component in testApplication to generate IntegrationTestScenarios", testApplication.Components)
-		// For Operator Application we need to generate e2e as well.
-		if err := generateFileFromTemplate("tests-e2e-tektoncd-pipelines.yaml", testApplication, filepath.Join(target, application.Version, "tests-e2e-tektoncd-pipelines.yaml")); err != nil {
-			return err
-		}
 	}
 	if err := generateFileFromTemplate("tests.yaml", testApplication, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
 		return err
