@@ -10,7 +10,7 @@ components:
   - webhook
   - workingdirinit
 branches:
-  - upstream: release-v0.65.x
+  - upstream: release-v0.68.x
     version: next
     release: auto
   - upstream: release-v0.68.x
