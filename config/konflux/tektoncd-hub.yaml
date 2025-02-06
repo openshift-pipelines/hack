@@ -5,8 +5,8 @@ components:
   - hub-api
   - hub-ui
 branches:
-  - upstream: release-v1.19.2
+  - upstream: release-v1.20.0
     version: next
     release: auto
-  - upstream: main
+  - upstream: release-v1.20.0
     version: "1.18"
