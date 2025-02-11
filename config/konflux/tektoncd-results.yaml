@@ -8,5 +8,5 @@ branches:
   - upstream: release-v0.13.x
     version: next
     release: auto
-  - upstream: main
+  - upstream: release-v0.14.x
     version: "1.18"
