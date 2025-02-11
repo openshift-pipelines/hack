@@ -34,5 +34,5 @@ branches:
     version: next
     # patches: *patches
     release: auto
-  - upstream: main
+  - upstream: release-v0.24.x
     version: "1.18"
