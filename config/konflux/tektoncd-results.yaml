@@ -1,0 +1,12 @@
+repository: tektoncd-results
+upstream: tektoncd/results
+components:
+  - api
+  - watcher
+  - retention-policy-agent
+branches:
+  - upstream: release-v0.13.x
+    version: next
+    release: auto
+  - upstream: main
+    version: "1.18"
