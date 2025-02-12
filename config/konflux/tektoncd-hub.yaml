@@ -7,8 +7,10 @@ components:
     prefetch-input: |-
       {"type": "npm", "path": "upstream/ui"}
 branches:
-  - upstream: release-v1.20.0
-    version: next
-    release: auto
-  - upstream: release-v1.20.0
-    version: "1.18"
+  - name: main
+  - name: next
+    upstream: release-v1.19.2
+    versions:
+      - version: next
+        release: auto
+      - version: "1.18"

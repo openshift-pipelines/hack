@@ -23,6 +23,7 @@ func main() {
 	defer cancel()
 
 	config := flag.String("config", filepath.Join("config", "konflux", "repository.yaml"), "specify the repository configuration")
+	branch := flag.String("branch", "main", "specify the repository configuration")
 	flag.Parse()
 
 	in, err := os.ReadFile(*config)
@@ -34,9 +35,13 @@ func main() {
 		log.Fatalln("Unmarshal config", err)
 	}
 
-	versions := []string{"main"}
+	var versions []string
 	for _, b := range c.Branches {
-		versions = append(versions, b.Version)
+		if b.Name == *branch {
+			for _, v := range b.Versions {
+				versions = append(versions, v.Version)
+			}
+		}
 	}
 
 	// Create temporary folder
@@ -49,7 +54,7 @@ func main() {
 	if err := gitClone(ctx, dir, c.Repository); err != nil {
 		log.Fatalln(err)
 	}
-	// Kubectl apply
+	//Kubectl apply
 	if err := apply(ctx, dir, versions); err != nil {
 		log.Fatalln(err)
 	}
@@ -63,9 +68,11 @@ func apply(ctx context.Context, dir string, versions []string) error {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
-		if err := cmd.Run(); err != nil {
-			return err
-		}
+		log.Printf("Final CMD : %s\n", cmd.String())
+
+		//if err := cmd.Run(); err != nil {
+		//	return err
+		//}
 	}
 	return nil
 }
