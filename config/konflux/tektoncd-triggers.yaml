@@ -6,8 +6,14 @@ components:
   - name: core-interceptors
   - name: eventlistenersink
 branches:
-  - upstream: release-v0.31.x
-    version: next
-    release: auto
-  - upstream: release-v0.31.x
-    version: "1.18"
+  - name: main
+  - name: next
+    upstream: release-v0.30.x
+    versions:
+      - version: next
+        release: auto
+      - version: "1.18"
+  - name: release-v1.18.x
+    upstream: release-v0.30.x
+    versions:
+      - version: "1.18"

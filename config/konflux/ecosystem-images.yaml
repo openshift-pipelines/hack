@@ -5,8 +5,9 @@ components:
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - version: next
-    branch: main
-    release: auto
-  - version: "1.18"
-    branch: main
+  - name: main
+    versions:
+    - version: main
+    - version: next
+      release: auto
+    - version: "1.18"

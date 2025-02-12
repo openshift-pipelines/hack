@@ -13,7 +13,9 @@ components:
       - operator-{{hyphenize .Version}}-index-4-16
       - operator-{{hyphenize .Version}}-index-4-17
     tekton:
-      watched-sources:  ( "project.yaml".pathChanged() ||  ".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged() )
+      watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
+      build-nudge-files: ".*Dockerfile.*, .*.yaml, .*Containerfile.*, .*catalog-template.json.*"
+
 # - index
 platforms:
   - linux-m2xlarge/arm64
@@ -52,8 +54,10 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - version: next
+  - name: main
+  - name: next
     upstream: main
-    release: auto
-  - upstream: main
-    version: "1.18"
+  - name: "release-v1.18.x"
+    upstream: main
+    versions:
+      - version: "1.18"

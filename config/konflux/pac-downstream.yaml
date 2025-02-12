@@ -6,8 +6,9 @@ components:
   - name: watcher
   - name: cli
 branches:
-  - upstream: release-v0.32.x
-    version: next
-    release: auto
-  - upstream: release-v0.32.x
-    version: "1.18"
+  - name: main
+    versions:
+    - version: main
+    - version: next
+      release: auto
+    - version: "1.18"

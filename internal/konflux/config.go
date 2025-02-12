@@ -46,18 +46,23 @@ type GitHub struct {
 type Tekton struct {
 	WatchedSources string `json:"watched-sources" yaml:"watched-sources"`
 	EventType      string `json:"event_type" yaml:"event_type"`
+	NudgeFiles     string `json:"build-nudge-files" yaml:"build-nudge-files"`
 }
 
 type Branch struct {
-	Version   string
-	Upstream  string
-	Branch    string
-	Patches   []Patch
-	Platforms []string
-	Release   string
+	Versions       []Version
+	UpstreamBranch string `json:"upstream" yaml:"upstream"`
+	Name           string
+	Patches        []Patch
+	Platforms      []string
 }
 
 type Patch struct {
 	Name   string
 	Script string
+}
+
+type Version struct {
+	Version string
+	Release string
 }
