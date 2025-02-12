@@ -357,13 +357,7 @@ func generateKonflux(application k.Application, target string) error {
 		return err
 	}
 
-	// As the 'bundle' component is not included in the operator configuration in hack, we need to add it to the test context scenario with a condition.
-	testApplication := application
-	if strings.HasPrefix(testApplication.Name, "operator") {
-		testApplication.Components = append(testApplication.Components, "bundle")
-		log.Println("Adding 'bundle' component in testApplication to generate IntegrationTestScenarios", testApplication.Components)
-	}
-	if err := generateFileFromTemplate("tests.yaml", testApplication, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
+	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(target, application.Version, "tests.yaml")); err != nil {
 		return err
 	}
 	if application.ReleasePlan {
