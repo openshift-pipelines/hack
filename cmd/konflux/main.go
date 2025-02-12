@@ -110,6 +110,10 @@ func generateConfig(ctx context.Context, c k.Config, dir string, dryRun bool) er
 				GitHub:         c.GitHub,
 				UpstreamBranch: branch.UpstreamBranch,
 			}
+			// If upstream-branch is not defined then assume it same as branch name
+			if app.UpstreamBranch == "" {
+				app.UpstreamBranch = branch.Name
+			}
 			if err := generateGitHub(app, filepath.Join(checkoutDir, ".github")); err != nil {
 				log.Fatalln(err)
 			}
@@ -248,8 +252,8 @@ func generateTekton(application k.Application, target string) error {
 	return nil
 }
 
-// This function can modified in future if we want to override the fields at component level.
-func updateComponent(application k.Application, c *k.Component) {
+// This function can be modified  if we want to override the fields at component level.
+func updateComponent(application k.Application, c *k.Component) error {
 	c.Application = application.Name
 	c.Repository = application.Repository
 	c.Branch = application.Branch
@@ -259,11 +263,16 @@ func updateComponent(application k.Application, c *k.Component) {
 		c.Tekton = application.Tekton
 	}
 	if c.Dockerfile == "" {
-		c.Dockerfile, _ = eval(".konflux/dockerfiles/{{.Name}}.Dockerfile", c)
+		Dockerfile, err := eval(".konflux/dockerfiles/{{.Name}}.Dockerfile", c)
+		if err != nil {
+			return err
+		}
+		c.Dockerfile = Dockerfile
 	}
 	if c.PrefetchInput == "" {
 		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
 	}
+	return nil
 }
 
 func generateKonflux(application k.Application, target string) error {
