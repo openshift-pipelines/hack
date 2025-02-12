@@ -6,8 +6,6 @@ components:
   - name: proxy
   - name: bundle
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
-    prefetch-input: |-
-      [{"type": "rpm", "path": ".konflux/rpms"},{"type": "generic", "path": ".konflux/prefetch"}]
     nudges:
       - operator-{{hyphenize .Version}}-index-4-15
       - operator-{{hyphenize .Version}}-index-4-16

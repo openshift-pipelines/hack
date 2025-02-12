@@ -1,12 +1,17 @@
 repository: tektoncd-results
 upstream: tektoncd/results
 components:
-  - api
-  - watcher
-  - retention-policy-agent
+  - name: api
+  - name: watcher
+  - name: retention-policy-agent
 branches:
-  - upstream: release-v0.13.x
-    version: next
-    release: auto
-  - upstream: release-v0.14.x
-    version: "1.18"
+  - name: main
+  - name: next
+    upstream: release-v0.14.x
+    versions:
+      - version: next
+        release: auto
+  - name: release-v1.18.x
+    upstream: release-v0.14.x
+    versions:
+      - version: "1.18"

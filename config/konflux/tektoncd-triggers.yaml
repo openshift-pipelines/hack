@@ -8,12 +8,11 @@ components:
 branches:
   - name: main
   - name: next
-    upstream: release-v0.30.x
+    upstream: release-v0.31.x
     versions:
       - version: next
         release: auto
-      - version: "1.18"
   - name: release-v1.18.x
-    upstream: release-v0.30.x
+    upstream: release-v0.31.x
     versions:
       - version: "1.18"

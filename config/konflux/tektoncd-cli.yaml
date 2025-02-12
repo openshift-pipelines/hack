@@ -4,9 +4,12 @@ components:
   - name: tkn
 branches:
   - name: main
-  - name: next
+  - name: release-v1.18.x
     upstream: release-v0.39.1
     versions:
       - version: "1.18"
+  - name: next
+    upstream: release-v0.39.1
+    versions:
       - version: "next"
         release: auto

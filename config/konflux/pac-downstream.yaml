@@ -5,10 +5,15 @@ components:
   - name: webhook
   - name: watcher
   - name: cli
+    nudges:
+      - operator-{{hyphenize .Version}}-bundle
+      - tektoncd-cli-{{hyphenize .Version}}-tkn
 branches:
   - name: main
+  - name: next
     versions:
-    - version: main
-    - version: next
-      release: auto
-    - version: "1.18"
+      - version: next
+        release: auto
+  - name: release-v1.18.x
+    versions:
+      - version: "1.18"
