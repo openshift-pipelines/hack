@@ -1,0 +1,37 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  labels:
+    appstudio.openshift.io/application: tekton-caches-1-18
+    pac.test.appstudio.openshift.io/event-type: push
+    pac.test.appstudio.openshift.io/url-org: openshift-pipelines
+    pac.test.appstudio.openshift.io/url-repository: ecosystem-images
+    release.appstudio.openshift.io/author: rh-ee-prbindal
+  name: tekton-ecosystem-1-18-stage-release
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      description: |
+        Red Hat OpenShift Pipelines is a cloud-native continuous integration and
+        delivery (CI/CD) solution for building pipelines using Tekton. Tekton is a
+        flexible, Kubernetes-native, open-source CI/CD framework which enables
+        automating deployments across multiple platforms such as Kubernetes, Serverless,
+        and VMs by abstracting away the underlying details.
+      package-maintainer: pipelines-bots@redhat.com
+      references:
+        - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
+      release-name: openshift-pipelines-1.18.0
+      solution: |
+        Before applying this update, make sure all previously released advisory
+        relevant to your system have been applied.
+        For details on how to apply this update, refer to:
+        https://access.redhat.com/articles/11258
+      synopsis: "Red Hat OpenShift Pipelines Release 1.18.0"
+      topic: |
+        The 1.18.0 GA release of Red Hat OpenShift Pipelines Operator.
+        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+      type: RHEA
+  gracePeriodDays: 10
+  releasePlan: caches-1-18-stage-release-as-op
+  snapshot: ecosystem-images-1-18-vm2v2
