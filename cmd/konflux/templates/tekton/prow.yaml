@@ -2,15 +2,15 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: prow-commands
+  name: boussole
   annotations:
-    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/pipelines-as-code-prow/refs/heads/main/pipeline-prow.yaml"
-    pipelinesascode.tekton.dev/on-comment: "^/(help|merge|lgtm|(assign|unassign|label|unlabel)[ ].*)$"
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/pac-boussole/refs/heads/main/pipeline-boussole.yaml"
+    pipelinesascode.tekton.dev/on-comment: "^/(help|rebase|merge|lgtm|(cherry-pick|assign|unassign|label|unlabel)[ ].*)$"
     pipelinesascode.tekton.dev/max-keep-runs: "2"
 spec:
   params:
     - name: trigger_comment
-      value: |-
+      value: |
         '{{"{{trigger_comment}}"}}'
     - name: repo_owner
       value: '{{"{{ repo_owner }}"}}'
@@ -32,12 +32,12 @@ spec:
     #   value: git-provider-token
     #
     # The /lgtm threshold needed of approvers for a PR to be approved (default: 1)
-    # - name: lgtm_threshold
-    #   value: "1"
+    - name: lgtm_threshold
+      value: "1"
     #
     # The permissionms the user need to trigger a lgtm
-    # - name: lgtm_permissions
-    #   value: "admin,write"
+    - name: lgtm_permissions
+      value: "admin,write"
     #
     # The review event  when lgtm is triggered, can be APPROVE,
     # REQUEST_CHANGES, or COMMENT if setting to empty string it will be set as
@@ -46,7 +46,7 @@ spec:
     #   value: "APPROVE"
     #
     # The merge method to use. Can be one of: merge, squash, rebase
-    # - name: merge_method
-    #   value: "rebase"
+    - name: merge_method
+      value: "rebase"
   pipelineRef:
-    name: prow-commands
+    name: boussole
