@@ -6,7 +6,7 @@ tekton:
   watched-sources: '"***".pathChanged()'
 branches:
   - name: main
-  - name: release-v0.4.1
+  - name: release-v0.5.0
     versions:
     - version: next
       release: auto
