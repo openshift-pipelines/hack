@@ -103,6 +103,14 @@ func generateConfig(ctx context.Context, c k.Config, dir string, dryRun bool) er
 				Version: branch.Name,
 			}}
 		}
+
+		if branch.Name == "main" {
+			boussolefilename := fmt.Sprintf("boussole.yaml")
+			if err := generateFileFromTemplate("boussole.yaml", k.Application{}, filepath.Join(filepath.Join(checkoutDir, ".tekton"), boussolefilename)); err != nil {
+				return err
+			}
+		}
+
 		if c.Upstream != "" {
 			app := k.Application{
 				Upstream:       c.Upstream,
@@ -317,7 +325,7 @@ func generateGitHub(app k.Application, target string) error {
 }
 
 func eval(tmpl string, data interface{}) (string, error) {
-	var funcMap = template.FuncMap{
+	funcMap := template.FuncMap{
 		"hyphenize": hyphenize,
 		"basename":  basename,
 		"indent":    indent,
@@ -336,7 +344,7 @@ func eval(tmpl string, data interface{}) (string, error) {
 }
 
 func generateFileFromTemplate(templateFile string, o interface{}, filepath string) error {
-	var funcMap = template.FuncMap{
+	funcMap := template.FuncMap{
 		"hyphenize": hyphenize,
 		"basename":  basename,
 		"indent":    indent,
