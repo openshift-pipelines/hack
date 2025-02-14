@@ -5,7 +5,7 @@ components:
   - name: hub-api
   - name: hub-ui
     prefetch-input: |-
-      {"type": "npm", "path": "upstream/ui"}
+      [{"type": "npm", "path": "upstream/ui"}, {"type": "rpm", "path": ".konflux/rpms"}]
 branches:
   - name: main
   - name: next
