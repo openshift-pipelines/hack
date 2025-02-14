@@ -179,7 +179,7 @@ func commitAndPullRequest(ctx context.Context, dir, branch string) error {
 	if out, err := run(ctx, dir, "bash", "-c", "gh pr list --base "+branch+" --head actions/update/konflux-configuration-"+branch+" --json url --jq 'length'"); err != nil {
 		return fmt.Errorf("failed to check if a pr exists: %s, %s", err, out)
 	} else if strings.TrimSpace(string(out)) == "0" {
-		if out, err := run(ctx, dir, "gh", "pr", "create", "-d",
+		if out, err := run(ctx, dir, "gh", "pr", "create",
 			"--base", branch,
 			"--head", "actions/update/konflux-configuration-"+branch,
 			"--label=hack", "--label=automated",
