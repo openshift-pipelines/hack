@@ -317,7 +317,7 @@ func generateGitHub(app k.Application, target string) error {
 	if err := os.MkdirAll(filepath.Join(target, "workflows"), 0o755); err != nil {
 		return err
 	}
-	filename := fmt.Sprintf("update-sources.%s.yaml", app.Branch)
+	filename := "update-sources.yaml"
 	if err := generateFileFromTemplate("update-sources.yaml", app, filepath.Join(target, "workflows", filename)); err != nil {
 		return err
 	}
