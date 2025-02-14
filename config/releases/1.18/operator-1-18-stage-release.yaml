@@ -1,0 +1,96 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  labels:
+    appstudio.openshift.io/application: operator-1-18
+    pac.test.appstudio.openshift.io/event-type: push
+    pac.test.appstudio.openshift.io/url-org: openshift-pipelines
+    pac.test.appstudio.openshift.io/url-repository: operator
+    release.appstudio.openshift.io/author: rh-ee-sashture
+  name: operator-1-18-stage-release
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      description: |
+        Red Hat OpenShift Pipelines is a cloud-native continuous integration and
+        delivery (CI/CD) solution for building pipelines using Tekton. Tekton is a
+        flexible, Kubernetes-native, open-source CI/CD framework which enables
+        automating deployments across multiple platforms such as Kubernetes, Serverless,
+        and VMs by abstracting away the underlying details.
+
+        Red Hat OpenShift Pipelines consists of:
+
+        (needs to be updated)
+        - Tekton Operator 0.75.x
+        - Tekton Pipelines 0.68.x
+        - Tekton Triggers 0.31.x
+        - Tekton tkn CLI 0.40.x
+        - Tekton Chains 0.24.x (GA)
+        - Pipelines-as-Code 0.29.x (GA)
+        - Tekton Hub 1.20.x (GA)
+        - Tekton Result 0.14.x (TP)
+        - Manual-Approval-Gate 0.5.x (TP)
+        - Tekton Cache 0.1.x (TP)
+
+        ## Features
+        - Standard CI/CD pipelines definition
+
+        - Easy to extend and integrate with existing tools
+
+        - Portable across any Kubernetes platform
+
+        - Designed for microservices and decentralized teams
+
+        - Integrated with OpenShift Developer Console
+
+        - Build images with Kubernetes tools such as S2I, Buildah, Buildpacks, Kaniko,
+          etc.
+
+        - Deploy applications to multiple platforms such as Kubernetes, Serverless, and
+          VMs
+
+        - Scale pipelines on-demand
+
+        - Enhance supply chain security with Tekton Chains (Technology Preview)
+
+        - Install and deploy Tekton Hub (Technology Preview) with custom catalog on
+          enterprise cluster
+
+        - Maintain pipelines definitions as part of an application repository with
+          Pipelines-as-Code (PAC) (General Availability)
+
+          For more information, see the Release Notes on any one of the following
+          platforms:
+
+        - Customer Portal:
+          https://access.redhat.com/documentation/en-us/red_hat_openshift_pipelines/1.17/html/about_openshift_pipelines/op-release-notes#op-release-notes-1-17_op-release-notes
+
+        - OpenShift documentation:
+          https://docs.openshift.com/pipelines/1.17/about/op-release-notes.html#op-release-notes-1-17_op-release-notes
+      issues:
+        fixed:
+        - id: SRVKP-5901
+          source: issues.redhat.com
+        cves:
+        - component: operator-1-18
+          key: CVE-2024-45338
+        - component: operator-1-18
+          key: CVE-2024-45337
+      package-maintainer: pipelines-bots@redhat.com
+      references:
+      - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
+      release-name: openshift-pipelines-1.18.0
+      solution: |
+        Before applying this update, make sure all previously released advisory
+        relevant to your system have been applied.
+        For details on how to apply this update, refer to:
+        https://access.redhat.com/articles/11258
+      synopsis: "Red Hat OpenShift Pipelines Release 1.18.0"
+      topic: |
+        The 1.18.0 GA release of Red Hat OpenShift Pipelines Operator..
+        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+      type: RHEA
+  gracePeriodDays: 10
+  releasePlan: operator-1-18-stage-release-as-op
+  snapshot: tektoncd-chains-1-18-snapshot
