@@ -16,6 +16,6 @@ branches:
       - version: next
         release: auto
   - name: release-v1.18.x
-    upstream: main
+    upstream: release-v0.33.x
     versions:
       - version: "1.18"
