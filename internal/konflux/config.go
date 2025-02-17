@@ -25,6 +25,8 @@ type Component struct {
 	Platforms     []string
 	Nudges        []string
 	Dockerfile    string
+	ImagePrefix   string `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix   string `json:"image-suffix" yaml:"image-suffix"`
 	PrefetchInput string `json:"prefetch-input" yaml:"prefetch-input"`
 }
 

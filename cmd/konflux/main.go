@@ -280,6 +280,12 @@ func updateComponent(application k.Application, c *k.Component) error {
 	if c.PrefetchInput == "" {
 		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
 	}
+	if c.ImageSuffix == "" {
+		c.ImageSuffix = "-rhel9"
+	}
+	if application.Upstream != "" {
+		c.ImagePrefix = strings.Split(application.Upstream, "/")[1] + "-"
+	}
 	return nil
 }
 
