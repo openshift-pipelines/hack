@@ -7,7 +7,7 @@ metadata:
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: tektoncd-chains
     release.appstudio.openshift.io/author: rh-ee-sashture
-  name: chains-1-18-stage-release-4
+  generateName: chains-1-18-stage-release-4
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -43,4 +43,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: chains-1-18-stage-release-as-op
-  snapshot: tektoncd-chains-1-18-4cxfx
+  snapshot: tektoncd-chains-1-18-gl7gr

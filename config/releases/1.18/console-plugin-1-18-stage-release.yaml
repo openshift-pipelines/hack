@@ -34,4 +34,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: console-plugin-1-18-stage-release-as-op
-  snapshot: console-plugin-1-18-qwt26
+  snapshot: console-plugin-1-18-xmbck
