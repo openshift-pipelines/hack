@@ -3,7 +3,7 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
+  name: {{hyphenize .Version}}-{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
   labels:
@@ -11,5 +11,5 @@ metadata:
     appstudio.redhat.com/application: {{.Application}}-{{hyphenize .Version}}
 spec:
   image:
-   name: {{.Application}}-{{hyphenize .Version}}/{{.Name}}
+   name: {{hyphenize .Version}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}
    visibility: public
