@@ -38,4 +38,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: caches-1-18-stage-release-as-op
-  snapshot: tekton-caches-1-18-shnnf
+  snapshot: tekton-caches-1-18-pnrph

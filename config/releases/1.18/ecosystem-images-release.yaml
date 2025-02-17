@@ -7,7 +7,7 @@ metadata:
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: ecosystem-images
     release.appstudio.openshift.io/author: rh-ee-prbindal
-  name: tekton-ecosystem-1-18-stage-release
+  generateName: tekton-ecosystem-1-18-stage-release
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -33,5 +33,5 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHEA
   gracePeriodDays: 10
-  releasePlan: caches-1-18-stage-release-as-op
-  snapshot: ecosystem-images-1-18-vm2v2
+  releasePlan: ecosystem-images-1-18-stage-release-as-op
+  snapshot: ecosystem-images-1-18-59t7l

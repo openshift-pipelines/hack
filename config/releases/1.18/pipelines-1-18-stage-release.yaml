@@ -43,4 +43,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: pipeline-1-18-stage-release-as-op
-  snapshot: tektoncd-pipeline-1-18-dcrww
+  snapshot: tektoncd-pipeline-1-18-kx2cr
