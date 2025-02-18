@@ -7,9 +7,9 @@ metadata:
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: operator
     release.appstudio.openshift.io/author: rh-ee-sashture
-  name: openshift-pipelines-fbc-4-18-stage
+  generateName: openshift-pipelines-fbc-4-18-stage-
   namespace: tekton-ecosystem-tenant
 spec:
   gracePeriodDays: 10
   releasePlan: pipelines-operator-1-18-fbc-4-18-stage-release-as-op
-  snapshot: openshift-builds-fbc-4-14-c462j
+  snapshot: operator-1-18-index-4-18-application-kbf9f
