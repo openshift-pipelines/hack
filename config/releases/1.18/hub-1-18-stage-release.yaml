@@ -7,7 +7,7 @@ metadata:
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: tektoncd-hub
     release.appstudio.openshift.io/author: rh-ee-sashture
-  name: hub-1-18-stage-release
+  generateName: hub-1-18-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
