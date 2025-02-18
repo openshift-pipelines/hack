@@ -23,7 +23,6 @@ func main() {
 	defer cancel()
 
 	config := flag.String("config", filepath.Join("config", "konflux", "repository.yaml"), "specify the repository configuration")
-	branch := flag.String("branch", "main", "specify the repository configuration")
 	flag.Parse()
 
 	in, err := os.ReadFile(*config)
@@ -35,28 +34,30 @@ func main() {
 		log.Fatalln("Unmarshal config", err)
 	}
 
-	var versions []string
 	for _, b := range c.Branches {
-		if b.Name == *branch {
+		var versions []string
+		if len(b.Versions) == 0 {
+			versions = []string{b.Name}
+		} else {
 			for _, v := range b.Versions {
 				versions = append(versions, v.Version)
 			}
 		}
-	}
 
-	// Create temporary folder
-	dir, err := os.MkdirTemp("", "konflux-apply")
-	if err != nil {
-		log.Fatalln(err)
-	}
+		// Create temporary folder
+		dir, err := os.MkdirTemp("", "konflux-apply")
+		if err != nil {
+			log.Fatalln(err)
+		}
 
-	// Clone repository
-	if err := gitClone(ctx, dir, c.Repository); err != nil {
-		log.Fatalln(err)
-	}
-	//Kubectl apply
-	if err := apply(ctx, dir, versions); err != nil {
-		log.Fatalln(err)
+		// Clone repository
+		if err := gitClone(ctx, dir, c.Repository, b.Name); err != nil {
+			log.Fatalln(err)
+		}
+		//Kubectl apply
+		if err := apply(ctx, dir, versions); err != nil {
+			log.Fatalln(err)
+		}
 	}
 }
 
@@ -70,16 +71,16 @@ func apply(ctx context.Context, dir string, versions []string) error {
 
 		log.Printf("Final CMD : %s\n", cmd.String())
 
-		//if err := cmd.Run(); err != nil {
-		//	return err
-		//}
+		if err := cmd.Run(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
-func gitClone(ctx context.Context, dir, repository string) error {
+func gitClone(ctx context.Context, dir, repository string, branch string) error {
 	log.Printf("Cloning %s in %s\n", osp+repository, dir)
-	cmd := exec.CommandContext(ctx, "git", "clone", osp+repository, ".")
+	cmd := exec.CommandContext(ctx, "git", "clone", "-b", branch, osp+repository, ".")
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
