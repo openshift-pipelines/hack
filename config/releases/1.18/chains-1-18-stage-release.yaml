@@ -7,7 +7,7 @@ metadata:
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: tektoncd-chains
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: chains-1-18-stage-release-4
+  generateName: chains-1-18-stage-release
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -18,15 +18,15 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      issues:
-        fixed:
-        - id: SRVKP-6771
-          source: issues.redhat.com
-        cves:
+      cves:
         - component: tektoncd-chains-1-18-controller
           key: CVE-2024-45338
         - component: tektoncd-chains-1-18-controller
           key: CVE-2024-45337
+      issues:
+        fixed:
+        - id: SRVKP-6771
+          source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
       - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines

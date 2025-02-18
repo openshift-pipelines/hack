@@ -22,7 +22,7 @@ spec:
         fixed:
         - id: SRVKP-6185
           source: issues.redhat.com
-        cves:
+      cves:
         - component: tektoncd-results-1-18
           key: CVE-2024-45338
         - component: tektoncd-results-1-18

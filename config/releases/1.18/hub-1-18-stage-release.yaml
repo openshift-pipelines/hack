@@ -18,8 +18,7 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      issues:
-        cves:
+      cves:
         - component: tektoncd-hub-1-18
           key: CVE-2024-45338
         - component: tektoncd-hub-1-18

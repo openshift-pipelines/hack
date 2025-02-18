@@ -22,7 +22,7 @@ spec:
         fixed:
         - id: SRVKP-6771
           source: issues.redhat.com
-        cves:
+      cves:
         - component: tektoncd-pipeline-1-18
           key: CVE-2024-45338
         - component: tektoncd-pipeline-1-18
