@@ -56,6 +56,6 @@ branches:
   - name: next
     upstream: main
   - name: "release-v1.18.x"
-    upstream: main
+    upstream: release-v0.75.x
     versions:
       - version: "1.18"
