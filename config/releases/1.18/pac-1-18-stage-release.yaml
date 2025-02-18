@@ -40,7 +40,7 @@ spec:
           source: issues.redhat.com
         - id: SRVKP-4603
           source: issues.redhat.com
-        cves:
+      cves:
         - component: pac-downstream-1-18
           key: CVE-2024-45338
         - component: pac-downstream-1-18

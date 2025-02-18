@@ -72,7 +72,7 @@ spec:
         fixed:
         - id: SRVKP-5901
           source: issues.redhat.com
-        cves:
+      cves:
         - component: operator-1-18
           key: CVE-2024-45338
         - component: operator-1-18
