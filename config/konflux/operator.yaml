@@ -10,6 +10,7 @@ components:
       - operator-{{hyphenize .Version}}-index-4-15
       - operator-{{hyphenize .Version}}-index-4-16
       - operator-{{hyphenize .Version}}-index-4-17
+      - operator-{{hyphenize .Version}}-index-4-18
     tekton:
       watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
       build-nudge-files: ".*Dockerfile.*, .*.yaml, .*Containerfile.*, .*catalog-template.json.*"
