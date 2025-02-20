@@ -43,10 +43,17 @@ spec:
               TARGET_REGISTRY="quay.io/openshift-pipeline"
               SOURCE_PATTEN="quay.io/.*/(pipeline-)?(.*@sha256:.+)"
               TARGET_PATTEN="${TARGET_REGISTRY}/pipelines-\2"
+              BUNDLE_SOURCE_PATTEN="quay.io/.*/(.*)-rhel9(@sha256:.+)"
+              BUNDLE_TARGET_PATTEN="$TARGET_REGISTRY/pipelines-\1\2"
+        
               for container_image in "${container_images[@]}"; do 
-                new_image=$(echo "$container_image" | sed -E "s|$SOURCE_PATTEN|$TARGET_PATTEN|g")
-                new_image=$(echo "$new_image" | sed -E "s/operator-operator-rhel9/rhel9-operator/g")  # For Operator Image
-                echo "Component Image updated for release : $IMAGE"
+                if [[ $container_image =  *'operator-bundle'* ]]; then
+                  new_image=$(echo "$container_image" | sed -E "s|$BUNDLE_SOURCE_PATTEN|$BUNDLE_TARGET_PATTEN|g")
+                else
+                  new_image=$(echo "$container_image" | sed -E "s|$SOURCE_PATTEN|$TARGET_PATTEN|g")
+                  new_image=$(echo "$new_image" | sed -E "s/operator-operator-rhel9/rhel9-operator/g")  
+                fi
+                echo "Component Image updated for release : $new_image"
                 sha=${new_image/*@sha256:/}
                 new_image=${new_image/@sha256:*/}
                 tags=(next ${sha} )
