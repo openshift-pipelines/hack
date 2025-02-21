@@ -2,8 +2,8 @@
 name: Apply konflux configurations
 
 on:
-  schedule:
-    - cron: "0 4 * * *" # Daily at 06:00.
+  # schedule:
+  #   - cron: "0 4 * * *" # Daily at 06:00.
   workflow_dispatch: # Manual workflow trigger
 
 concurrency:
