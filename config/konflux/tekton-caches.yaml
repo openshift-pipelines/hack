@@ -4,7 +4,8 @@ components:
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: release-v0.1.x
     versions:
       - version: next

@@ -10,7 +10,8 @@ components:
   - name: webhook
   - name: workingdirinit
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: next
     upstream: release-v0.68.x
     versions:
