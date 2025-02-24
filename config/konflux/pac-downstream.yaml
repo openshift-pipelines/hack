@@ -9,7 +9,8 @@ components:
       - operator-{{hyphenize .Version}}-bundle
       - tektoncd-cli-{{hyphenize .Version}}-tkn
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: next
     upstream: release-v0.33.x
     versions:

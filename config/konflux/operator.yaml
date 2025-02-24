@@ -53,7 +53,8 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: next
     upstream: main
   - name: "release-v1.18.x"

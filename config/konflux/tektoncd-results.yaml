@@ -5,7 +5,8 @@ components:
   - name: watcher
   - name: retention-policy-agent
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: next
     upstream: release-v0.14.x
     versions:
