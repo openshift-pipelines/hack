@@ -6,7 +6,8 @@ components:
   - name: core-interceptors
   - name: eventlistenersink
 branches:
-  - name: main
+  # uncomment below line to get nightly builds
+  # - name: main
   - name: next
     upstream: release-v0.31.x
     versions:
