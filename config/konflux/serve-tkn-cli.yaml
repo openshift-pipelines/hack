@@ -1,0 +1,10 @@
+repository: serve-tkn-cli
+components:
+  - name: serve-tkn-cli
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - name: next
+  - name: "release-v1.18.x"
+    versions:
+      - version: "1.18"
