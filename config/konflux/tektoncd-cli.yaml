@@ -6,11 +6,11 @@ branches:
   # uncomment below line to get nightly builds
   # - name: main
   - name: release-v1.18.x
-    upstream: main
+    upstream: release-v0.40.0
     versions:
       - version: "1.18"
   - name: next
-    upstream: release-v0.39.1
+    upstream: release-v0.40.0
     versions:
       - version: "next"
         release: auto
