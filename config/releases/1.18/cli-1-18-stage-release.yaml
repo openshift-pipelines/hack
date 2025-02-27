@@ -39,4 +39,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: cli-1-18-stage-release-as-op
-  snapshot: tektoncd-cli-1-18-bhqwq
+  snapshot: tektoncd-cli-1-18-2jzdd
