@@ -12,4 +12,4 @@ metadata:
 spec:
   gracePeriodDays: 10
   releasePlan: pipelines-operator-1-18-fbc-4-18-stage-release-as-op
-  snapshot: operator-1-18-index-4-18-application-kbf9f
+  snapshot: operator-1-18-index-4-18-application-952pc
