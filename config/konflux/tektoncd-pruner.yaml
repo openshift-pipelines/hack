@@ -1,0 +1,5 @@
+repository: tektoncd-pruner
+components:
+  - name: controller
+branches:
+  - name: next
