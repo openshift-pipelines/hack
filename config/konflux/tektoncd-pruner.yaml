@@ -1,5 +1,10 @@
 repository: tektoncd-pruner
 components:
-  - name: controller
+  - name: tektoncd-pruner-controller
+tekton:
+  watched-sources: '"***".pathChanged()'
 branches:
   - name: next
+    versions:
+      - version: next
+        release: auto
