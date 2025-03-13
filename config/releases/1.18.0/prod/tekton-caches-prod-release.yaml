@@ -5,9 +5,9 @@ metadata:
     appstudio.openshift.io/application: tekton-caches-1-18
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    pac.test.appstudio.openshift.io/url-repository: tekton-caches
+    pac.test.appstudio.openshift.io/url-repository: tekton-cache
     release.appstudio.openshift.io/author: rh-ee-prbindal
-  generateName: cache-1-18-stage-release-
+  generateName: cache-1-18-prod-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
