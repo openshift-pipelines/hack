@@ -4,9 +4,9 @@ RELEASE=${1:-1.18.0}
 TAG_NAME=osp-v$RELEASE
 echo $RELEASE
 
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 
-for RELEASE_FILE in $RELEASE/*; do
-  if [[ "$(basename "$RELEASE_FILE")" != operator* ]]; then
+for RELEASE_FILE in $SCRIPT_DIR/prod/$RELEASE/*; do
       echo "Creating tag from release file: $RELEASE_FILE"
       SNAPSHOT=$(yq .spec.snapshot $RELEASE_FILE)
       REPO=$(yq '.metadata.labels["pac.test.appstudio.openshift.io/url-repository"]' $RELEASE_FILE)
@@ -41,7 +41,6 @@ for RELEASE_FILE in $RELEASE/*; do
         -X POST \
         -F ref="refs/tags/$TAG_NAME" \
         -F sha="$TAG_SHA"
-  fi
 done
 
 
