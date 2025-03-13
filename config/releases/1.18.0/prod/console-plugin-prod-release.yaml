@@ -2,12 +2,12 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: tektoncd-pipeline-1-18
+    appstudio.openshift.io/application: console-plugin-1-18
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    pac.test.appstudio.openshift.io/url-repository: tektoncd-pipeline
+    pac.test.appstudio.openshift.io/url-repository: console-plugin
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: pipeline-1-18-stage-release-
+  generateName: console-plugin-1-18-prod-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -18,15 +18,6 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      issues:
-        fixed:
-        - id: SRVKP-6771
-          source: issues.redhat.com
-      cves:
-        - component: tektoncd-pipeline-1-18
-          key: CVE-2024-45338
-        - component: tektoncd-pipeline-1-18
-          key: CVE-2024-45337
       package-maintainer: pipelines-bots@redhat.com
       references:
       - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -42,5 +33,5 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHEA
   gracePeriodDays: 10
-  releasePlan: pipeline-1-18-stage-release-as-op
-  snapshot: tektoncd-pipeline-1-18-kx2cr
+  releasePlan: console-plugin-1-18-prod-release-as-op
+  snapshot: console-plugin-1-18-9bvx7
