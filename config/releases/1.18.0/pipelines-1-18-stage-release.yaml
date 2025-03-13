@@ -2,12 +2,12 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: tekton-caches-1-18
+    appstudio.openshift.io/application: tektoncd-pipeline-1-18
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    pac.test.appstudio.openshift.io/url-repository: tekton-cache
-    release.appstudio.openshift.io/author: rh-ee-prbindal
-  generateName: cache-1-18-stage-release-
+    pac.test.appstudio.openshift.io/url-repository: tektoncd-pipeline
+    release.appstudio.openshift.io/author: rh-ee-sashture
+  generateName: pipeline-1-18-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -20,11 +20,16 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-3744
-            source: issues.redhat.com
+        - id: SRVKP-6771
+          source: issues.redhat.com
+      cves:
+        - component: tektoncd-pipeline-1-18
+          key: CVE-2024-45338
+        - component: tektoncd-pipeline-1-18
+          key: CVE-2024-45337
       package-maintainer: pipelines-bots@redhat.com
       references:
-        - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
+      - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       release-name: openshift-pipelines-1.18.0
       solution: |
         Before applying this update, make sure all previously released advisory
@@ -37,5 +42,5 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHEA
   gracePeriodDays: 10
-  releasePlan: caches-1-18-stage-release-as-op
-  snapshot: tekton-caches-1-18-lr7lr
+  releasePlan: pipeline-1-18-stage-release-as-op
+  snapshot: tektoncd-pipeline-1-18-kx2cr
