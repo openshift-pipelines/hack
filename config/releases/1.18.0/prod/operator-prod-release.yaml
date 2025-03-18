@@ -93,4 +93,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: operator-1-18-prod-release-as-op
-  snapshot: operator-1-18-js9gp
+  snapshot: operator-1-18-wjj56
