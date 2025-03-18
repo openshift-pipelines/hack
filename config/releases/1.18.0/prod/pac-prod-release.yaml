@@ -61,4 +61,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: pac-1-18-prod-release-as-op
-  snapshot: pac-downstream-1-18-qch88
+  snapshot: pac-downstream-1-18-nt67l

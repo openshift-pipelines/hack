@@ -43,4 +43,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: tektoncd-results-1-18-prod-release-as-op
-  snapshot: tektoncd-results-1-18-bs7nk
+  snapshot: tektoncd-results-1-18-xttkh
