@@ -39,4 +39,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: mag-1-18-prod-release-as-op
-  snapshot: manual-approval-gate-1-18-4r95j
+  snapshot: manual-approval-gate-1-18-hrkfx

@@ -39,4 +39,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: triggers-1-18-prod-release-as-op
-  snapshot: tektoncd-triggers-1-18-nb8wb
+  snapshot: tektoncd-triggers-1-18-pbl4s

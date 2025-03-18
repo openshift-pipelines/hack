@@ -39,4 +39,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: hub-1-18-prod-release-as-op
-  snapshot: tektoncd-hub-1-18-zc88h
+  snapshot: tektoncd-hub-1-18-g24c6

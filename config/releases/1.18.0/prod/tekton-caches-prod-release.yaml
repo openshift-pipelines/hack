@@ -37,5 +37,5 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHEA
   gracePeriodDays: 10
-  releasePlan: caches-1-18-stage-release-as-op
-  snapshot: tekton-caches-1-18-lr7lr
+  releasePlan: caches-1-18-prod-release-as-op
+  snapshot: tekton-caches-1-18-52l4d
