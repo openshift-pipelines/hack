@@ -5,8 +5,8 @@ TAG_NAME=osp-v$RELEASE
 echo $RELEASE
 
 
-for RELEASE_FILE in $RELEASE/*; do
-  if [[ "$(basename "$RELEASE_FILE")" != operator* ]]; then
+for RELEASE_FILE in $RELEASE/prod/*; do
+  if [[ "$(basename "$RELEASE_FILE")" != operator-fbc* ]]; then
       echo "Creating tag from release file: $RELEASE_FILE"
       SNAPSHOT=$(yq .spec.snapshot $RELEASE_FILE)
       REPO=$(yq '.metadata.labels["pac.test.appstudio.openshift.io/url-repository"]' $RELEASE_FILE)
