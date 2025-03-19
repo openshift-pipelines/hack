@@ -6,11 +6,11 @@ metadata:
   labels:
     release.appstudio.openshift.io/auto-release: 'true'
     release.appstudio.openshift.io/standing-attribution: 'true'
-  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-rp
+  name: {{basename .Name| hyphenize}}-{{hyphenize .Version.Version}}-rp
 spec:
-  application: {{.Name}}-{{hyphenize .Version}}
+  application: {{.Name}}-{{hyphenize .Version.Version}}
   tenantPipeline:
-    serviceAccountName: release-registry-openshift-pipelines-next
+    serviceAccountName: release-registry-{{.Name}}-{{hyphenize .Version.Version}}
     pipelineRef:
       resolver: git
       params:

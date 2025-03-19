@@ -1,0 +1,11 @@
+name: tektoncd-git-clone
+upstream: tektoncd-catalog/git-clone
+components:
+  - name: git-init
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - name: release-v1.17.x
+    upstream: main
+    versions:
+      - "1.17"

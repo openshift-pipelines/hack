@@ -1,0 +1,11 @@
+name: tektoncd-results
+upstream: tektoncd/results
+components:
+  - name: api
+  - name: watcher
+  - name: retention-policy-agent
+branches:
+  - name: release-v1.17.x
+    upstream: release-v0.13.x
+    versions:
+      - "1.17"

@@ -3,16 +3,12 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{.Name}}-{{hyphenize .Version}}-enterprise-contract
+  name: {{.Name}}-{{hyphenize .Version.Version}}-enterprise-contract
 spec:
-  application: {{.Name}}-{{hyphenize .Version}}
+  application: {{.Name}}-{{hyphenize .Version.Version}}
   contexts:
-{{- $name :=  .Name }}
-{{- $version :=  hyphenize .Version }}
-{{- range $component := .Components }}
-    - description: Application testing for {{$name}}-{{$version}}-{{$component.Name}}
-      name: component_{{$name}}-{{$version}}-{{$component.Name}}
-{{- end }}
+    - description: execute the integration test for a Snapshot of the `component` type
+      name: component
   params:
     - name: POLICY_CONFIGURATION
       value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers

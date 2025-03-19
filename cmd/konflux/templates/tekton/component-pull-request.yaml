@@ -4,25 +4,25 @@ kind: PipelineRun
 metadata:
   annotations:
     pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
-    {{- if or (ne .Application "operator" )  (ne .Branch "main") }}
+    {{- if or (ne .Application.Name "operator" )  (ne .Branch.Name "main") }}
     pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/docker-build-ta.yaml"
     {{- end }}
-    build.appstudio.openshift.io/repo: https://github.com/{{.Repository}}?rev={{"{{revision}}"}}
+    build.appstudio.openshift.io/repo: {{.Repository.Url}}?rev={{"{{revision}}"}}
     build.appstudio.redhat.com/commit_sha: '{{"{{revision}}"}}'
     build.appstudio.redhat.com/pull_request_number: '{{"{{pull_request_number}}"}}'
     build.appstudio.redhat.com/target_branch: '{{"{{target_branch}}"}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "{{.Branch}}" &&
+      == "{{.Branch.Name}}" &&
       ({{.Tekton.WatchedSources}} ||
       "{{.Dockerfile}}".pathChanged() ||
-      ".tekton/{{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-pull-request.yaml".pathChanged())
+      ".tekton/{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-pull-request.yaml".pathChanged())
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: {{.Application}}-{{hyphenize .Version}}
-    appstudio.openshift.io/component: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}
+    appstudio.openshift.io/application: {{.Application.Name}}-{{hyphenize .Version.Version}}
+    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
     pipelines.appstudio.openshift.io/type: build
-  name: {{basename .Repository | hyphenize}}-{{hyphenize .Version}}-{{.Name}}-on-pull-request
+  name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-on-pull-request
   namespace: tekton-ecosystem-tenant
 spec:
   params:
@@ -31,7 +31,7 @@ spec:
   - name: revision
     value: '{{"{{revision}}"}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{hyphenize .Version}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:on-pr-{{"{{revision}}"}}
+    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{hyphenize .Version.Version}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:on-pr-{{"{{revision}}"}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile

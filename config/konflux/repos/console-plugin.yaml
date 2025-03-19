@@ -1,0 +1,9 @@
+name: console-plugin
+components:
+  - name: console-plugin
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - name: release-v1.17.x
+    versions:
+      - "1.17"

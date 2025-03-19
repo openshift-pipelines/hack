@@ -30,5 +30,6 @@ func run(ctx context.Context, r string, name string, args ...string) ([]byte, er
 	if err := cmd.Run(); err != nil {
 		return buf.Bytes(), fmt.Errorf("[%s] failed to run %s %v: %w", r, name, args, err)
 	}
+	log.Printf("[%s] %s", r, buf.String())
 	return buf.Bytes(), nil
 }

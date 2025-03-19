@@ -1,48 +1,51 @@
 package konflux
 
+type Config struct {
+	Name      string
+	Versions  map[string]Version
+	Repos     []Repository
+	Resources []string
+}
+
 type Application struct {
+	Name    string
+	Repos   []Repository
+	Version *Version
+	Config  Config
+}
+
+type Repository struct {
+	Name        string
+	Upstream    string
+	Url         string
+	Branches    []Branch
+	Components  []Component
+	Application Application
+	Version     string
+	Tekton      Tekton
+	GitHub      GitHub
+}
+type Branch struct {
+	Versions       []string
+	UpstreamBranch string `json:"upstream" yaml:"upstream"`
 	Name           string
-	Repository     string
-	Upstream       string
-	Branch         string
-	UpstreamBranch string
-	Components     []Component
-	Version        string
-	GitHub         GitHub
-	Tekton         Tekton
 	Patches        []Patch
 	Platforms      []string
-	ReleasePlan    bool
+	Repository     *Repository
 }
 
 type Component struct {
 	Name          string
-	Application   string
-	Repository    string
-	Branch        string
-	Version       string
-	Tekton        Tekton
-	Platforms     []string
 	Nudges        []string
 	Dockerfile    string
 	ImagePrefix   string `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix   string `json:"image-suffix" yaml:"image-suffix"`
 	PrefetchInput string `json:"prefetch-input" yaml:"prefetch-input"`
-}
-
-type Config struct {
-	Repository string
-	Upstream   string
-	GitHub     GitHub
-	Tekton     Tekton
-	Components []Component
-	Branches   []Branch
-	Patches    []Patch
-	Platforms  []string
-}
-
-type GitHub struct {
-	UpdateSources string `json:"update-sources" yaml:"update-sources"`
+	Version       Version
+	Branch        Branch
+	Repository    Repository
+	Application   Application
+	Tekton        Tekton
 }
 
 type Tekton struct {
@@ -51,20 +54,18 @@ type Tekton struct {
 	NudgeFiles     string `json:"build-nudge-files" yaml:"build-nudge-files"`
 }
 
-type Branch struct {
-	Versions       []Version
-	UpstreamBranch string `json:"upstream" yaml:"upstream"`
-	Name           string
-	Patches        []Patch
-	Platforms      []string
+type GitHub struct {
+	UpdateSources string `json:"update-sources" yaml:"update-sources"`
 }
 
 type Patch struct {
 	Name   string
 	Script string
 }
-
 type Version struct {
-	Version string
-	Release string
+	Version     string
+	ImagePrefix string `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix string `json:"image-suffix" yaml:"image-suffix"`
+	AutoRelease bool   `json:"auto-release" yaml:"auto-release"`
+	Branch      *Branch
 }

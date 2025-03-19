@@ -1,0 +1,12 @@
+name: tektoncd-triggers
+upstream: tektoncd/triggers
+components:
+  - name: controller
+  - name: webhook
+  - name: core-interceptors
+  - name: eventlistenersink
+branches:
+  - name: release-v1.17.x
+    upstream: release-v0.30.x
+    versions:
+      - "1.17"

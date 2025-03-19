@@ -1,0 +1,19 @@
+name: openshift-pipelines
+versions:
+  1.17:
+    version: 1.17
+    image-suffix: -rhel8
+resources:
+  - console-plugin
+  - manual-approval-gate
+  - pac-downstream
+  - tektoncd-triggers
+  - tektoncd-pipeline
+  - tektoncd-chains
+  - tektoncd-cli
+  - tektoncd-hub
+  - tektoncd-results
+  - operator
+  - opc
+  - git-init
+

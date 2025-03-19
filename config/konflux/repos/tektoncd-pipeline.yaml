@@ -1,0 +1,16 @@
+name: tektoncd-pipeline
+upstream: tektoncd/pipeline
+components:
+  - name: controller
+  - name: entrypoint
+  - name: events
+  - name: nop
+  - name: resolvers
+  - name: sidecarlogresults
+  - name: webhook
+  - name: workingdirinit
+branches:
+  - name: release-v1.17.x
+    upstream: release-v0.65.x
+    versions:
+      - "1.17"
