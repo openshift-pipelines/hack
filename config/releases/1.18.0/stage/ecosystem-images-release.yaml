@@ -2,7 +2,7 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: tekton-caches-1-18
+    appstudio.openshift.io/application: ecosystem-images-1-18
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     pac.test.appstudio.openshift.io/url-repository: ecosystem-images

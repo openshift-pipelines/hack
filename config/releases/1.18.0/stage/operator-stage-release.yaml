@@ -28,8 +28,8 @@ spec:
         - Tekton tkn CLI 0.40.x
         - Tekton Chains 0.24.x (GA)
         - Pipelines-as-Code 0.33.x (GA)
-        - Tekton Hub 1.20.x (GA)
-        - Tekton Result 0.14.x (TP)
+        - Tekton Hub 1.20.x (TP)
+        - Tekton Result 0.14.x (GA)
         - Manual-Approval-Gate 0.5.x (TP)
         - Tekton Cache 0.1.x (TP)
 
