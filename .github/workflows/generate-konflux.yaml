@@ -3,10 +3,6 @@ name: Generate konflux configurations
 
 on:
   push:
-    branches:
-      - 'main'
-  # schedule:
-  #   - cron: "0 6 * * *" # Daily at 06:00.
   workflow_dispatch: # Manual workflow trigger
 
 concurrency:
@@ -23,14 +19,6 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-    # - name: Synchronize labels
-    #   run: |
-    #     pushd project
-    #     gh label clone openshift-pipelines/hack
-    #     popd
-    #   env:
-    #     GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
-    #     GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
     - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
@@ -42,7 +30,34 @@ jobs:
         gh auth status
         gh auth setup-git
         
-        go run ./cmd/konflux/ config/konflux/*
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines.yaml
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+    - name: Commit new changes
+      run: |
+        BASE_BRANCH=${GITHUB_REF#refs/heads/}
+        SOURCE_BRANCH=actions/update/hack-update-konflux-${BASE_BRANCH}
+        git config user.name openshift-pipelines-bot
+        git config user.email pipelines-extcomm@redhat.com
+        git checkout -b ${SOURCE_BRANCH}
+
+        git add -f .konflux
+
+        if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+        fi
+
+        git commit -F- <<EOF
+          [bot:${BASE_BRANCH}] Update Generated Konflux Config
+        EOF
+
+        git push -f origin ${SOURCE_BRANCH}
+
+        if [ "$(gh pr list --base ${BASE_BRANCH} --head ${SOURCE_BRANCH} --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated   --fill
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
