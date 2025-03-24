@@ -254,7 +254,16 @@ func generateKonfluxApplication(application k.Application) error {
 	}
 
 	if application.Version.AutoRelease {
-		if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(konfluxDir, "release-plan-%s.yaml")); err != nil {
+		if err := generateFileFromTemplate("role.yaml", application, filepath.Join(konfluxDir, "role.yaml")); err != nil {
+			return err
+		}
+		if err := generateFileFromTemplate("secret.yaml", application, filepath.Join(konfluxDir, "secret.yaml")); err != nil {
+			return err
+		}
+		if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(konfluxDir, "service-account.yaml")); err != nil {
+			return err
+		}
+		if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(konfluxDir, "release-plan.yaml")); err != nil {
 			return err
 		}
 	}
