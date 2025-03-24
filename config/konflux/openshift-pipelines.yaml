@@ -3,6 +3,7 @@ versions:
   1.15:
     version: 1.15
     image-suffix: -rhel8
+    auto-release: true
 resources:
   - console-plugin
   - manual-approval-gate
