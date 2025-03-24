@@ -254,7 +254,7 @@ func generateKonfluxApplication(application k.Application) error {
 	}
 
 	if application.Version.AutoRelease {
-		if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(konfluxDir, application.Name, fmt.Sprintf("release-plan-%s.yaml", application.Name))); err != nil {
+		if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(konfluxDir, "release-plan-%s.yaml")); err != nil {
 			return err
 		}
 	}
