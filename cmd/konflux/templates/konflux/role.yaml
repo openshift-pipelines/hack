@@ -1,3 +1,5 @@
+# Generated for Release {{.Version.Version}} by openshift-pipelines/hack. DO NOT EDIT.
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
