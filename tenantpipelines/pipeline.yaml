@@ -56,7 +56,7 @@ spec:
                 echo "Component Image updated for release : $new_image"
                 sha=${new_image/*@sha256:/}
                 new_image=${new_image/@sha256:*/}
-                tags=(next ${sha} )
+                tags=($(params.RELEASED_VERSION) ${sha} )
                 for tag in "${tags[@]}"; do
                   echo "copying the image from $container_image to $new_image with tag $tag and preserving digests"
                   skopeo copy docker://"$container_image" docker://"$new_image:$tag" --all --preserve-digests
