@@ -17,7 +17,7 @@ spec:
         - name: url
           value: https://github.com/openshift-pipelines/hack.git
         - name: revision
-          value: release-v1.17.x
+          value: release-v{{.Version.Version}}.x
         - name: pathInRepo
           value: tenantpipelines/pipeline.yaml
     params:
