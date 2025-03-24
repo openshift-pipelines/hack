@@ -1,7 +1,7 @@
 name: openshift-pipelines
 versions:
-  1.17:
-    version: 1.17
+  1.15:
+    version: 1.15
     image-suffix: -rhel8
 resources:
   - console-plugin
@@ -14,6 +14,4 @@ resources:
   - tektoncd-hub
   - tektoncd-results
   - operator
-  - opc
   - git-init
-
