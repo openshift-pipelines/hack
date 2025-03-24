@@ -7,6 +7,9 @@ components:
   - name: bundle
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
     nudges:
+      - operator-{{hyphenize .Version.Version}}-index-4-12
+      - operator-{{hyphenize .Version.Version}}-index-4-13
+      - operator-{{hyphenize .Version.Version}}-index-4-14                      
       - operator-{{hyphenize .Version.Version}}-index-4-15
       - operator-{{hyphenize .Version.Version}}-index-4-16
       - operator-{{hyphenize .Version.Version}}-index-4-17
@@ -42,13 +45,13 @@ github:
         pip3 install -r requirements.txt
 
         # Update operator's payload and stuff
-        make update-payload-and-version
+        update-payload-and-reference
         pushd upstream
         rm -fR cmd/openshift/operator/kodata operatorhub
         git checkout HEAD .
         popd
 branches:
-  - name: "release-v1.17.x"
-    upstream: release-v0.74.x
+  - name: "release-v1.15.x"
+    upstream: release-v0.71.x
     versions:
       - "1.17"

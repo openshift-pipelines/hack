@@ -1,9 +1,0 @@
-name: opc
-components:
-  - name: opc
-tekton:
-  watched-sources: '"***".pathChanged()'
-branches:
-  - name: release-v1.17.x
-    versions:
-      - "1.17"
