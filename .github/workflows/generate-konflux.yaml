@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   update-projects:
-#    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -54,4 +54,4 @@ branches:
   - name: "release-v1.15.x"
     upstream: release-v0.71.x
     versions:
-      - "1.17"
+      - "1.15"
