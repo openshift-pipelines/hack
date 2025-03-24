@@ -1,8 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: tekton-ecosystem-tenant
-  name: release-plan-role-next
+  name: release-plan-role-1.17
 rules:
 - apiGroups:
   - appstudio.redhat.com
@@ -15,13 +14,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  namespace: tekton-ecosystem-tenant
-  name: release-plan-rolebinding-next
+  name: release-plan-rolebinding-1.17
 subjects:
 - kind: ServiceAccount
-  name: release-registry-openshift-pipelines-next
+  name: release-registry-openshift-pipelines-1.17
   apiGroup: ""
 roleRef:
   kind: Role
-  name: release-plan-role-next
+  name: release-plan-role-1.17
   apiGroup: rbac.authorization.k8s.io
