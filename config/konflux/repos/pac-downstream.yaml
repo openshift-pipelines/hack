@@ -9,7 +9,7 @@ components:
       - operator-{{hyphenize .Version.Version}}-bundle
       - tektoncd-cli-{{hyphenize .Version.Version}}-tkn
 branches:
-  - name: release-v1.15.x
-    upstream: release-v0.27.x
+  - name: release-v1.14.x
+    upstream: release-v0.24.x
     versions:
-      - "1.15"
+      - "1.14"

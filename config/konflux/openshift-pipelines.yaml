@@ -1,12 +1,11 @@
 name: openshift-pipelines
 versions:
-  1.15:
-    version: 1.15
+  1.14:
+    version: 1.14
     image-suffix: -rhel8
     auto-release: true
 resources:
   - console-plugin
-  - manual-approval-gate
   - pac-downstream
   - tektoncd-triggers
   - tektoncd-pipeline
