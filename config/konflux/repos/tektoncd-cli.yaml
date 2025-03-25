@@ -3,7 +3,7 @@ upstream: tektoncd/cli
 components:
   - name: tkn
 branches:
-  - name: release-v1.15.x
-    upstream: release-v0.37.1
+  - name: next
+    upstream: release-v0.40.0
     versions:
-      - "1.15"
+      - next

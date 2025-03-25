@@ -1,6 +1,7 @@
-name: console-plugin
+name: tektoncd-pruner
 components:
-  - name: console-plugin
+  - name: controller
+    image-prefix: pruner-
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:

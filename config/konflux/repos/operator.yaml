@@ -51,7 +51,7 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: "release-v1.15.x"
-    upstream: release-v0.71.x
+  - name: next
+    upstream: main
     versions:
-      - "1.15"
+      - next
