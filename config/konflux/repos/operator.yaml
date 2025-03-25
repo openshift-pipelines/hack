@@ -9,7 +9,7 @@ components:
     nudges:
       - operator-{{hyphenize .Version.Version}}-index-4-12
       - operator-{{hyphenize .Version.Version}}-index-4-13
-      - operator-{{hyphenize .Version.Version}}-index-4-14                      
+      - operator-{{hyphenize .Version.Version}}-index-4-14
       - operator-{{hyphenize .Version.Version}}-index-4-15
       - operator-{{hyphenize .Version.Version}}-index-4-16
       - operator-{{hyphenize .Version.Version}}-index-4-17
@@ -51,7 +51,7 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: "release-v1.15.x"
-    upstream: release-v0.71.x
+  - name: "release-v1.14.x"
+    upstream: release-v0.70.x
     versions:
-      - "1.15"
+      - "1.14"
