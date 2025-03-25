@@ -43,7 +43,7 @@ spec:
               TARGET_REGISTRY="quay.io/openshift-pipeline"
               SOURCE_PATTEN="quay.io/.*/(pipeline-)?(.*@sha256:.+)"
               TARGET_PATTEN="${TARGET_REGISTRY}/pipelines-\2"
-              BUNDLE_SOURCE_PATTEN="quay.io/.*/(.*)-rhel9(@sha256:.+)"
+              BUNDLE_SOURCE_PATTEN="quay.io/.*/(.*)-rhel[0-9](@sha256:.+)"
               BUNDLE_TARGET_PATTEN="$TARGET_REGISTRY/pipelines-\1\2"
         
               for container_image in "${container_images[@]}"; do 
