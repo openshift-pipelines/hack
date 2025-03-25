@@ -1,16 +1,19 @@
 name: openshift-pipelines-core
 versions:
-  1.15:
-    version: 1.15
-    image-suffix: -rhel8
+  next:
+    version: next
+    image-suffix: -rhel9
     auto-release: true
 resources:
   - console-plugin
-  - pac-downstream
-  - tektoncd-triggers
-  - tektoncd-pipeline
-  - tektoncd-chains
-  - tektoncd-hub
-  - tektoncd-results
   - git-init
   - manual-approval-gate
+  - pac-downstream
+  - tekton-caches
+  - tektoncd-chains
+  - tektoncd-cli
+  - tektoncd-hub
+  - tektoncd-pipeline
+  - tektoncd-pruner
+  - tektoncd-results
+  - tektoncd-triggers

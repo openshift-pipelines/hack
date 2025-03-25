@@ -1,17 +1,17 @@
-# Generated for Release {{.Version.Version}} by openshift-pipelines/hack. DO NOT EDIT.
+# Generated for Release next by openshift-pipelines/hack. DO NOT EDIT.
 ---
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{.Name}}-{{hyphenize .Version.Version}}-enterprise-contract
+  name: openshift-pipelines-operator-next-enterprise-contract
 spec:
-  application: {{.Name}}-{{hyphenize .Version.Version}}
+  application: openshift-pipelines-operator-next
   contexts:
     - description: execute the integration test for a Snapshot of the `component` type
       name: component
   params:
     - name: POLICY_CONFIGURATION
-      value: {{- if  not (contains .Name "index") }} tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers {{- else}} tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes {{- end}}
+      value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers
     - name: TIMEOUT
       value: "15m0s"
     - name: SINGLE_COMPONENT

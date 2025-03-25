@@ -1,4 +1,4 @@
-# Generated for Release {{.Version.Version}} by openshift-pipelines/hack. DO NOT EDIT.
+# Generated for Release next by openshift-pipelines/hack. DO NOT EDIT.
 ---
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlan
@@ -6,20 +6,20 @@ metadata:
   labels:
     release.appstudio.openshift.io/auto-release: 'true'
     release.appstudio.openshift.io/standing-attribution: 'true'
-  name: {{basename .Name| hyphenize}}-{{hyphenize .Version.Version}}-rp
+  name: openshift-pipelines-operator-next-rp
 spec:
-  application: {{.Name}}-{{hyphenize .Version.Version}}
+  application: openshift-pipelines-operator-next
   tenantPipeline:
-    serviceAccountName: release-registry-{{.Name}}-{{hyphenize .Version.Version}}
+    serviceAccountName: release-registry-openshift-pipelines-operator-next
     pipelineRef:
       resolver: git
       params:
         - name: url
           value: https://github.com/openshift-pipelines/hack.git
         - name: revision
-          value: {{- if or (eq .Version.Version "main") (eq .Version.Version "next")  }}  {{.Version.Version}} {{- else}} release-v{{.Version.Version}}.x {{end}}
+          value:  next
         - name: pathInRepo
           value: tenantpipelines/pipeline.yaml
     params:
       - name: released_version
-        value: "{{.Version.Version}}"
+        value: "next"

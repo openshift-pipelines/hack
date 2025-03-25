@@ -4,7 +4,7 @@ name: update-sources-{{.Name}}
 on:
   workflow_dispatch: {}
   schedule:
-  - cron: "0 1 * * 1" # At 1AM every monday
+  - cron: "0 1 * * *" # At 1AM everyday
 
 jobs:
 
