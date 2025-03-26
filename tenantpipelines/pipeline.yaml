@@ -58,7 +58,7 @@ spec:
                   new_image=$(echo "$container_image" | sed -E "s|$BUNDLE_SOURCE_PATTEN|$BUNDLE_TARGET_PATTEN|g")
                 else
                   new_image=$(echo "$container_image" | sed -E "s|$SOURCE_PATTEN|$TARGET_PATTEN|g")
-                  new_image=$(echo "$new_image" | sed -E "s/operator-operator-rhel9/rhel9-operator/g")
+                  new_image=$(echo "$new_image" | sed -E "s/operator-operator-rhel8/rhel8-operator/g")
                 fi
                 echo "Component Image updated for release : $new_image"
                 sha=${new_image/*@sha256:/}
