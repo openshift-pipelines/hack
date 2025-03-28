@@ -46,6 +46,7 @@ type Component struct {
 	Repository    Repository
 	Application   Application
 	Tekton        Tekton
+	NoImagePrefix bool `json:"no-image-prefix" yaml:"no-image-prefix"`
 }
 
 type Tekton struct {

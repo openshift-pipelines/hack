@@ -2,6 +2,7 @@ name: tektoncd-git-clone
 upstream: tektoncd-catalog/git-clone
 components:
   - name: git-init
+    no-image-prefix: true
 branches:
   - name: release-v1.14.x
     upstream: release-v1.0.x
