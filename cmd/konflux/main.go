@@ -5,14 +5,15 @@ import (
 	"embed"
 	"flag"
 	"fmt"
-	k "github.com/openshift-pipelines/hack/internal/konflux"
-	"gopkg.in/yaml.v2"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	k "github.com/openshift-pipelines/hack/internal/konflux"
+	"gopkg.in/yaml.v2"
 )
 
 var nameFieldInvalidCharPattern = regexp.MustCompile("[^a-z0-9]")
@@ -240,7 +241,8 @@ func updateComponent(c *k.Component, version k.Version) error {
 	if c.ImageSuffix == "" {
 		c.ImageSuffix = DefaultImageSuffix
 	}
-	if repo.Upstream != "" {
+	// This is the case for git-init where we don't require upstream name because comet created is pipelines-git-init-rhel8
+	if !c.NoImagePrefix && repo.Upstream != "" {
 		c.ImagePrefix = strings.Split(repo.Upstream, "/")[1] + "-"
 	}
 	return nil
