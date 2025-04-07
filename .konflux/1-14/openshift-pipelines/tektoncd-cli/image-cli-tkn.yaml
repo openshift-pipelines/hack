@@ -6,6 +6,7 @@ metadata:
   name: 1-14-cli-tkn-rhel8
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: tektoncd-cli-1-14-tkn
     appstudio.redhat.com/application: openshift-pipelines-1-14

@@ -6,6 +6,7 @@ metadata:
   name: 1-14-hub-ui-rhel8
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: tektoncd-hub-1-14-ui
     appstudio.redhat.com/application: openshift-pipelines-1-14
