@@ -6,6 +6,7 @@ metadata:
   name: {{hyphenize .Version.Version}}-{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
     appstudio.redhat.com/application: {{.Application.Name}}-{{hyphenize .Version.Version}}
