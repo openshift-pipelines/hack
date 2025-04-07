@@ -6,6 +6,7 @@ metadata:
   name: 1-14-results-watcher-rhel8
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: tektoncd-results-1-14-watcher
     appstudio.redhat.com/application: openshift-pipelines-1-14
