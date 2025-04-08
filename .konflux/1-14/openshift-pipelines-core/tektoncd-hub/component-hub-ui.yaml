@@ -1,0 +1,18 @@
+# Generated for Release 1.14 by openshift-pipelines/hack. DO NOT EDIT.
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
+  name: tektoncd-hub-1-14-ui
+spec:
+  componentName: ui
+  application: openshift-pipelines-core-1-14
+  build-nudges-ref:
+  - operator-1-14-bundle
+  source:
+    git:
+      url: https://github.com/openshift-pipelines/tektoncd-hub.git
+      dockerfileUrl: .konflux/dockerfiles/ui.Dockerfile
+      revision: release-v1.14.x

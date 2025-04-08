@@ -1,0 +1,27 @@
+# Generated for Release 1.14 by openshift-pipelines/hack. DO NOT EDIT.
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: release-plan-role-openshift-pipelines-bundle-1-14
+rules:
+- apiGroups:
+  - appstudio.redhat.com
+  resources:
+  - snapshots
+  verbs:
+  - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: release-plan-rolebinding-openshift-pipelines-bundle-1-14
+subjects:
+- kind: ServiceAccount
+  name: release-registry-openshift-pipelines-bundle-1-14
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: release-plan-role-openshift-pipelines-bundle-1-14
+  apiGroup: rbac.authorization.k8s.io
