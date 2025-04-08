@@ -1,0 +1,16 @@
+# Generated for Release 1.15 by openshift-pipelines/hack. DO NOT EDIT.
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: 1-15-operator-bundle-rhel8
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: operator-1-15-bundle
+    appstudio.redhat.com/application: openshift-pipelines-1-15
+spec:
+  image:
+   name: 1-15/operator-bundle-rhel8
+   visibility: public
