@@ -1,8 +1,0 @@
-# Generated for Release 1.14 by openshift-pipelines/hack. DO NOT EDIT.
----
-apiVersion: appstudio.redhat.com/v1alpha1
-kind: Application
-metadata:
-  name: openshift-pipelines-1-14
-spec:
-  displayName: openshift-pipelines 1.14

@@ -1,4 +1,4 @@
-name: openshift-pipelines-bundle
+name: openshift-pipelines-operator
 versions:
   1.14:
     version: 1.14
