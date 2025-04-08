@@ -30,7 +30,9 @@ jobs:
         gh auth status
         gh auth setup-git
         
-        go run ./cmd/konflux/ config/konflux/openshift-pipelines.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-operator.yaml
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}

@@ -1,4 +1,4 @@
-name: openshift-pipelines
+name: openshift-pipelines-core
 versions:
   1.14:
     version: 1.14
@@ -10,8 +10,6 @@ resources:
   - tektoncd-triggers
   - tektoncd-pipeline
   - tektoncd-chains
-  - tektoncd-cli
   - tektoncd-hub
   - tektoncd-results
-  - operator
   - git-init
