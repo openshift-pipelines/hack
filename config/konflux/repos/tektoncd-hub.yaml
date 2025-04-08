@@ -7,7 +7,7 @@ components:
     prefetch-input: |-
       [{"type": "npm", "path": "upstream/ui"}, {"type": "rpm", "path": ".konflux/rpms"}]
 branches:
-  - name: release-v1.14.x
-    upstream: release-v1.16.2
+  - name: release-v1.15.x
+    upstream: release-v1.17.0
     versions:
-      - "1.14"
+      - "1.15"

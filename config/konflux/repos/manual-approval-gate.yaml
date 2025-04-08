@@ -1,0 +1,13 @@
+name: manual-approval-gate
+components:
+  # Image name patten in Comment includes prefix "manual-approval-gate-". To match the generated images we need to add Image Prefix here.
+  - name: controller
+    image-prefix: manual-approval-gate-
+  - name: webhook
+    image-prefix: manual-approval-gate-  
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - name: release-v0.2.2
+    versions:
+      - "1.15"
