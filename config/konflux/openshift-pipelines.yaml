@@ -1,7 +1,7 @@
 name: openshift-pipelines
 versions:
-  1.14:
-    version: 1.14
+  1.15:
+    version: 1.15
     image-suffix: -rhel8
     auto-release: true
 resources:
@@ -15,3 +15,4 @@ resources:
   - tektoncd-results
   - operator
   - git-init
+  - manual-approval-gate
