@@ -2,11 +2,11 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: openshift-pipelines-1-14
+    appstudio.openshift.io/application: openshift-pipelines-operator-1-14
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: openshift-pipelines-1-14-6-prod-release-
+  generateName: openshift-pipelines-operator-1-14-6-prod-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -68,11 +68,7 @@ spec:
           https://docs.openshift.com/pipelines/1.14/about/op-release-notes.html#op-release-notes-1-14_op-release-notes
       issues:
         fixed:
-          - id: SRVKP-5839
-            source: issues.redhat.com
           - id: SRVKP-7066
-            source: issues.redhat.com
-          - id: SRVKP-6404
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -89,5 +85,5 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHBA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-1-14-prod-release-as-op
+  releasePlan: openshift-pipelines-operator-1-14-prod-release-as-op
   snapshot: openshift-pipelines-1-14-kvss4
