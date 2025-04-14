@@ -256,11 +256,13 @@ func generateKonfluxApplication(application k.Application) error {
 	if err := generateFileFromTemplate("application.yaml", application, filepath.Join(konfluxDir, "application.yaml")); err != nil {
 		return err
 	}
-	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(konfluxDir, "tests.yaml")); err != nil {
-		return err
-	}
+	if strings.Contains(application.Name, "index") {
+		if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(konfluxDir, "release-tests.yaml")); err != nil {
+			return err
+		}
 
-	if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(konfluxDir, "release-tests.yaml")); err != nil {
+	}
+	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(konfluxDir, "tests.yaml")); err != nil {
 		return err
 	}
 
@@ -307,6 +309,9 @@ func generateGitHubWorkflow(branch k.Branch, target string) error {
 	}
 	filename := fmt.Sprintf("update-sources-%s.yaml", branch.Name)
 	if err := generateFileFromTemplate("update-sources.yaml", branch, filepath.Join(target, "workflows", filename)); err != nil {
+		return err
+	}
+	if err := generateFileFromTemplate("auto-merge-upstream.yaml", branch, filepath.Join(target, "workflows", fmt.Sprintf("auto-merge-upstream-%s.yaml", branch.Name))); err != nil {
 		return err
 	}
 	return nil

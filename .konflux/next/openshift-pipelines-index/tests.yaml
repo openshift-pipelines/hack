@@ -3,15 +3,15 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: openshift-pipelines-operator-next-enterprise-contract
+  name: openshift-pipelines-index-next-enterprise-contract
 spec:
-  application: openshift-pipelines-operator-next
+  application: openshift-pipelines-index-next
   contexts:
     - description: execute the integration test for a Snapshot of the `component` type
       name: component
   params:
     - name: POLICY_CONFIGURATION
-      value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers
+      value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes
     - name: TIMEOUT
       value: "15m0s"
     - name: SINGLE_COMPONENT

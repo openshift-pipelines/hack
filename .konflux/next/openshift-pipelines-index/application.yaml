@@ -3,6 +3,6 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Application
 metadata:
-  name: openshift-pipelines-operator-next
+  name: openshift-pipelines-index-next
 spec:
-  displayName: openshift-pipelines-operator next
+  displayName: openshift-pipelines-index next

@@ -6,11 +6,11 @@ metadata:
   labels:
     release.appstudio.openshift.io/auto-release: 'true'
     release.appstudio.openshift.io/standing-attribution: 'true'
-  name: openshift-pipelines-operator-next-rp
+  name: openshift-pipelines-index-next-rp
 spec:
-  application: openshift-pipelines-operator-next
+  application: openshift-pipelines-index-next
   tenantPipeline:
-    serviceAccountName: release-registry-openshift-pipelines-operator-next
+    serviceAccountName: release-registry-openshift-pipelines-index-next
     pipelineRef:
       resolver: git
       params:

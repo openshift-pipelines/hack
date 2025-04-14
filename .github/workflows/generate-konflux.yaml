@@ -25,14 +25,13 @@ jobs:
     - name: Generate configurations and pull-requests
       run: |
         echo "Let's go"
-        # git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
-
         gh auth status
         gh auth setup-git
         
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-operator.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index.yaml
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
