@@ -5,14 +5,14 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: operator-next-webhook
+  name: operator-next-index-4-16
 spec:
-  componentName: webhook
-  application: openshift-pipelines-operator-next
+  componentName: index-4-16
+  application: openshift-pipelines-index-next
   build-nudges-ref:
-  - operator-next-bundle
+  - 
   source:
     git:
       url: https://github.com/openshift-pipelines/operator.git
-      dockerfileUrl: .konflux/dockerfiles/webhook.Dockerfile
+      dockerfileUrl: .konflux/olm-catalog/index/v4.16/Dockerfile.catalog
       revision: next

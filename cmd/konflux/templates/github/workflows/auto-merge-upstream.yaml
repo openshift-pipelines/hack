@@ -1,5 +1,5 @@
 # Generated for Release {{.Repository.Application.Version.Version}} by openshift-pipelines/hack. DO NOT EDIT.
-name: auto-merge-{{.Version}}
+name: auto-merge-upstream-{{.Name}}
 
 on:
   workflow_dispatch: {}
@@ -15,24 +15,13 @@ jobs:
     steps:
     - name: Checkout the current repo
       uses: actions/checkout@v4
-    - name: auto-merge-update-references
+    - name: auto-merge-upstream-{{.Name}}
       run: |
         gh auth status
         git config user.name openshift-pipelines-bot
         git config user.email pipelines-extcomm@redhat.com
         # Approve and merge pull-request with no reviews
-        for p in $(gh pr list --search "author:app/red-hat-konflux head:konflux/references/{{.Version}}" --json "number" | jq ".[].number"); do
-          gh pr merge --rebase --delete-branch --auto $p
-        done
-      env:
-        GH_TOKEN: {{"${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}"}}
-    - name: auto-merge-upstream-{{.Version}}
-      run: |
-        gh auth status
-        git config user.name openshift-pipelines-bot
-        git config user.email pipelines-extcomm@redhat.com
-        # Approve and merge pull-request with no reviews
-        for p in $(gh pr list --search "head:actions/update/sources-{{.Version}}" --json "number" | jq ".[].number"); do
+        for p in $(gh pr list --search "head:actions/update/sources-{{.Name}}" --json "number" | jq ".[].number"); do
           gh pr merge --rebase --delete-branch --auto $p
         done
       env:
