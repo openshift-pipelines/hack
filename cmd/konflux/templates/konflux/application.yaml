@@ -3,6 +3,6 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Application
 metadata:
-  name: {{.Name}}-{{hyphenize .Version.Version}}
+  name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
 spec:
   displayName: {{.Name}} {{.Version.Version}}

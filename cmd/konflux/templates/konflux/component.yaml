@@ -5,10 +5,10 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
+  name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
 spec:
-  componentName: {{.Name}}
-  application: {{.Application.Name}}-{{hyphenize .Version.Version}}
+  componentName: {{hyphenize .Name}}
+  application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
   build-nudges-ref:
   {{- $dot := .}}
   {{- if .Nudges }}

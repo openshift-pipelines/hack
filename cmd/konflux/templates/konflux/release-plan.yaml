@@ -8,9 +8,9 @@ metadata:
     release.appstudio.openshift.io/standing-attribution: 'true'
   name: {{basename .Name| hyphenize}}-{{hyphenize .Version.Version}}-rp
 spec:
-  application: {{.Name}}-{{hyphenize .Version.Version}}
+  application: {{.Name | hyphenize}}-{{hyphenize .Version.Version}}
   tenantPipeline:
-    serviceAccountName: release-registry-{{.Name}}-{{hyphenize .Version.Version}}
+    serviceAccountName: release-registry-{{.Name | hyphenize}}-{{hyphenize .Version.Version}}
     pipelineRef:
       resolver: git
       params:

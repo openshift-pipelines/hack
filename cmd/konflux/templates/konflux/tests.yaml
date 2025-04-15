@@ -3,9 +3,9 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{.Name}}-{{hyphenize .Version.Version}}-enterprise-contract
+  name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}-enterprise-contract
 spec:
-  application: {{.Name}}-{{hyphenize .Version.Version}}
+  application: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
   contexts:
     - description: execute the integration test for a Snapshot of the `component` type
       name: component

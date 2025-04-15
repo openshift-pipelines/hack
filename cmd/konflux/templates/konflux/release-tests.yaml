@@ -2,12 +2,12 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{.Name}}-{{hyphenize .Version.Version}}-release-tests
+  name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}-release-tests
 spec:
-  application: {{.Name}}-{{hyphenize .Version.Version}}
+  application: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
   contexts:
     - description: Application testing
-      name: component_{{.Name}}-{{hyphenize .Version.Version}}-index-4-18
+      name: component_{{hyphenize .Name}}-{{hyphenize .Version.Version}}-index-4-18
   resolverRef:
     params:
       - name: url
