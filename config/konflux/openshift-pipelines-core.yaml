@@ -11,9 +11,8 @@ resources:
   - pac-downstream
   - tekton-caches
   - tektoncd-chains
-  - tektoncd-cli
   - tektoncd-hub
   - tektoncd-pipeline
   - tektoncd-pruner
-#  - tektoncd-results
-#  - tektoncd-triggers
+  - tektoncd-results
+  - tektoncd-triggers
