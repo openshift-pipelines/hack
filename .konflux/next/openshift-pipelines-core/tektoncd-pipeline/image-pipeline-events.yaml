@@ -1,0 +1,16 @@
+# Generated for Release next by openshift-pipelines/hack. DO NOT EDIT.
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: next-pipeline-events-rhel9
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: tektoncd-pipeline-next-events
+    appstudio.redhat.com/application: openshift-pipelines-core-next
+spec:
+  image:
+   name: next/pipeline-events-rhel9
+   visibility: public

@@ -1,0 +1,16 @@
+# Generated for Release next by openshift-pipelines/hack. DO NOT EDIT.
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: next-pipelines-as-code-controller-rhel9
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: pac-downstream-next-controller
+    appstudio.redhat.com/application: openshift-pipelines-core-next
+spec:
+  image:
+   name: next/pipelines-as-code-controller-rhel9
+   visibility: public
