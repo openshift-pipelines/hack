@@ -3,9 +3,9 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: openshift-pipelines-index-4.17-next-enterprise-contract
+  name: openshift-pipelines-index-4-17-next-enterprise-contract
 spec:
-  application: openshift-pipelines-index-4.17-next
+  application: openshift-pipelines-index-4-17-next
   contexts:
     - description: execute the integration test for a Snapshot of the `component` type
       name: component

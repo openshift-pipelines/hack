@@ -8,9 +8,9 @@ metadata:
     release.appstudio.openshift.io/standing-attribution: 'true'
   name: openshift-pipelines-index-4-13-next-rp
 spec:
-  application: openshift-pipelines-index-4.13-next
+  application: openshift-pipelines-index-4-13-next
   tenantPipeline:
-    serviceAccountName: release-registry-openshift-pipelines-index-4.13-next
+    serviceAccountName: release-registry-openshift-pipelines-index-4-13-next
     pipelineRef:
       resolver: git
       params:
