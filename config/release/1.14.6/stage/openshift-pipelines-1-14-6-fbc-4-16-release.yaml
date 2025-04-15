@@ -11,4 +11,4 @@ metadata:
 spec:
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-1-14-fbc-4-16-stage-release-as-op
-  snapshot: openshift-pipelines-1-14-kvss4
+  snapshot: operator-1-14-index-4-16-application-j5mcv
