@@ -1,8 +1,0 @@
-name: openshift-pipelines-index
-versions:
-  next:
-    version: next
-    auto-release: true
-resources:
-  - operator-index
-
