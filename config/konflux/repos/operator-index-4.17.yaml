@@ -1,0 +1,11 @@
+name: operator
+components:
+  - name: index-4.17
+    dockerfile: .konflux/olm-catalog/index/v4.17/Dockerfile.catalog
+    nudges: [ "" ]
+tekton:
+  watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/index/***".pathChanged())
+branches:
+  - name: next
+    versions:
+      - next
