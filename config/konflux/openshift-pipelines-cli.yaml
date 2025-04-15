@@ -1,8 +1,8 @@
 name: openshift-pipelines-cli
 versions:
-  1.14:
-    version: 1.14
-    image-suffix: -rhel8
+  1.18:
+    version: 1.18
+    image-suffix: -rhel9
     auto-release: true
 resources:
   - tektoncd-cli
