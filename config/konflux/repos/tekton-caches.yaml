@@ -1,9 +1,9 @@
-name: console-plugin
+name: tekton-caches
 components:
-  - name: console-plugin
+  - name: cache
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - name: release-v1.18.x
+  - name: release-v0.1.x
     versions:
       - "1.18"
