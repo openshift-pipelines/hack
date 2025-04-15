@@ -6,7 +6,7 @@ metadata:
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: openshift-pipelines-1-14-6-stage-release-
+  generateName: openshift-pipelines-operator-1-14-6-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -86,4 +86,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-14-stage-release-as-op
-  snapshot: openshift-pipelines-1-14-kvss4
+  snapshot: openshift-pipelines-operator-1-14-xln9s
