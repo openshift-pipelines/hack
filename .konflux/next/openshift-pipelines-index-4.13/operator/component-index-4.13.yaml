@@ -5,10 +5,10 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: operator-next-index-4.13
+  name: operator-next-index-4-13
 spec:
-  componentName: index-4.13
-  application: openshift-pipelines-index-4.13-next
+  componentName: index-4-13
+  application: openshift-pipelines-index-4-13-next
   build-nudges-ref:
   - 
   source:
