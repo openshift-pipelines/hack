@@ -22,7 +22,7 @@ metadata:
       ".tekton/{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-pull-request.yaml".pathChanged())
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: {{.Application.Name}}-{{hyphenize .Version.Version}}
+    appstudio.openshift.io/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
     appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
     pipelines.appstudio.openshift.io/type: build
   name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-on-pull-request
