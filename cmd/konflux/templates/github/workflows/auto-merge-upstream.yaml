@@ -1,4 +1,3 @@
-# Generated for Release {{.Repository.Application.Version.Version}} by openshift-pipelines/hack. DO NOT EDIT.
 name: auto-merge-upstream-{{.Name}}
 
 on:
