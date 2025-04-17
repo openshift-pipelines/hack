@@ -3,12 +3,12 @@ kind: PipelineRun
 metadata:
   annotations:
     pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
-  {{- if  or (ne .Branch.Name "main")  (ne .Repository.Name "operator") }}
-    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/docker-build-ta.yaml"
-  {{- end }}
-  {{- if  (contains .Name "index") }}
+    {{- if  and (ne .Branch.Name "main") (contains .Name "index") }}
     pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/fbc-build.yaml"
-  {{- end }}
+    {{- else }}{{- if  or (ne .Branch.Name "main") (ne .Repository.Name "operator") }}
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/docker-build-ta.yaml"
+    {{- end }}
+    {{- end }}
     build.appstudio.openshift.io/repo: {{.Repository.Url}}?rev={{"{{revision}}"}}
     build.appstudio.redhat.com/commit_sha: '{{"{{revision}}"}}'
     build.appstudio.redhat.com/pull_request_number: '{{"{{pull_request_number}}"}}'
@@ -23,7 +23,7 @@ metadata:
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
-    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
+    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
     pipelines.appstudio.openshift.io/type: build
   name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-on-pull-request
   namespace: tekton-ecosystem-tenant
@@ -42,11 +42,10 @@ spec:
   - name: build-platforms
     value:
     - linux/x86_64
-  {{- if contains (printf "%s-%s-%s" (basename .Repository.Name | hyphenize) (hyphenize .Version.Version) .Name) "bundle" }}
+  {{- if eq .Name "bundle" }}
   - name: build-image-index
     value: false
   {{end }}
-
   {{- if  not (contains .Name "index") }}
   - name: prefetch-input
     value: |
