@@ -9,7 +9,7 @@ components:
       - operator-{{hyphenize .Version.Version}}-bundle
       - tektoncd-cli-{{hyphenize .Version.Version}}-tkn
 branches:
-  - name: next
+  - name: main
     upstream: main
     versions:
-      - next
+      - main

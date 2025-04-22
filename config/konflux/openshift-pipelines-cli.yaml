@@ -1,7 +1,7 @@
 name: openshift-pipelines-cli
 versions:
-  next:
-    version: next
+  main:
+    version: main
     image-suffix: -rhel9
     auto-release: true
 resources:

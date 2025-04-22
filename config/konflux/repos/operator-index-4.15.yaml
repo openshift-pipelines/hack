@@ -6,6 +6,6 @@ components:
 tekton:
   watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/index/***".pathChanged())
 branches:
-  - name: next
+  - name: main
     versions:
-      - next
+      - main
