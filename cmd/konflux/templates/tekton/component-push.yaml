@@ -36,6 +36,13 @@ spec:
     value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{hyphenize .Version.Version}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:{{"{{revision}}"}}
   - name: dockerfile
     value: {{.Dockerfile}}
+  {{- if contains (printf "%s-%s-%s" (basename .Repository.Name | hyphenize) (hyphenize .Version.Version) .Name) "bundle" }}
+  - name: build-platforms
+    value:
+      - linux/x86_64
+  - name: build-image-index
+    value: false
+  {{- end }}
   - name: prefetch-input
     value: |
       {{ .PrefetchInput }}
