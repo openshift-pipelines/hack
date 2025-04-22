@@ -51,7 +51,7 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: next
+  - name: main
     upstream: main
     versions:
-      - next
+      - main

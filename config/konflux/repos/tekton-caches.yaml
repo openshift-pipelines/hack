@@ -8,4 +8,4 @@ branches:
   # - name: main
   - name: main
     versions:
-      - next
+      - main
