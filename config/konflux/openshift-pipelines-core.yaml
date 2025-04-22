@@ -1,8 +1,8 @@
 name: openshift-pipelines-core
 versions:
-  next:
-    version: next
-    image-suffix: -rhel9
+  1.16:
+    version: 1.16
+    image-suffix: -rhel8
     auto-release: true
 resources:
   - console-plugin
@@ -13,6 +13,5 @@ resources:
   - tektoncd-chains
   - tektoncd-hub
   - tektoncd-pipeline
-  - tektoncd-pruner
   - tektoncd-results
   - tektoncd-triggers
