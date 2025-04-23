@@ -3,7 +3,7 @@ upstream: tektoncd/chains
 components:
   - name: controller
 branches:
-  - name: next
+  - name:  "release-v1.17.x"
     upstream: release-v0.24.x
     versions:
-      - next
+      - "1.17"

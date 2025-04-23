@@ -6,6 +6,6 @@ tekton:
 branches:
   # uncomment below line to get nightly builds
   # - name: main
-  - name: main
+  - name: "main"
     versions:
-      - next
+      - "release-v1.17.x"
