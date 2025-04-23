@@ -1,8 +1,8 @@
 name: openshift-pipelines-core
 versions:
-  next:
-    version: next
-    image-suffix: -rhel9
+  1.17:
+    version: 1.17
+    image-suffix: -rhel8
     auto-release: true
 resources:
   - console-plugin

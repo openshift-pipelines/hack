@@ -6,4 +6,4 @@ tekton:
 branches:
   - name: main
     versions:
-      - next
+      - "1.17"
