@@ -10,13 +10,14 @@ set -e
 # It uses the version-compatibility-matrix.json to determine which
 # components should be updated for the specified version.
 #
-# Usage: ./hack/update-all.sh [--dry-run] <new_version>
+# Usage: ./hack/update-all.sh [--dry-run] <new_version> <image_suffix>
 #
-# Example: ./hack/update-all.sh 1.16
-#          ./hack/update-all.sh --dry-run 1.16
+# Example: ./hack/update-all.sh 1.16 -rhel8
+#          ./hack/update-all.sh --dry-run 1.16 -rhel8
 #
 # Parameters:
 #   <new_version>    - The new version number (e.g., "1.16")
+#   <image_suffix>   - The image suffix (e.g., "-rhel8", "-rhel9")
 #
 # Options:
 #   --dry-run        - Show what would be changed without actually making changes
@@ -28,16 +29,17 @@ if [ "$1" == "--dry-run" ]; then
     shift
 fi
 
-if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 [--dry-run] <new_version>"
-    echo "Example: $0 1.16"
+if [ "$#" -lt 2 ]; then
+    echo "Error: Not enough arguments"
+    echo "Usage: $0 [--dry-run] <new_version> <image_suffix>"
+    echo "Example: $0 1.16 -rhel8"
     exit 1
 fi
 
 # Set parameters
 NEW_VERSION=$1
+IMAGE_SUFFIX=$2
 OLD_VERSION="next"
-IMAGE_SUFFIX="-rhel8"
 
 # Check if the version includes a patch version (e.g., 0.5.0)
 if [[ "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
