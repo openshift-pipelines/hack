@@ -4,7 +4,7 @@ components:
   - name: api
   - name: watcher
 branches:
-  - name: next
-    upstream: release-v0.14.x
+  - name: release-v0.16.x
+    upstream: release-v0.12.x
     versions:
-      - next
+      - "1.16"
