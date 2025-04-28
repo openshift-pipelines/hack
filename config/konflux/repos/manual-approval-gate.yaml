@@ -8,6 +8,6 @@ components:
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - name: release-v0.5.0
+  - name: release-v0.3.1
     versions:
-      - next
+      - "1.16"
