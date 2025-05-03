@@ -16,3 +16,4 @@ resources:
   - tektoncd-pruner
   - tektoncd-results
   - tektoncd-triggers
+  - opc
