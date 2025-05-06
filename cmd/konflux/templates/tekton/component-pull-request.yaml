@@ -56,7 +56,7 @@ spec:
   {{- if  not (contains .Name "index") }} docker-build-ta
   {{- else}} fbc-build {{- end }}
   taskRunTemplate:
-    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
+    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
   workspaces:
   - name: git-auth
     secret:
