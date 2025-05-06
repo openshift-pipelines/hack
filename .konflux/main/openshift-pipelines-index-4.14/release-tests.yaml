@@ -8,7 +8,7 @@ spec:
   application: openshift-pipelines-index-4-14-main
   contexts:
     - description: Application testing
-      name: component_openshift-pipelines-index-4-14-main-index-4-18
+      name: component
   resolverRef:
     params:
       - name: url
