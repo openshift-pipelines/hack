@@ -48,6 +48,8 @@ spec:
       {{ .PrefetchInput }}
   pipelineRef:
     name: docker-build-ta
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}
   workspaces:
   - name: git-auth
     secret:
