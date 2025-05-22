@@ -8,7 +8,6 @@ components:
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
     nudges:
       - operator-{{hyphenize .Version.Version}}-index-4-12
-      - operator-{{hyphenize .Version.Version}}-index-4-13
       - operator-{{hyphenize .Version.Version}}-index-4-14
       - operator-{{hyphenize .Version.Version}}-index-4-15
       - operator-{{hyphenize .Version.Version}}-index-4-16
@@ -16,20 +15,6 @@ components:
       - operator-{{hyphenize .Version.Version}}-index-4-18
     tekton:
       watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
-patches: &patches
-  - name: go1.23
-    script: |
-      rm ../.konflux/patches/0000-go1.23.patch || true
-      sed -i "s%go1.24.*%go1.23%g" go.mod
-      sed -i "s%go 1.23.8%go 1.23.6%g" vendor/modules.txt
-      if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
-            echo "No change, exiting"
-            exit 0
-      else
-        git diff > ../.konflux/patches/0000-go1.23.patch
-      fi
-      # clean after yourself >:D
-      git checkout HEAD go.mod vendor/modules.txt
 tekton:
   watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
@@ -42,7 +27,7 @@ github:
 
         if [[ "$BRANCH_NAME" != "main" ]] && [[ -z $(git status --porcelain --untracked-files=no) ]]; then
           echo "No change, do nothing"
-          # exit 0
+          exit 0
         fi
         # Operator SDK
         export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/v1.37.0/operator-sdk_linux_amd64
@@ -64,8 +49,7 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: next
-    upstream: main
-    patches: *patches
+  - name: release-v1.16.x
+    upstream: release-v0.73.x
     versions:
-      - next
+      - 1.16
