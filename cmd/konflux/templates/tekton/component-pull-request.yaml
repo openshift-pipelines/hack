@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    #pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
+    pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
     {{- if  and (ne .Branch.Name "main") (contains .Name "index") }}
     pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/fbc-build.yaml"
     {{- else }}{{- if  or (ne .Branch.Name "main") (ne .Repository.Name "operator") }}
