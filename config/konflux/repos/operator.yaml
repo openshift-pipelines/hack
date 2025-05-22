@@ -16,7 +16,20 @@ components:
       - operator-{{hyphenize .Version.Version}}-index-4-18
     tekton:
       watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
-
+patches: &patches
+  - name: go1.23
+    script: |
+      rm ../.konflux/patches/0000-go1.23.patch || true
+      sed -i "s%go1.24.*%go1.23%g" go.mod
+      sed -i "s%go 1.23.8%go 1.23.6%g" vendor/modules.txt
+      if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+            echo "No change, exiting"
+            exit 0
+      else
+        git diff > ../.konflux/patches/0000-go1.23.patch
+      fi
+      # clean after yourself >:D
+      git checkout HEAD go.mod vendor/modules.txt
 tekton:
   watched-sources: '"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
 github:
@@ -53,5 +66,6 @@ github:
 branches:
   - name: next
     upstream: main
+    patches: *patches
     versions:
       - next

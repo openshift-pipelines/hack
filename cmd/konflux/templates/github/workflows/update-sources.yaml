@@ -26,18 +26,18 @@ jobs:
         pushd upstream
         git checkout -B {{.UpstreamBranch}} origin/{{.UpstreamBranch}}
         popd
-{{if .Repository.GitHub.UpdateSources }}
-{{ .Repository.GitHub.UpdateSources | indent 4}}
-{{end}}
-{{if .Patches}}
+{{- if .Repository.GitHub.UpdateSources }}
+{{  .Repository.GitHub.UpdateSources | indent 4}}
+{{- end}}
+{{- if .Patches}}
     - name: Generate patches
       run: |
         pushd upstream
-{{range .Patches}}
-{{.Script | indent 8}}
-{{end}}
+{{- range .Patches}}
+{{ .Script | indent 8}}
+{{- end}}
         popd
-{{end}}
+{{- end}}
     - name: Commit new changes
       run: |
         git config user.name openshift-pipelines-bot
