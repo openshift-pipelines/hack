@@ -4,6 +4,6 @@ components:
   - name: controller
 branches:
   - name: next
-    upstream: release-v0.24.x
+    upstream: release-v0.25.1
     versions:
       - next
