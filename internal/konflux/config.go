@@ -24,6 +24,7 @@ type Repository struct {
 	Version     string
 	Tekton      Tekton
 	GitHub      GitHub
+	Patches     []Patch
 }
 type Branch struct {
 	Versions       []string
