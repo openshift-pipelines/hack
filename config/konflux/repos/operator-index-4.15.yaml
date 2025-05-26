@@ -4,7 +4,7 @@ components:
     dockerfile: .konflux/olm-catalog/index/v4.15/Dockerfile.catalog
     nudges: [ "" ]
 tekton:
-  watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/index/***".pathChanged())
+  watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())
 branches:
   - name: next
     versions:
