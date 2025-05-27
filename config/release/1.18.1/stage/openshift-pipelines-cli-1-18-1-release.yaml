@@ -2,11 +2,11 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: openshift-pipelines-cli-1-14
+    appstudio.openshift.io/application: openshift-pipelines-cli-1-18
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: openshift-pipelines-cli-1-14-6-stage-release-
+  generateName: openshift-pipelines-cli-1-18-1-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -20,17 +20,17 @@ spec:
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      release-name: openshift-pipelines-1.14.6
+      release-name: openshift-pipelines-1.18.1
       solution: |
         Before applying this update, make sure all previously released advisory
         relevant to your system have been applied.
         For details on how to apply this update, refer to:
         https://access.redhat.com/articles/11258
-      synopsis: "Red Hat OpenShift Pipelines Release 1.14.6"
+      synopsis: "Red Hat OpenShift Pipelines Release 1.18.1"
       topic: |
-        The 1.14.6 release of Red Hat OpenShift Pipelines Operator..
+        The 1.18.1 release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHBA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-cli-1-14-stage-release-as-op
+  releasePlan: openshift-pipelines-cli-1-18-stage-release-as-op
   snapshot: openshift-pipelines-cli-1-14-hb4cv
