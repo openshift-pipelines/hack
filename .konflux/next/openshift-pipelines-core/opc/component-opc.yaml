@@ -15,4 +15,4 @@ spec:
     git:
       url: https://github.com/openshift-pipelines/opc.git
       dockerfileUrl: .konflux/dockerfiles/opc.Dockerfile
-      revision: main
+      revision: release-v1.19.x
