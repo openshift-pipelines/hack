@@ -11,4 +11,4 @@ metadata:
 spec:
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-1-18-fbc-4-17-stage-release-as-op
-  snapshot: operator-1-18-index-4-17-application-rmvtr
+  snapshot: operator-1-18-index-4-17-application-k75nc
