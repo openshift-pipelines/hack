@@ -73,7 +73,7 @@ github:
         popd
 branches:
   - name: next
-    upstream: main
+    upstream: release-v0.76.x
     patches: *patches
     versions:
       - next
