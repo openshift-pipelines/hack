@@ -6,3 +6,4 @@ versions:
     auto-release: true
 resources:
   - tektoncd-cli
+  - opc
