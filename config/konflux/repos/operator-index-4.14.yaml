@@ -6,6 +6,6 @@ components:
 tekton:
   watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())
 branches:
-  - name: next
+  - name: release-v1.19.x]
     versions:
-      - next
+      - "1.19"

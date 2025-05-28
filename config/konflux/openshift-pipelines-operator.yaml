@@ -1,7 +1,7 @@
 name: openshift-pipelines-operator
 versions:
-  next:
-    version: next
+  "1.19":
+    version: "1.19"
     image-suffix: -rhel9
     auto-release: true
 resources:

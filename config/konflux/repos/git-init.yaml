@@ -4,7 +4,7 @@ components:
   - name: git-init
     no-image-prefix: true
 branches:
-  - name: next
+  - name: release-v1.19.x]
     upstream: release-v1.0.x
     versions:
-      - next
+      - "1.19"

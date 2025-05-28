@@ -10,4 +10,4 @@ tekton:
 branches:
   - name: release-v0.6.0
     versions:
-      - next
+      - "1.19"
