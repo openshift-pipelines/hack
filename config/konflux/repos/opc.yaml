@@ -9,10 +9,10 @@ patches: &patches
       rm ../.konflux/patches/0000-go1.23.patch || true
 
       # Change 'go 1.23.8' to 'go 1.23.6' in go.mod 
-      sed -i 's|^go 1\.23\.8$|go 1.23.6|' go.mod
+      sed -i 's|^go 1\.23\.8$|go 1.23|' go.mod
 
       # Change 'toolchain go1.24.x' to 'toolchain go1.23' in go.mod
-      sed -i 's|^toolchain go1\.24\..*$|toolchain go1.23|' go.mod
+      sed -i 's|^toolchain go1\.23\..*$|toolchain go1.23.6|' go.mod
 
       # Change 'go 1.23.8' to 'go 1.23.6' in vendor/modules.txt (within comments or specific lines)
       sed -i 's|go 1\.23\.8|go 1.23.6|g' vendor/modules.txt
@@ -29,5 +29,6 @@ branches:
   # uncomment below line to get nightly builds
   # - name: main
   - name: release-v1.19.x
+    patches: *patches
     versions:
       - next
