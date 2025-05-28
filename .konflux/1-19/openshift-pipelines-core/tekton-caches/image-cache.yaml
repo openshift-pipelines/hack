@@ -1,0 +1,16 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: 1-19-cache-rhel9
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: tekton-caches-1-19-cache
+    appstudio.redhat.com/application: openshift-pipelines-core-1-19
+spec:
+  image:
+   name: 1-19/cache-rhel9
+   visibility: public
