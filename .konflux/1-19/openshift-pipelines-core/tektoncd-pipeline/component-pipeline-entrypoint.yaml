@@ -15,4 +15,4 @@ spec:
     git:
       url: https://github.com/openshift-pipelines/tektoncd-pipeline.git
       dockerfileUrl: .konflux/dockerfiles/entrypoint.Dockerfile
-      revision: release-v1.19.x]
+      revision: release-v1.19.x
