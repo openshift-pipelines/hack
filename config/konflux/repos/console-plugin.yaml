@@ -1,6 +1,8 @@
 name: console-plugin
 components:
   - name: console-plugin
+    prefetch-input: |-
+      [{"type": "yarn", "path": ""}]
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
