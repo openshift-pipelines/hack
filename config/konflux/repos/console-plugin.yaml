@@ -2,7 +2,7 @@ name: console-plugin
 components:
   - name: console-plugin
     prefetch-input: |-
-      [{"type": "yarn", "path": ""}]
+      [{"type": "rpm", "path": ".konflux/rpms"}, {"type": "yarn"}]
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
