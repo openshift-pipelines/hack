@@ -89,4 +89,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-16-prod-release-as-op
-  snapshot: openshift-pipelines-operator-1-18-jktm4
+  snapshot: openshift-pipelines-operator-1-16-dh44s
