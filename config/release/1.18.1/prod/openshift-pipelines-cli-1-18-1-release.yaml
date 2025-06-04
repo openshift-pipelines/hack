@@ -33,4 +33,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-18-prod-release-as-op
-  snapshot: openshift-pipelines-cli-1-14-hb4cv
+  snapshot: openshift-pipelines-cli-1-18-l6x5x
