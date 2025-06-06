@@ -4,11 +4,11 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Component
 metadata:
   annotations:
-    build.appstudio.openshift.io/pipeline: '{"name":"fbc-builder","bundle":"latest"}'
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
   name: operator-1-16-index-4-17
 spec:
   componentName: index-4-17
-  application: operator-1-16-index-4-17-application
+  application: openshift-pipelines-index-4-17-1-16
   build-nudges-ref:
   - 
   source:

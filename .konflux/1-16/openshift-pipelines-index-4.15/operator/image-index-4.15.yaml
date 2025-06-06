@@ -9,7 +9,7 @@ metadata:
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: operator-1-16-index-4-15
-    appstudio.redhat.com/application: operator-1-16-index-4-15-application
+    appstudio.redhat.com/application: openshift-pipelines-index-4-15-1-16
 spec:
   image:
    name: 1-16/index-4.15

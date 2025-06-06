@@ -3,6 +3,6 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Application
 metadata:
-  name: operator-1-16-index-4-14-application
+  name: openshift-pipelines-index-4-14-1-16
 spec:
-  displayName: application for index operator 1.16 for OCP 4.14
+  displayName: openshift-pipelines-index-4.14 1.16
