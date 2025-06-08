@@ -51,6 +51,5 @@ github:
 branches:
   - name: release-v1.17.x
     upstream: release-v0.74.x
-    patches: *patches
     versions:
       - 1.17
