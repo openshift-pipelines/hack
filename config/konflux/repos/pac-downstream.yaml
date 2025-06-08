@@ -31,8 +31,8 @@ patches: &patches
       # clean after yourself >:D
       git checkout HEAD go.mod vendor/modules.txt
 branches:
-  - name: next
-    upstream: release-v0.35.x
+  - name: release-v1.17.x
+    upstream: release-v0.29.x
     patches: *patches
     versions:
-      - next
+      - 1.17

@@ -5,7 +5,7 @@ components:
   - name: watcher
   - name: retention-policy-agent
 branches:
-  - name: next
-    upstream: release-v0.15.x
+  - name: release-v1.17.x
+    upstream: release-v0.13.x
     versions:
-      - next
+      - 1.17
