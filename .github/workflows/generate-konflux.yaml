@@ -31,8 +31,6 @@ jobs:
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-operator.yaml
-        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.12.yaml 
-        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.14.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.15.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.16.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.17.yaml 
