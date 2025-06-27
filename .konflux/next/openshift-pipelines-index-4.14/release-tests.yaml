@@ -6,9 +6,6 @@ metadata:
   name: openshift-pipelines-index-4-14-next-release-tests
 spec:
   application: openshift-pipelines-index-4-14-next
-  contexts:
-    - description: Application testing
-      name: component_openshift-pipelines-index-4-14-next-index-4-18
   resolverRef:
     params:
       - name: url
