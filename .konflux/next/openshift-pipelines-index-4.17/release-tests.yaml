@@ -6,6 +6,9 @@ metadata:
   name: openshift-pipelines-index-4-17-next-release-tests
 spec:
   application: openshift-pipelines-index-4-17-next
+  contexts:
+    - description: execute the integration test for a Snapshot created for a `push` event
+      name: push
   resolverRef:
     params:
       - name: url
