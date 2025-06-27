@@ -56,6 +56,9 @@ jobs:
         popd
         rm -rf upstream/.git
         git add -f upstream head .konflux
+        {{- if eq .Repository.Name "operator" }}
+        git add project.yaml
+        {{- end}}
 
         if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
           echo "No change, exiting"
