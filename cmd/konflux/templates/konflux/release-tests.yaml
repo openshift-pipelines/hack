@@ -5,6 +5,9 @@ metadata:
   name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}-release-tests
 spec:
   application: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
+  contexts:
+    - description: execute the integration test for a Snapshot created for a `push` event
+      name: push
   resolverRef:
     params:
       - name: url
