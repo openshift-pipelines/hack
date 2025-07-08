@@ -2,13 +2,13 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: openshift-pipelines-index-4-16-1-17
+    appstudio.openshift.io/application: openshift-pipelines-index-4-19-1-19
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-sashture
-  generateName: openshift-pipelines-1-17-2-fbc-4-16-stage-release-
+  generateName: openshift-pipelines-1-19-0-fbc-4-19-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-1-17-fbc-4-16-stage-release-as-op
-  snapshot: operator-1-16-index-4-16-application-mj8pk
+  releasePlan: openshift-pipelines-1-19-fbc-4-19-stage-release-as-op
+  snapshot: openshift-pipelines-index-4-19-1-19-8p7t2

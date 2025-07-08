@@ -164,7 +164,7 @@ spec:
       topic: |
         The 1.19.0 release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
-      type: RHBA
+      type: RHEA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-19-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-19-xbzbl
+  snapshot: openshift-pipelines-core-1-19-b66mx
