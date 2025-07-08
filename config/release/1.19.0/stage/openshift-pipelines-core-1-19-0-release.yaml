@@ -109,14 +109,6 @@ spec:
             source: issues.redhat.com
           - id: SRVKP-7105
             source: issues.redhat.com
-          - id: SRVKP-4556
-            source: issues.redhat.com
-          - id: SRVKP-6382
-            source: issues.redhat.com
-          - id: SRVKP-6280
-            source: issues.redhat.com
-          - id: SRVKP-6246
-            source: issues.redhat.com
           - id: SRVKP-7253
             source: issues.redhat.com
           - id: SRVKP-7274
