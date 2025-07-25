@@ -8,6 +8,6 @@ components:
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - name: main
+  - name: main 
     versions:
       - next
