@@ -39,4 +39,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-19-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-19-qhhp9
+  snapshot: openshift-pipelines-core-1-19-smxct
