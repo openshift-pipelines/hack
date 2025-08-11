@@ -6,7 +6,7 @@ components:
   - name: core-interceptors
   - name: eventlistenersink
 branches:
-  - name: next
+  - name: release-v1.20.x
     upstream: release-v0.32.x
     versions:
-      - next
+      - "1.20"

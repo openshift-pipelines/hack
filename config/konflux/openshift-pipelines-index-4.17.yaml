@@ -1,8 +1,8 @@
 name: openshift-pipelines-index-4.17
 versions:
-  next:
+  "1.20":
     image-suffix: "None"
-    version: next
+    version: "1.20"
     auto-release: true
 resources:
   - operator-index-4.17

@@ -8,4 +8,4 @@ branches:
   # - name: main
   - name: release-v0.2.x
     versions:
-      - next
+      - "1.20"
