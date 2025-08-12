@@ -16,7 +16,7 @@ jobs:
     if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
@@ -38,9 +38,9 @@ jobs:
       pull-requests: write
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Clone ${{matrix.project}}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: openshift-pipelines/${{matrix.project}}
         path: project
