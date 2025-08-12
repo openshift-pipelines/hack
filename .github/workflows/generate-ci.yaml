@@ -27,7 +27,7 @@ jobs:
           sudo mv /usr/bin/yq /usr/local/bin/yq
 
       - name: Checkout openshift-pipelines/hack
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: Setup Golang
         uses: actions/setup-go@v5
@@ -35,7 +35,7 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Checkout openshift/release
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           branch: 'master'
           repository: 'openshift/release'
