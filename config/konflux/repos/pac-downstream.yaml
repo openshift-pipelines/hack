@@ -32,7 +32,7 @@ patches: &patches
       git checkout HEAD go.mod vendor/modules.txt
 branches:
   - name: next
-    upstream: release-v0.36.x
+    upstream: release-v0.37.x
     patches: *patches
     versions:
       - next
