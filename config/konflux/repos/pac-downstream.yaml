@@ -11,6 +11,5 @@ components:
 branches:
   - name: release-v1.20.x
     upstream: release-v0.37.x
-    patches: *patches
     versions:
       - "1.20"
