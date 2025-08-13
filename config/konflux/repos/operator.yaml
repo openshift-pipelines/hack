@@ -72,8 +72,8 @@ github:
         git checkout HEAD .
         popd
 branches:
-  - name: next
-    upstream: main
+  - name: release-v1.21.x
+    upstream: release-v0.76.x
     patches: *patches
     versions:
-      - next
+      - "1.21"
