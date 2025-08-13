@@ -15,4 +15,4 @@ spec:
     git:
       url: https://github.com/openshift-pipelines/tektoncd-pruner.git
       dockerfileUrl: .konflux/dockerfiles/controller.Dockerfile
-      revision: release-v0.1.x
+      revision: main
