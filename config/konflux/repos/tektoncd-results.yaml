@@ -6,6 +6,6 @@ components:
   - name: retention-policy-agent
 branches:
   - name: release-v1.20.x
-    upstream: main
+    upstream: main 
     versions:
       - "1.20"
