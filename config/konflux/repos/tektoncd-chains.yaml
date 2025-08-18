@@ -4,6 +4,6 @@ components:
   - name: controller
 branches:
   - name: release-v1.20.x
-    upstream: release-v0.25.x
+    upstream: release-v0.25.x 
     versions:
       - "1.20"
