@@ -51,6 +51,6 @@ github:
         popd
 branches:
   - name: release-v1.20.x
-    upstream: main
+    upstream: release-v0.77.x
     versions:
       - "1.20"
