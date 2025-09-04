@@ -6,6 +6,6 @@ components:
 tekton:
   watched-sources: '"***".pathChanged()'
 branches:
-  - name: release-v1.19.x
+  - name: release-v1.20.x
     versions:
       - next
