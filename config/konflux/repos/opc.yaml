@@ -6,4 +6,4 @@ tekton:
 branches:
   - name:  release-v1.20.x
     versions:
-      - "1.20"
+      - next
