@@ -1,0 +1,11 @@
+name: tekton-kueue
+upstream: konflux-ci/tekton-kueue
+components:
+  - name: kueue
+    prefetch-input: |
+      {"type": "gomod", "path": "upstream"}
+branches:
+  - name: main
+    upstream: main
+    versions:
+      - next

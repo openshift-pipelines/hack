@@ -1,9 +1,8 @@
-name: openshift-pipelines-cli
+name: openshift-pipelines-serve-tkn-cli
 versions:
   next:
     version: next
     image-suffix: -rhel9
     auto-release: true
 resources:
-  - tektoncd-cli
-  - opc
+  - serve-tkn-cli

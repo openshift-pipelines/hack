@@ -1,0 +1,8 @@
+name: serve-tkn-cli
+versions:
+  "1.18":
+    version: 1.18
+    image-suffix: -rhel9
+    auto-release: true
+resources:
+  - serve-tkn-cli

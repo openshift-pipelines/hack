@@ -101,9 +101,11 @@ func main() {
 func generateConfig(ctx context.Context, config k.Config, dir string, dryRun bool) error {
 
 	for _, repo := range config.Repos {
+		if repo.Url == "" {
+			repo.Url = fmt.Sprintf("https://github.com/%s/%s.git", GithubOrg, repo.Name)
+		}
+		repository := repo.Url
 
-		repository := fmt.Sprintf("https://github.com/%s/%s.git", GithubOrg, repo.Name)
-		repo.Url = repository
 		fmt.Printf("::group:: generating konflux configuration for %s\n", repository)
 
 		//Set Repo Defaults

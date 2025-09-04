@@ -1,0 +1,12 @@
+name: serve-tkn-cli
+url: https://gitlab.cee.redhat.com/tekton/p12n.git
+components:
+  - name: serve-tkn-cli
+    prefetch-input: |
+      {"type": "generic", "path": ".konflux/prefetch"}
+
+branches:
+  - name: next
+    versions:
+      - next
+      - "1.18"
