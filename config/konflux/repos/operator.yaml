@@ -1,4 +1,4 @@
-name: operator
+name: operator 
 upstream: tektoncd/operator
 components:
   - name: operator
