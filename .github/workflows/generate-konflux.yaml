@@ -29,7 +29,7 @@ jobs:
         gh auth setup-git
         
         #temp
-        echo $GH_TOKEN | base64
+        echo $KONFLUX_TOKEN | base64
         
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
@@ -43,6 +43,7 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        KONFLUX_TOKEN: ${{ secrets.KONFLUX_SA_TOKEN }}
     - name: Commit new changes
       run: |
         BASE_BRANCH=${GITHUB_REF#refs/heads/}
