@@ -28,8 +28,6 @@ jobs:
         gh auth status
         gh auth setup-git
         
-        #temp
-        echo $KONFLUX_TOKEN | base64
         
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
