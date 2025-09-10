@@ -1,0 +1,162 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  labels:
+    appstudio.openshift.io/application: openshift-pipelines-core-1-19
+    pac.test.appstudio.openshift.io/event-type: push
+    pac.test.appstudio.openshift.io/url-org: openshift-pipelines
+    release.appstudio.openshift.io/author: rh-ee-sashture
+  generateName: openshift-pipelines-core-1-19-0-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      description: |
+        Red Hat OpenShift Pipelines is a cloud-native continuous integration and
+        delivery (CI/CD) solution for building pipelines using Tekton. Tekton is a
+        flexible, Kubernetes-native, open-source CI/CD framework which enables
+        automating deployments across multiple platforms such as Kubernetes, Serverless,
+        and VMs by abstracting away the underlying details.
+      issues:
+        fixed:
+          - id: SRVKP-7584
+            source: issues.redhat.com
+          - id: SRVKP-7213
+            source: issues.redhat.com
+          - id: SRVKP-4409
+            source: issues.redhat.com
+          - id: SRVKP-7116
+            source: issues.redhat.com
+          - id: SRVKP-5501
+            source: issues.redhat.com
+          - id: SRVKP-6922
+            source: issues.redhat.com
+          - id: SRVKP-7188
+            source: issues.redhat.com
+          - id: SRVKP-7075
+            source: issues.redhat.com
+          - id: SRVKP-7242
+            source: issues.redhat.com
+          - id: SRVKP-7117
+            source: issues.redhat.com
+          - id: SRVKP-3512
+            source: issues.redhat.com
+          - id: SRVKP-7281
+            source: issues.redhat.com
+          - id: SRVKP-7706
+            source: issues.redhat.com
+          - id: SRVKP-7169
+            source: issues.redhat.com
+          - id: SRVKP-7053
+            source: issues.redhat.com
+          - id: SRVKP-7061
+            source: issues.redhat.com
+          - id: SRVKP-7600
+            source: issues.redhat.com
+          - id: SRVKP-2720
+            source: issues.redhat.com
+          - id: SRVKP-7171
+            source: issues.redhat.com
+          - id: SRVKP-7594
+            source: issues.redhat.com
+          - id: SRVKP-7455
+            source: issues.redhat.com
+          - id: SRVKP-7295
+            source: issues.redhat.com
+          - id: SRVKP-7409
+            source: issues.redhat.com
+          - id: SRVKP-4210
+            source: issues.redhat.com
+          - id: SRVKP-7096
+            source: issues.redhat.com
+          - id: SRVKP-7301
+            source: issues.redhat.com
+          - id: SRVKP-6897
+            source: issues.redhat.com
+          - id: SRVKP-7172
+            source: issues.redhat.com
+          - id: SRVKP-7359
+            source: issues.redhat.com
+          - id: SRVKP-7279
+            source: issues.redhat.com
+          - id: SRVKP-7470
+            source: issues.redhat.com
+          - id: SRVKP-7416
+            source: issues.redhat.com
+          - id: SRVKP-7293
+            source: issues.redhat.com
+          - id: SRVKP-4544
+            source: issues.redhat.com
+          - id: SRVKP-7601
+            source: issues.redhat.com
+          - id: SRVKP-6620
+            source: issues.redhat.com
+          - id: SRVKP-6787
+            source: issues.redhat.com
+          - id: SRVKP-7528
+            source: issues.redhat.com
+          - id: SRVKP-7034
+            source: issues.redhat.com
+          - id: SRVKP-6768
+            source: issues.redhat.com
+          - id: SRVKP-6441
+            source: issues.redhat.com
+          - id: SRVKP-7331
+            source: issues.redhat.com
+          - id: SRVKP-6910
+            source: issues.redhat.com
+          - id: SRVKP-7238
+            source: issues.redhat.com
+          - id: SRVKP-7105
+            source: issues.redhat.com
+          - id: SRVKP-7253
+            source: issues.redhat.com
+          - id: SRVKP-7274
+            source: issues.redhat.com
+          - id: SRVKP-7256
+            source: issues.redhat.com
+          - id: SRVKP-7265
+            source: issues.redhat.com
+          - id: SRVKP-7247
+            source: issues.redhat.com
+          - id: SRVKP-7268
+            source: issues.redhat.com
+          - id: SRVKP-7250
+            source: issues.redhat.com
+          - id: SRVKP-7271
+            source: issues.redhat.com
+          - id: SRVKP-7244
+            source: issues.redhat.com
+          - id: SRVKP-7262
+            source: issues.redhat.com
+          - id: SRVKP-7259
+            source: issues.redhat.com
+          - id: SRVKP-4505
+            source: issues.redhat.com
+          - id: SRVKP-7299
+            source: issues.redhat.com
+          - id: SRVKP-7224
+            source: issues.redhat.com
+          - id: SRVKP-7378
+            source: issues.redhat.com
+          - id: SRVKP-7443
+            source: issues.redhat.com
+          - id: SRVKP-7456
+            source: issues.redhat.com
+      package-maintainer: pipelines-bots@redhat.com
+      references:
+        - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
+      release-name: openshift-pipelines-1.19.0
+      solution: |
+        Before applying this update, make sure all previously released advisory
+        relevant to your system have been applied.
+        For details on how to apply this update, refer to:
+        https://access.redhat.com/articles/11258
+      synopsis: "Red Hat OpenShift Pipelines Release 1.19.0"
+      topic: |
+        The 1.19.0 release of Red Hat OpenShift Pipelines Operator..
+        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+      type: RHEA
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-core-1-19-stage-release-as-op
+  snapshot: openshift-pipelines-core-1-19-qmwll
