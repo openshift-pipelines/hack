@@ -19,129 +19,111 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-7584
+          - id: SRVKP-7999
             source: issues.redhat.com
-          - id: SRVKP-7213
+          - id: SRVKP-7695
             source: issues.redhat.com
-          - id: SRVKP-4409
+          - id: SRVKP-8476
             source: issues.redhat.com
-          - id: SRVKP-7116
+          - id: SRVKP-8271
+            source: issues.redhat.com
+          - id: SRVKP-8322
+            source: issues.redhat.com
+          - id: SRVKP-7678
+            source: issues.redhat.com
+          - id: SRVKP-8006
+            source: issues.redhat.com
+          - id: SRVKP-7834
+            source: issues.redhat.com
+          - id: SRVKP-8174
+            source: issues.redhat.com
+          - id: SRVKP-8321
+            source: issues.redhat.com
+          - id: SRVKP-7697
             source: issues.redhat.com
           - id: SRVKP-5501
             source: issues.redhat.com
-          - id: SRVKP-6922
+          - id: SRVKP-8058
             source: issues.redhat.com
-          - id: SRVKP-7188
+          - id: SRVKP-2582
             source: issues.redhat.com
-          - id: SRVKP-7075
+          - id: SRVKP-7303
             source: issues.redhat.com
-          - id: SRVKP-7242
+          - id: SRVKP-7332
             source: issues.redhat.com
-          - id: SRVKP-7117
+          - id: SRVKP-7700
             source: issues.redhat.com
-          - id: SRVKP-3512
+          - id: SRVKP-7716
             source: issues.redhat.com
-          - id: SRVKP-7281
+          - id: SRVKP-3334
             source: issues.redhat.com
-          - id: SRVKP-7706
+          - id: SRVKP-4332
             source: issues.redhat.com
-          - id: SRVKP-7169
+          - id: SRVKP-7240
             source: issues.redhat.com
-          - id: SRVKP-7053
+          - id: SRVKP-7417
             source: issues.redhat.com
-          - id: SRVKP-7061
+          - id: SRVKP-8191
             source: issues.redhat.com
-          - id: SRVKP-7600
+          - id: SRVKP-7755
             source: issues.redhat.com
-          - id: SRVKP-2720
+          - id: SRVKP-8031
             source: issues.redhat.com
-          - id: SRVKP-7171
+          - id: SRVKP-8158
             source: issues.redhat.com
-          - id: SRVKP-7594
+          - id: SRVKP-8000
             source: issues.redhat.com
-          - id: SRVKP-7455
+          - id: SRVKP-8263
             source: issues.redhat.com
-          - id: SRVKP-7295
+          - id: SRVKP-8484
             source: issues.redhat.com
-          - id: SRVKP-7409
+          - id: SRVKP-8568
             source: issues.redhat.com
-          - id: SRVKP-4210
+          - id: SRVKP-8836
             source: issues.redhat.com
-          - id: SRVKP-7096
+          - id: SRVKP-5546
             source: issues.redhat.com
-          - id: SRVKP-7301
+          - id: SRVKP-6960
             source: issues.redhat.com
-          - id: SRVKP-6897
+          - id: SRVKP-7739
             source: issues.redhat.com
-          - id: SRVKP-7172
+          - id: SRVKP-8209
             source: issues.redhat.com
-          - id: SRVKP-7359
+          - id: SRVKP-8210
             source: issues.redhat.com
-          - id: SRVKP-7279
+          - id: SRVKP-8480
             source: issues.redhat.com
-          - id: SRVKP-7470
+          - id: SRVKP-6211
             source: issues.redhat.com
-          - id: SRVKP-7416
+          - id: SRVKP-7308
             source: issues.redhat.com
-          - id: SRVKP-7293
+          - id: SRVKP-7343
             source: issues.redhat.com
-          - id: SRVKP-4544
+          - id: SRVKP-7607
             source: issues.redhat.com
-          - id: SRVKP-7601
+          - id: SRVKP-8019
             source: issues.redhat.com
-          - id: SRVKP-6620
+          - id: SRVKP-8114
             source: issues.redhat.com
-          - id: SRVKP-6787
+          - id: SRVKP-8197
             source: issues.redhat.com
-          - id: SRVKP-7528
+          - id: SRVKP-8206
             source: issues.redhat.com
-          - id: SRVKP-7034
+          - id: SRVKP-8208
             source: issues.redhat.com
-          - id: SRVKP-6768
+          - id: SRVKP-8256
             source: issues.redhat.com
-          - id: SRVKP-6441
+          - id: SRVKP-8567
             source: issues.redhat.com
-          - id: SRVKP-7331
+          - id: SRVKP-8571
             source: issues.redhat.com
-          - id: SRVKP-6910
+          - id: SRVKP-8342
             source: issues.redhat.com
-          - id: SRVKP-7238
+          - id: SRVKP-6761
             source: issues.redhat.com
-          - id: SRVKP-7105
+          - id: SRVKP-7680
             source: issues.redhat.com
-          - id: SRVKP-7253
-            source: issues.redhat.com
-          - id: SRVKP-7274
-            source: issues.redhat.com
-          - id: SRVKP-7256
-            source: issues.redhat.com
-          - id: SRVKP-7265
-            source: issues.redhat.com
-          - id: SRVKP-7247
-            source: issues.redhat.com
-          - id: SRVKP-7268
-            source: issues.redhat.com
-          - id: SRVKP-7250
-            source: issues.redhat.com
-          - id: SRVKP-7271
-            source: issues.redhat.com
-          - id: SRVKP-7244
-            source: issues.redhat.com
-          - id: SRVKP-7262
-            source: issues.redhat.com
-          - id: SRVKP-7259
-            source: issues.redhat.com
-          - id: SRVKP-4505
-            source: issues.redhat.com
-          - id: SRVKP-7299
-            source: issues.redhat.com
-          - id: SRVKP-7224
-            source: issues.redhat.com
-          - id: SRVKP-7378
-            source: issues.redhat.com
-          - id: SRVKP-7443
-            source: issues.redhat.com
-          - id: SRVKP-7456
+          - id: SRVKP-8351
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
