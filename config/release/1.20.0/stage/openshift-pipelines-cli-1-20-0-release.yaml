@@ -33,4 +33,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-cli-1-20-lrfks
+  snapshot: openshift-pipelines-cli-1-20-c8rkm
