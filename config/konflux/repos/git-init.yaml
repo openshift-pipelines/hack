@@ -5,6 +5,6 @@ components:
     no-image-prefix: true
 branches:
   - name: next
-    upstream: release-v1.1.x
+    upstream: main
     versions:
       - next
