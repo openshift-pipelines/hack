@@ -6,6 +6,6 @@ components:
     image-prefix: pruner-
 branches:
   - name: next
-    upstream: main
+    upstream: release-v0.2.x
     versions:
       - next
