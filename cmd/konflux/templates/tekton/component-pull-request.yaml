@@ -31,6 +31,10 @@ spec:
   params:
   - name: git-url
     value: '{{"{{source_url}}"}}'
+  {{- if .Repository.Upstream }}
+  - name: upstream-git-url
+    value: 'https://github.com/{{.Repository.Upstream}}'
+  {{- end }}
   - name: revision
     value: '{{"{{revision}}"}}'
   - name: output-image
