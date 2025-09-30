@@ -58,7 +58,7 @@ func generateFileFromTemplate(templateFile string, data interface{}, filePath st
 	if err != nil {
 		return err
 	}
-	if _, err := file.WriteString(header); err != nil {
+	if _, err := file.WriteString(header + "\n"); err != nil {
 		return err
 	}
 
