@@ -1,7 +1,7 @@
 name: operator
 components:
-  - name: index-4.14
-    dockerfile: .konflux/olm-catalog/index/v4.14/Dockerfile.catalog
+  - name: index-4.19
+    dockerfile: .konflux/olm-catalog/index/v4.19/Dockerfile.catalog
     nudges: [ "" ]
 tekton:
   watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())

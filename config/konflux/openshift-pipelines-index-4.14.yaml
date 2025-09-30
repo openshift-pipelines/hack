@@ -1,9 +1,0 @@
-name: openshift-pipelines-index-4.14
-versions:
-  next:
-    image-suffix: "None"
-    version: next
-    auto-release: true
-resources:
-  - operator-index-4.14
-

@@ -15,7 +15,7 @@ import (
 const baseBranchPrefix = "actions/update/konflux-configuration-"
 
 func cloneAndCheckout(ctx context.Context, repo, branch, dir string, config k.Config) error {
-	branchPrefix := baseBranchPrefix + config.Name
+	branchPrefix := baseBranchPrefix + config.Name + "/"
 	exists, err := exists(filepath.Join(dir, ".git"))
 
 	if err != nil {
@@ -60,7 +60,7 @@ func cloneAndCheckout(ctx context.Context, repo, branch, dir string, config k.Co
 }
 
 func commitAndPullRequest(ctx context.Context, dir, branch string, config k.Config) error {
-	branchPrefix := baseBranchPrefix + config.Name
+	branchPrefix := baseBranchPrefix + config.Name + "/"
 
 	if out, err := run(ctx, dir, "git", "status", "--porcelain"); err != nil {
 		return fmt.Errorf("failed to check git status: %s, %s", err, out)
