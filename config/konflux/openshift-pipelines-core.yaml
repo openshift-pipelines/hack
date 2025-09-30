@@ -17,3 +17,4 @@ resources:
   - tektoncd-results
   - tektoncd-triggers
   - tekton-assist
+  - secret-syncer
