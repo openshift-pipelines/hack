@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: release-plan-role-openshift-pipelines-index-4.18-1-20
+  name: release-plan-role-openshift-pipelines-index-4-18-1-20
 rules:
 - apiGroups:
   - appstudio.redhat.com
@@ -16,12 +16,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: release-plan-rolebinding-openshift-pipelines-index-4.18-1-20
+  name: release-plan-rolebinding-openshift-pipelines-index-4-18-1-20
 subjects:
 - kind: ServiceAccount
-  name: release-registry-openshift-pipelines-index-4.18-1-20
+  name: release-registry-openshift-pipelines-index-4-18-1-20
   apiGroup: ""
 roleRef:
   kind: Role
-  name: release-plan-role-openshift-pipelines-index-4.18-1-20
+  name: release-plan-role-openshift-pipelines-index-4-18-1-20
   apiGroup: rbac.authorization.k8s.io
