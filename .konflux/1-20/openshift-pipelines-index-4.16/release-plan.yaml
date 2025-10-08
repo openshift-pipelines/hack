@@ -10,7 +10,7 @@ metadata:
 spec:
   application: openshift-pipelines-index-4-16-1-20
   tenantPipeline:
-    serviceAccountName: release-registry-openshift-pipelines-index-4-16-1-20
+    serviceAccountName: release-registry-openshift-pipelines
     pipelineRef:
       resolver: git
       params:
