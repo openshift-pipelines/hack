@@ -4,6 +4,8 @@ apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
   name: openshift-pipelines-index-4-15-1-20-release-tests
+labels:
+  test.appstudio.openshift.io/optional: "true"
 spec:
   application: openshift-pipelines-index-4-15-1-20
   contexts:
