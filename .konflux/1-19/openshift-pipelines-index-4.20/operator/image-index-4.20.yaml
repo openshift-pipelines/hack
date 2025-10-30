@@ -3,7 +3,7 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: 1-19-index-4.0
+  name: 1-19-index-4.20
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
