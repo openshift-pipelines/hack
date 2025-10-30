@@ -1,0 +1,16 @@
+# Generated for Konflux Application openshift-pipelines-index-4.20-next by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: next-index-4.20
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: operator-next-index-4-20
+    appstudio.redhat.com/application: openshift-pipelines-index-4-20-next
+spec:
+  image:
+   name: next/index-4.20
+   visibility: public
