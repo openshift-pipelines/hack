@@ -1,0 +1,25 @@
+# Generated for Konflux Application openshift-pipelines-index-4.20-next by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: 'true'
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: openshift-pipelines-index-4-20-next-rp
+spec:
+  application: openshift-pipelines-index-4-20-next
+  tenantPipeline:
+    serviceAccountName: release-registry-openshift-pipelines-index-4-20-next
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: https://github.com/openshift-pipelines/hack.git
+        - name: revision
+          value:  next
+        - name: pathInRepo
+          value: tenantpipelines/pipeline.yaml
+    params:
+      - name: released_version
+        value: "next"
