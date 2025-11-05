@@ -1,0 +1,18 @@
+# Generated for Konflux Application openshift-pipelines-core-1.21 by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
+  name: tektoncd-pipeline-1-21-entrypoint
+spec:
+  componentName: entrypoint
+  application: openshift-pipelines-core-1-21
+  build-nudges-ref:
+  - operator-1-21-bundle
+  source:
+    git:
+      url: https://github.com/openshift-pipelines/tektoncd-pipeline.git
+      dockerfileUrl: .konflux/dockerfiles/entrypoint.Dockerfile
+      revision: release-v1.21.x
