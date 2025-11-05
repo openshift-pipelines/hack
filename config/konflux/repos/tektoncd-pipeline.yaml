@@ -10,7 +10,7 @@ components:
   - name: webhook
   - name: workingdirinit
 branches:
-  - name: next
+  - name: release-v1.21.x
     upstream: release-v1.3.x
     versions:
-      - next
+      - "1.21"
