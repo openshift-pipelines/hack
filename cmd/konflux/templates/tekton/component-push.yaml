@@ -35,6 +35,10 @@ spec:
     value: '{{"{{source_url}}"}}'
   - name: revision
     value: '{{"{{revision}}"}}'
+  {{- if .Repository.Upstream }}
+  - name: upstream-git-url
+    value: 'https://github.com/{{.Repository.Upstream}}'
+  {{- end }}
   - name: output-image
     value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/{{hyphenize .Version.Version}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:{{"{{revision}}"}}
   - name: dockerfile
