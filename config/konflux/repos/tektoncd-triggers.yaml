@@ -7,6 +7,6 @@ components:
   - name: eventlistenersink
 branches:
   - name: next
-    upstream: release-v0.33.x
+    upstream: release-v0.34.x
     versions:
       - next

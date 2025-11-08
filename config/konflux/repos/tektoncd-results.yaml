@@ -6,6 +6,7 @@ components:
   - name: retention-policy-agent
 branches:
   - name: next
-    upstream: release-v0.16.x
+    # upstream: release-v0.16.x
+    upstream: main
     versions:
       - next
