@@ -19,124 +19,38 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-7999
+          - id: SRVKP-8993
             source: issues.redhat.com
-          - id: SRVKP-7695
+          - id: SRVKP-8910
             source: issues.redhat.com
-          - id: SRVKP-8476
+          - id: SRVKP-8908
             source: issues.redhat.com
-          - id: SRVKP-8271
+          - id: SRVKP-8902
             source: issues.redhat.com
-          - id: SRVKP-8322
+          - id: SRVKP-8616
             source: issues.redhat.com
-          - id: SRVKP-7678
+          - id: SRVKP-8891
             source: issues.redhat.com
-          - id: SRVKP-8006
-            source: issues.redhat.com
-          - id: SRVKP-7834
-            source: issues.redhat.com
-          - id: SRVKP-8174
-            source: issues.redhat.com
-          - id: SRVKP-8321
-            source: issues.redhat.com
-          - id: SRVKP-7697
-            source: issues.redhat.com
-          - id: SRVKP-5501
-            source: issues.redhat.com
-          - id: SRVKP-8058
-            source: issues.redhat.com
-          - id: SRVKP-2582
-            source: issues.redhat.com
-          - id: SRVKP-7303
-            source: issues.redhat.com
-          - id: SRVKP-7332
-            source: issues.redhat.com
-          - id: SRVKP-7700
-            source: issues.redhat.com
-          - id: SRVKP-7716
-            source: issues.redhat.com
-          - id: SRVKP-3334
-            source: issues.redhat.com
-          - id: SRVKP-4332
-            source: issues.redhat.com
-          - id: SRVKP-7240
-            source: issues.redhat.com
-          - id: SRVKP-7417
-            source: issues.redhat.com
-          - id: SRVKP-8191
-            source: issues.redhat.com
-          - id: SRVKP-7755
-            source: issues.redhat.com
-          - id: SRVKP-8031
-            source: issues.redhat.com
-          - id: SRVKP-8158
-            source: issues.redhat.com
-          - id: SRVKP-8000
-            source: issues.redhat.com
-          - id: SRVKP-8263
-            source: issues.redhat.com
-          - id: SRVKP-8484
-            source: issues.redhat.com
-          - id: SRVKP-8568
-            source: issues.redhat.com
-          - id: SRVKP-8836
-            source: issues.redhat.com
-          - id: SRVKP-5546
-            source: issues.redhat.com
-          - id: SRVKP-6960
-            source: issues.redhat.com
-          - id: SRVKP-7739
-            source: issues.redhat.com
-          - id: SRVKP-8209
-            source: issues.redhat.com
-          - id: SRVKP-8210
+          - id: SRVKP-8930
             source: issues.redhat.com
           - id: SRVKP-8480
             source: issues.redhat.com
-          - id: SRVKP-6211
+          - id: SRVKP-8894
             source: issues.redhat.com
-          - id: SRVKP-7308
-            source: issues.redhat.com
-          - id: SRVKP-7343
-            source: issues.redhat.com
-          - id: SRVKP-7607
-            source: issues.redhat.com
-          - id: SRVKP-8019
-            source: issues.redhat.com
-          - id: SRVKP-8114
-            source: issues.redhat.com
-          - id: SRVKP-8197
-            source: issues.redhat.com
-          - id: SRVKP-8206
-            source: issues.redhat.com
-          - id: SRVKP-8208
-            source: issues.redhat.com
-          - id: SRVKP-8256
-            source: issues.redhat.com
-          - id: SRVKP-8567
-            source: issues.redhat.com
-          - id: SRVKP-8571
-            source: issues.redhat.com
-          - id: SRVKP-8342
-            source: issues.redhat.com
-          - id: SRVKP-6761
-            source: issues.redhat.com
-          - id: SRVKP-7680
-            source: issues.redhat.com
-          - id: SRVKP-8351
+          - id: SRVKP-9054
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      release-name: openshift-pipelines-1.20.0
+      release-name: openshift-pipelines-1.20.1
       solution: |
         Before applying this update, make sure all previously released advisory
         relevant to your system have been applied.
         For details on how to apply this update, refer to:
         https://access.redhat.com/articles/11258
-      synopsis: "Red Hat OpenShift Pipelines Release 1.20.0"
+      synopsis: "Red Hat OpenShift Pipelines Release 1.20.1"
       topic: |
-        The 1.20.0 release of Red Hat OpenShift Pipelines Operator..
+        The 1.20.1 release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       type: RHEA
   gracePeriodDays: 10
