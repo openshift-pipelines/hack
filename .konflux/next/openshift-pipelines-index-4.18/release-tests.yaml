@@ -16,5 +16,5 @@ spec:
       - name: revision
         value: main
       - name: pathInRepo
-        value: .konflux/tekton/bundle-e2e-pipeline.yaml
+        value: .konflux/tekton/release-test-pipeline.yaml
     resolver: git
