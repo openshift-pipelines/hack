@@ -11,6 +11,6 @@ components:
   - name: workingdirinit
 branches:
   - name: release-v1.21.x
-    upstream: release-v1.3.x
+    upstream: release-v1.6.x
     versions:
       - "1.21"
