@@ -8,6 +8,7 @@ spec:
   contexts:
     - description: execute the integration test for a Snapshot created for a `push` event
       name: push
+  optional: false
   resolverRef:
     params:
       - name: url
