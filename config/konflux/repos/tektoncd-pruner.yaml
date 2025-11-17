@@ -6,6 +6,6 @@ components:
     image-prefix: pruner-
 branches:
   - name: release-v1.21.x
-    upstream: main
+    upstream: release-v0.3.x
     versions:
       - "1.21"
