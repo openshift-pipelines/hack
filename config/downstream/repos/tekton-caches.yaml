@@ -1,0 +1,5 @@
+name: tekton-caches
+upstream: openshift-pipelines/tekton-caches
+no-prefix-upstream: true
+components:
+  - name: cache

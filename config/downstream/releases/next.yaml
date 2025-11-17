@@ -1,0 +1,6 @@
+version: next
+image-suffix: "-rhel9"
+#image-prefix: "pipeline-"
+branches:
+  serve-tkn-cli:
+    name: next

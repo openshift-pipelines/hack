@@ -1,0 +1,6 @@
+name: tektoncd-results
+upstream: tektoncd/results
+components:
+  - name: api
+  - name: watcher
+  - name: retention-policy-agent

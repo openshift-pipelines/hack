@@ -1,0 +1,27 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: "{{ .AutoRelease }}"
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: {{basename .Name| hyphenize}}-{{hyphenize .Release.Version}}{{- if (.ReleaseToGitHub) }}-github{{end}}-rp
+spec:
+  application: {{.Name | hyphenize}}-{{hyphenize .Release.Version}}
+  tenantPipeline:
+    serviceAccountName: release-registry-{{.Name | hyphenize}}-{{hyphenize .Release.Version}}
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: https://github.com/openshift-pipelines-konflux/hack.git
+        - name: revision
+          # value: {{- if or (eq .Release.Version "main") (eq .Release.Version "next")  }}  {{.Release.Version}} {{- else}} release-v{{.Release.Version}}.x {{end}}
+          value: main
+        - name: pathInRepo
+          value: pipelines/release-pipeline.yaml
+    params:
+      - name: release_version
+        value: "{{.Release.PatchVersion}}"
+      - name: release_to_github
+        value: "{{.ReleaseToGitHub}}"

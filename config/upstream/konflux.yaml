@@ -1,0 +1,4 @@
+applications:
+  - tekton-kueue
+versions:
+  - 0.1

@@ -1,0 +1,384 @@
+{
+  "component_matrix": [
+    {
+      "version": "1.0",
+      "ocp": ["4.4"],
+      "k8s": ["1.17"],
+      "minimum_k8s_version": null,
+      "components": {
+        "operator": "1.0",
+        "pipelines": "0.11.3",
+        "triggers": "0.4.0",
+        "tkn": "0.9",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.11",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.1",
+      "ocp": ["4.5"],
+      "k8s": ["1.18"],
+      "minimum_k8s_version": null,
+      "components": {
+        "operator": "1.1",
+        "pipelines": "0.14.3",
+        "triggers": "0.6.1",
+        "tkn": "0.11",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.14",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.2",
+      "ocp": ["4.6"],
+      "k8s": ["1.19"],
+      "minimum_k8s_version": null,
+      "components": {
+        "operator": "1.2",
+        "pipelines": "0.16.x",
+        "triggers": "0.8.x",
+        "tkn": "0.13",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.16",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.3",
+      "ocp": ["4.7"],
+      "k8s": ["1.20"],
+      "minimum_k8s_version": null,
+      "components": {
+        "operator": "1.3",
+        "pipelines": "0.19.x",
+        "triggers": "0.10.x",
+        "tkn": "0.15.x",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.19",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.4",
+      "ocp": ["4.7"],
+      "k8s": ["1.20"],
+      "minimum_k8s_version": null,
+      "components": {
+        "operator": "1.4",
+        "pipelines": "0.22.x",
+        "triggers": "0.12.x (TP)",
+        "tkn": "0.17.x",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.22",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.5",
+      "ocp": ["4.8"],
+      "k8s": ["1.21"],
+      "minimum_k8s_version": "1.18",
+      "components": {
+        "operator": "1.5",
+        "pipelines": "0.24.x",
+        "triggers": "0.14.x (TP)",
+        "tkn": "0.19.x",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.24",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.6",
+      "ocp": ["4.9", "4.10 (upgrades)"],
+      "k8s": ["1.22", "1.23"],
+      "minimum_k8s_version": "1.19",
+      "components": {
+        "operator": "0.50x",
+        "pipelines": "0.28.x",
+        "triggers": "0.16.x",
+        "tkn": "0.21.x",
+        "pac": null,
+        "chains": null,
+        "hub": null,
+        "results": null,
+        "catalog": "0.28",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.7",
+      "ocp": ["4.9", "4.10", "4.11"],
+      "k8s": ["1.22", "1.23", "1.24"],
+      "minimum_k8s_version": "1.21",
+      "components": {
+        "operator": "0.55.x",
+        "pipelines": "0.33.x",
+        "triggers": "0.19.x",
+        "tkn": "0.23.x",
+        "pac": "0.5.x",
+        "chains": "0.8.0 (TP)",
+        "hub": "1.7.0 (TP)",
+        "results": null,
+        "catalog": "0.33",
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.8",
+      "ocp": ["4.10", "4.11", "4.12"],
+      "k8s": ["1.23", "1.24", "1.25"],
+      "minimum_k8s_version": "1.21",
+      "components": {
+        "operator": "0.60.x",
+        "pipelines": "0.37.x",
+        "triggers": "0.20.x",
+        "tkn": "0.24.x",
+        "pac": "0.10.x (TP)",
+        "chains": "0.9.0 (TP)",
+        "hub": "1.8.x (TP)",
+        "results": null,
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.9",
+      "ocp": ["4.10", "4.11", "4.12", "4.13"],
+      "k8s": ["1.23", "1.24", "1.25", "1.26"],
+      "minimum_k8s_version": "1.23",
+      "components": {
+        "operator": "0.63.x",
+        "pipelines": "0.41.x",
+        "triggers": "0.22.x",
+        "tkn": "0.28.x",
+        "pac": "0.15.x",
+        "chains": "0.13.x (TP)",
+        "hub": "1.11.x (TP)",
+        "results": null,
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.10",
+      "ocp": ["4.10 (Citi)", "4.11", "4.12", "4.13"],
+      "k8s": ["1.23", "1.24", "1.25", "1.26"],
+      "minimum_k8s_version": "1.23",
+      "components": {
+        "operator": "0.65.x",
+        "pipelines": "0.44.x",
+        "triggers": "0.23.x",
+        "tkn": "0.30.x",
+        "pac": "0.17.x",
+        "chains": "0.15.x (TP)",
+        "hub": "1.12.x (TP)",
+        "results": null,
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.11",
+      "ocp": ["4.11", "4.12", "4.13", "4.14"],
+      "k8s": ["1.24", "1.25", "1.26", "1.27"],
+      "minimum_k8s_version": "1.24",
+      "components": {
+        "operator": "0.67.x",
+        "pipelines": "0.47.x",
+        "triggers": "0.24.x",
+        "tkn": "0.31.x",
+        "pac": "0.19.x",
+        "chains": "0.16.x",
+        "hub": "1.13.x (TP)",
+        "results": "0.6.x (TP)",
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.12",
+      "ocp": ["4.12", "4.13", "4.14"],
+      "k8s": ["1.25", "1.26", "1.27"],
+      "minimum_k8s_version": "1.24",
+      "components": {
+        "operator": "0.68.x",
+        "pipelines": "0.50.x",
+        "triggers": "0.25.x",
+        "tkn": "0.32.x",
+        "pac": "0.21.x",
+        "chains": "0.17.x",
+        "hub": "1.14.x (TP)",
+        "results": "0.8.x (TP)",
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.13",
+      "ocp": ["4.12", "4.13", "4.14", "4.15"],
+      "k8s": ["1.25", "1.26", "1.27", "1.28"],
+      "minimum_k8s_version": "1.25",
+      "components": {
+        "operator": "0.69.x",
+        "pipelines": "0.53.x",
+        "triggers": "0.25.x",
+        "tkn": "0.33.x",
+        "pac": "0.22.x",
+        "chains": "0.19.x",
+        "hub": "1.15.x (TP)",
+        "results": "0.8.x (TP)",
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.14",
+      "ocp": ["4.12", "4.13", "4.14", "4.15", "4.16"],
+      "k8s": ["1.25", "1.26", "1.27", "1.28", "1.29"],
+      "minimum_k8s_version": "1.25",
+      "components": {
+        "operator": "0.70.x",
+        "pipelines": "0.56.x",
+        "triggers": "0.26.x",
+        "tkn": "0.35.x",
+        "pac": "0.24.x",
+        "chains": "0.20.x",
+        "hub": "1.16.x (TP)",
+        "results": "0.9.x (TP)",
+        "catalog": null,
+        "manual_approval": null,
+        "opc": null
+      }
+    },
+    {
+      "version": "1.15",
+      "ocp": ["4.14", "4.15", "4.16"],
+      "k8s": ["1.27", "1.28", "1.29"],
+      "minimum_k8s_version": "1.27",
+      "components": {
+        "operator": "0.71.x",
+        "pipelines": "0.59.x",
+        "triggers": "0.27.x",
+        "tkn": "0.37.x",
+        "pac": "0.27.x",
+        "chains": "0.20.x",
+        "hub": "1.17.x (TP)",
+        "results": "0.10.x (TP)",
+        "catalog": null,
+        "manual_approval": "0.2.x (TP)",
+        "opc": null
+      }
+    },
+    {
+      "version": "1.16",
+      "ocp": ["4.15", "4.16", "4.17"],
+      "k8s": ["1.28", "1.29", "1.30"],
+      "minimum_k8s_version": "1.28",
+      "components": {
+        "operator": "0.73.x",
+        "pipelines": "0.62.x",
+        "triggers": "0.29.x",
+        "tkn": "0.38.x",
+        "pac": "0.28.x",
+        "chains": "0.22.x",
+        "hub": "1.18.x (TP)",
+        "results": "0.12.x (TP)",
+        "catalog": null,
+        "manual_approval": "0.3.x (TP)",
+        "opc": "1.16.x"
+      }
+    },
+    {
+      "version": "1.17",
+      "ocp": ["4.15", "4.16", "4.17", "4.18"],
+      "k8s": ["1.28", "1.29", "1.30", "1.30"],
+      "minimum_k8s_version": "1.28",
+      "components": {
+        "operator": "0.74.x",
+        "pipelines": "0.65.x",
+        "triggers": "0.30.x",
+        "tkn": "0.39.x",
+        "pac": "0.29.x",
+        "chains": "0.23.x",
+        "hub": "1.19.x (TP)",
+        "results": "0.13.x (TP)",
+        "catalog": null,
+        "manual_approval": "0.4.x (TP)",
+        "opc": "1.17.x"
+      }
+    },
+    {
+      "version": "1.18",
+      "ocp": ["4.15", "4.16", "4.17", "4.18"],
+      "k8s": ["1.28", "1.29", "1.30", "1.30"],
+      "minimum_k8s_version": "1.28",
+      "components": {
+        "operator": "0.75.x",
+        "pipelines": "0.68.x",
+        "triggers": "0.31.x",
+        "tkn": "0.40.x",
+        "pac": "0.33.x",
+        "chains": "0.24.x",
+        "hub": "1.20.x (TP)",
+        "results": "0.14.x",
+        "catalog": null,
+        "manual_approval": "0.5.x (TP)",
+        "opc": "1.18.x"
+      }
+    },
+    {
+      "version": "1.19",
+      "ocp": ["4.16", "4.17", "4.18", "4.19"],
+      "k8s": ["1.29", "1.30", "1.30", "1.31"],
+      "minimum_k8s_version": "1.29",
+      "components": {
+        "operator": "0.76.x",
+        "pipelines": "0.69.x",
+        "triggers": "0.32.x",
+        "tkn": "0.41.x",
+        "pac": "0.34.x",
+        "chains": "0.25.x",
+        "hub": "1.21.x (TP)",
+        "results": "0.15.x",
+        "catalog": null,
+        "manual_approval": "0.6.x (TP)",
+        "opc": "1.19.x"
+      }
+    }
+  ]
+} 

@@ -1,0 +1,89 @@
+name: update-sources-{{.Name}}
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: "0 1 * * *" # At 1AM everyday
+
+jobs:
+
+  update-sources:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout the current repo
+      uses: actions/checkout@v4
+      with:
+        ref: {{.Branch.Name}}
+
+    - name: Clone {{.Upstream}}
+      run: |
+        rm -fR upstream
+        git clone https://github.com/{{.Upstream}} upstream
+        pushd upstream
+        git checkout -B {{.Branch.UpstreamBranch}} origin/{{.Branch.UpstreamBranch}}
+        popd
+{{- if .GitHub.UpdateSources }}
+{{  .GitHub.UpdateSources | indent 4}}
+{{- end}}
+{{- if .Patches}}
+    - name: Generate patches
+      run: |
+        pushd upstream
+{{- range .Patches}}
+{{ .Script | indent 8}}
+{{- end}}
+        popd
+{{- end}}
+    - name: Commit new changes
+      run: |
+        
+        set -x
+        
+        git config user.name openshift-pipelines-bot
+        git config user.email pipelines-extcomm@redhat.com
+        git checkout -b actions/update/sources-{{.Branch.Name}}
+        touch head
+        pushd upstream
+        OLD_COMMIT=$(cat ../head)
+        NEW_COMMIT=$(git rev-parse HEAD)
+        echo Previous commit: ${OLD_COMMIT}
+        git show --stat ${OLD_COMMIT}
+        echo New commit: ${NEW_COMMIT}
+        git show --stat ${NEW_COMMIT}
+        git diff --stat ${NEW_COMMIT}..${OLD_COMMIT} > /tmp/diff.txt
+        git rev-parse HEAD > ../head
+        popd
+        rm -rf upstream/.git
+        git add -f upstream head .konflux
+        {{- if eq .Name "operator" }}
+        git add project.yaml
+        {{- end}}
+
+        if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+        fi
+
+        git commit -F- <<EOF
+        [bot] Update {{.Branch.Name}} from {{.Upstream}} to ${NEW_COMMIT}
+
+            $ git diff --stat ${NEW_COMMIT}..${OLD_COMMIT}
+        $(cat /tmp/diff.txt | sed 's/^/    /' | head -c 55555)
+        
+        https://github.com/{{.Upstream}}/compare/${NEW_COMMIT}..${OLD_COMMIT}
+        EOF
+        
+        git push -f origin actions/update/sources-{{.Branch.Name}}
+
+        if [ "$(gh pr list --base {{.Branch.Name}} --head actions/update/sources-{{.Branch.Name}} --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B {{.Branch.Name}} -H actions/update/sources-{{.Branch.Name}} --label=automated --label=upstream --fill
+        else
+          echo "a PR already exists, editing..."
+          gh pr edit --title "[bot] Update {{.Branch.Name}} from {{.Upstream}} to ${NEW_COMMIT}" --body "$(cat /tmp/diff.txt | sed 's/^/    /' | head -c 55555)"
+        fi
+      env:
+        GH_TOKEN: {{"${{ secrets.GITHUB_TOKEN }}"}}

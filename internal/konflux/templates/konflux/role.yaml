@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: release-plan-rolebinding-{{hyphenize .Name}}-{{hyphenize .Release.Version }}
+subjects:
+  - kind: ServiceAccount
+    name: release-registry-{{hyphenize .Name}}-{{hyphenize .Release.Version}}
+    apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: konflux-releaser-bot-actions
+  apiGroup: rbac.authorization.k8s.io

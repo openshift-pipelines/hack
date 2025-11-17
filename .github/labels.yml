@@ -1,0 +1,26 @@
+# .github/labels.yml
+- name: hack
+  color: 44d4c8
+  description: PRs Generated from Hack Repo
+
+- name: automated
+  color: 7057ff
+  description: For Automated PRs
+
+- name: upstream
+  color: e89815
+  description: For Upstream Sync PRs
+
+- name: konflux
+  color: 1161f5
+  description: For Konflux PRs
+
+- name: dependencies
+  color: fbca04
+  description: Pull requests that update a dependency file
+- name: approved
+  color: 0e8a16
+  description: Label for Approved PRs
+- name: lgtm
+  color: 8ad71a
+  description: Looks Good to Me Label

@@ -1,0 +1,6 @@
+name: manual-approval-gate
+upstream: openshift-pipelines/manual-approval-gate
+components:
+  - name: controller
+  - name: webhook
+
