@@ -1,0 +1,62 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
+    {{- if  and (ne .Repository.Branch.Name "main") (contains .Name "index") }}
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/fbc-build.yaml"
+    {{- else }}{{- if  or (ne .Repository.Branch.Name "main") (ne .Repository.Name "operator") }}
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/docker-build-ta.yaml"
+    {{- end }}
+    {{- end }}
+    build.appstudio.openshift.io/repo: {{.Repository.Url}}?rev={{"{{revision}}"}}
+    build.appstudio.redhat.com/commit_sha: '{{"{{revision}}"}}'
+    build.appstudio.redhat.com/target_branch: '{{"{{target_branch}}"}}'
+    pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "{{.Repository.Branch.Name}}" &&
+      ({{.Tekton.WatchedSources}} ||
+      "{{.Dockerfile}}".pathChanged() ||
+      {{- if  and (eq .Repository.Branch.Name "main")  (eq .Repository.Name "tektoncd-operator") }} ".tekton/*build*.yaml".pathChanged() || {{- end }}
+      ".tekton/{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-push.yaml".pathChanged())
+    {{- if .Tekton.NudgeFiles }}
+    build.appstudio.openshift.io/build-nudge-files: "{{.Tekton.NudgeFiles}}"
+    {{- end }}
+  creationTimestamp: null
+  labels:
+    appstudio.openshift.io/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
+    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+    pipelines.appstudio.openshift.io/type: build
+  name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-on-push
+  namespace: {{.Application.Namespace}}
+spec:
+  params:
+  - name: git-url
+    value: '{{"{{source_url}}"}}'
+  - name: revision
+    value: '{{"{{revision}}"}}'
+  - name: output-image
+    value: quay.io/redhat-user-workloads/{{.Application.Namespace}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:{{"{{revision}}"}}
+  - name: dockerfile
+    value: {{.Dockerfile}}
+  {{- if contains (printf "%s-%s-%s" (basename .Repository.Name | hyphenize) (hyphenize .Version.Version) .Name) "bundle" }}
+  - name: build-platforms
+    value:
+      - linux/x86_64
+  - name: build-image-index
+    value: false
+  {{- end }}
+  {{- if  not (contains .Name "index") }}
+  - name: prefetch-input
+    value: |
+      {{.PrefetchInput}}
+  {{- end }}
+  pipelineRef:
+    name: {{- if  not (contains .Name "index") }} docker-build-ta {{- else}} fbc-build {{- end }}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+  workspaces:
+  - name: git-auth
+    secret:
+      secretName: '{{"{{ git_auth_secret }}"}}'
+status: {}

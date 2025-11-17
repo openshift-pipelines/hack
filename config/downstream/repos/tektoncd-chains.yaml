@@ -1,0 +1,4 @@
+name: tektoncd-chains
+upstream: tektoncd/chains
+components:
+  - name: controller

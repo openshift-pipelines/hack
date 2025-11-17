@@ -1,0 +1,24 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
+  name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+spec:
+  componentName: {{hyphenize .Name}}
+  application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
+  build-nudges-ref:
+  {{- $dot := .}}
+  {{- if .Nudges }}
+  {{- range $nudge := .Nudges }}
+  - {{eval $nudge $dot}}
+  {{- end }}
+  {{- else }}
+  - tektoncd-operator-{{hyphenize .Version.Version}}-bundle
+  {{- end }}
+  source:
+    git:
+      url: {{.Repository.Url}}
+      dockerfileUrl: {{ .Dockerfile }}
+      revision: {{.Repository.Branch.Name}}

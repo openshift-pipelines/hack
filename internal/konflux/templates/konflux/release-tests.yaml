@@ -1,0 +1,19 @@
+---
+apiVersion: appstudio.redhat.com/v1beta2
+kind: IntegrationTestScenario
+metadata:
+  name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}-release-tests
+spec:
+  application: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
+  contexts:
+    - description: execute the integration test for a Snapshot created for a `push` event
+      name: push
+  resolverRef:
+    params:
+      - name: url
+        value: https://github.com/openshift-pipelines/operator
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: .konflux/tekton/bundle-e2e-pipeline.yaml
+    resolver: git

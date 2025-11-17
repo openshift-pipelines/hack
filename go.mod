@@ -1,4 +1,4 @@
-module github.com/openshift-pipelines/hack
+module github.com/openshift-pipelines-konflux/hack
 
 go 1.21
 

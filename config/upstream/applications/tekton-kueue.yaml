@@ -1,0 +1,6 @@
+- name: tekton-kueue
+  org: konflux-ci
+  namespace: konflux-infra-tenant
+  release-to-github: true
+  repos:
+    - tekton-kueue

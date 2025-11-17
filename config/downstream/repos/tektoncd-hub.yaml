@@ -1,0 +1,8 @@
+name: tektoncd-hub
+upstream: tektoncd/hub
+components:
+  - name: db-migration
+  - name: api
+  - name: ui
+    prefetch-input: |-
+      [{"type": "npm", "path": "upstream/ui"}, {"type": "rpm", "path": ".konflux/rpms"}]

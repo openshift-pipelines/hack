@@ -1,0 +1,5 @@
+name: opc
+upstream: openshift-pipelines/opc
+no-prefix-upstream: true
+components:
+  - name: opc
