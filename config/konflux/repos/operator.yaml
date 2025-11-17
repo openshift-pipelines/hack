@@ -7,13 +7,12 @@ components:
   - name: bundle
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
     nudges:
-      - operator-{{hyphenize .Version.Version}}-index-4-12
-      - operator-{{hyphenize .Version.Version}}-index-4-13
       - operator-{{hyphenize .Version.Version}}-index-4-14
-      - operator-{{hyphenize .Version.Version}}-index-4-15
       - operator-{{hyphenize .Version.Version}}-index-4-16
       - operator-{{hyphenize .Version.Version}}-index-4-17
       - operator-{{hyphenize .Version.Version}}-index-4-18
+      - operator-{{hyphenize .Version.Version}}-index-4-19
+      - operator-{{hyphenize .Version.Version}}-index-4-20
     tekton:
       watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
 tekton:
