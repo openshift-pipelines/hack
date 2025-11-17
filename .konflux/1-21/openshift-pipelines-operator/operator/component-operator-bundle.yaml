@@ -10,13 +10,12 @@ spec:
   componentName: bundle
   application: openshift-pipelines-operator-1-21
   build-nudges-ref:
-  - operator-1-21-index-4-12
-  - operator-1-21-index-4-13
   - operator-1-21-index-4-14
-  - operator-1-21-index-4-15
   - operator-1-21-index-4-16
   - operator-1-21-index-4-17
   - operator-1-21-index-4-18
+  - operator-1-21-index-4-19
+  - operator-1-21-index-4-20
   source:
     git:
       url: https://github.com/openshift-pipelines/operator.git

@@ -14,5 +14,5 @@ spec:
   source:
     git:
       url: https://github.com/openshift-pipelines/operator.git
-      dockerfileUrl: .konflux/olm-catalog/index/v4.15/Dockerfile.catalog
+      dockerfileUrl: .konflux/olm-catalog/index/v4.14/Dockerfile.catalog
       revision: release-v1.21.x
