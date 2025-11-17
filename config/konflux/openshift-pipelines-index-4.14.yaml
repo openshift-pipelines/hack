@@ -1,4 +1,4 @@
-name: openshift-pipelines-index-4.15
+name: openshift-pipelines-index-4.14
 versions:
   "1.21":
     image-suffix: "None"
