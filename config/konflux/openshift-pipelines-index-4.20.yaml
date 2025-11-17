@@ -1,4 +1,4 @@
-name: openshift-pipelines-index-4.19
+name: openshift-pipelines-index-4.20
 versions:
   "1.21":
     image-suffix: "None"
