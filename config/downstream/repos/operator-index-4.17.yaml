@@ -1,0 +1,7 @@
+name: tektoncd-operator
+components:
+  - name: index-4.17
+    dockerfile: .konflux/olm-catalog/index/v4.17/Dockerfile.catalog
+    nudges: [ "" ]
+tekton:
+  watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())

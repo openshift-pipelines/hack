@@ -1,0 +1,35 @@
+name: Sync Organization Labels
+on:
+  push:
+    paths:
+      - '.github/labels.yml'
+      - '.github/workflows/sync-org-labels.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  repository-projects: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Sync labels
+        uses: EndBug/label-sync@v2
+        with:
+          token: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          config-file: '.github/labels.yml'
+      - name: Sync labels to each repo
+        run: |
+          gh repo list openshift-pipelines-konflux --json name -q '.[].name' > repos.txt
+          for repo in $(cat repos.txt); do
+            echo "Syncing labels for $repo"
+            gh label clone openshift-pipelines-konflux/hack -R openshift-pipelines-konflux/$repo --force
+          done
+        env:
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+

@@ -2,11 +2,7 @@
 name: Generate konflux configurations
 
 on:
-#  push:
-#    branches:
-#      - 'main'
-  # schedule:
-  #   - cron: "0 6 * * *" # Daily at 06:00.
+  push:
   workflow_dispatch: # Manual workflow trigger
 
 concurrency:
@@ -14,35 +10,71 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  update-projects:
-#    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+  build-matrix:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      - id: set-matrix
+        name: set-matrix
+        run: |
+          pushd config
+          CONFIGS=$(ls -d * | jq -R -s -c 'split("\n")[:-1]')
+          popd
+          echo "Confgis: ${CONFIGS}"
+          echo "configs=${CONFIGS}" >> $GITHUB_OUTPUT
+    outputs:
+      configs: ${{ steps.set-matrix.outputs.configs }}
+  update-projects:
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: ${{ fromJSON(needs.build-matrix.outputs.configs) }}
     permissions:
       contents: write
       pull-requests: write
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v5
-    # - name: Synchronize labels
-    #   run: |
-    #     pushd project
-    #     gh label clone openshift-pipelines/hack
-    #     popd
-    #   env:
-    #     GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
-    #     GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }} 
-    - uses: actions/setup-go@v6
+      uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
       with:
         go-version: 1.22.x
-    - name: Generate configurations and pull-requests
+    - name: Generate  ${{matrix.config}} configurations and pull-requests
       run: |
         echo "Let's go"
-        # git config  -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
-
         gh auth status
-        gh auth setup-git
-        
-        go run ./cmd/konflux/ config/konflux/*
+        gh auth setup-git        
+        go run ./cmd/konflux/  config/${{matrix.config}}/konflux.yaml
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+    - name: Commit new changes
+      run: |
+        git config user.name openshift-pipelines-bot
+        git config user.email pipelines-extcomm@redhat.com
+        
+        BASE_BRANCH=${GITHUB_REF#refs/heads/}
+        SOURCE_BRANCH=actions/update/hack-update-konflux-${BASE_BRANCH}
+        git checkout -b ${SOURCE_BRANCH}
+        git add -f .konflux
+
+        if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+        fi
+
+        git commit -F- <<EOF
+          [bot:${BASE_BRANCH}] Update Generated Konflux Config
+        EOF
+
+        git push -f origin ${SOURCE_BRANCH}
+
+        if [ "$(gh pr list --base ${BASE_BRANCH} --head ${SOURCE_BRANCH} --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated   --fill
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

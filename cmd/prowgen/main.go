@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/openshift-pipelines/hack/internal/prowgen"
+	"github.com/openshift-pipelines-konflux/hack/internal/prowgen"
 )
 
 func main() {

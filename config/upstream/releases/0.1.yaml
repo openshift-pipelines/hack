@@ -1,0 +1,3 @@
+version: 0.1
+patch-version: 0.1.0
+image-suffix: "-rhel9"

@@ -1,0 +1,13 @@
+name: tektoncd-pipeline
+upstream: tektoncd/pipeline
+components:
+  - name: controller
+  - name: entrypoint
+  - name: events
+  - name: nop
+  - name: resolvers
+    tekton:
+      watched-sources: ("dependencies/tini/***".pathChanged())
+  - name: sidecarlogresults
+  - name: webhook
+  - name: workingdirinit

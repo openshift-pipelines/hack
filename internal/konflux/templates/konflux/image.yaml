@@ -1,0 +1,21 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: {{hyphenize .ImagePrefix}}{{hyphenize .Name}}{{hyphenize .ImageSuffix}}
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+    appstudio.redhat.com/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
+spec:
+  image:
+    name: {{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}
+    visibility: public
+  notifications:
+    - config:
+        url: https://bombino.api.redhat.com/v1/sbom/quay/push
+      event: repo_push
+      method: webhook
+      title: SBOM-event-to-Bombino

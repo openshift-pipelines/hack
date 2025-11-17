@@ -1,0 +1,4 @@
+name: tektoncd-cli
+upstream: tektoncd/cli
+components:
+  - name: tkn

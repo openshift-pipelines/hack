@@ -1,0 +1,14 @@
+version: 1.22
+patch-version: 1.22.0
+image-suffix: "-rhel9"
+#image-prefix: "pipeline-"
+branches:
+  tektoncd-pipeline:
+    name: main
+    upstream: release-v1.5.x
+  tektoncd-triggers:
+    name: main
+    upstream: release-v0.33.x
+  tektoncd-cli:
+    name: main
+    upstream: release-v0.41.0

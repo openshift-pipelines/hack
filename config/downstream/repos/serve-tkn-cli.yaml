@@ -1,0 +1,8 @@
+name: serve-tkn-cli
+url: https://gitlab.cee.redhat.com/tekton/serve-tkn-cli.git
+components:
+  - name: serve-tkn-cli
+    prefetch-input: |
+      {"type": "generic", "path": ".konflux/prefetch"}
+tekton:
+  watched-sources: '"***".pathChanged()'
