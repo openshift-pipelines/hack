@@ -1,0 +1,28 @@
+# Generated for Konflux Application openshift-pipelines-operator by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: "true"
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: openshift-pipelines-operator-next-rp
+spec:
+  application: openshift-pipelines-operator-next
+  tenantPipeline:
+    serviceAccountName: release-registry-openshift-pipelines-operator-next
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: https://github.com/openshift-pipelines-konflux/hack.git
+        - name: revision
+          # value:  next
+          value: main
+        - name: pathInRepo
+          value: pipelines/release-pipeline.yaml
+    params:
+      - name: release_version
+        value: ""
+      - name: release_to_github
+        value: "false"
