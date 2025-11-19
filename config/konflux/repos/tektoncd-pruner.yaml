@@ -4,6 +4,8 @@ upstream: tektoncd/pruner
 components:
   - name: controller
     image-prefix: pruner-
+  - name: webhook
+    image-prefix: pruner-
 branches:
   - name: next
     upstream: release-v0.3.x
