@@ -4,6 +4,6 @@ components:
   - name: tkn
 branches:
   - name: release-v1.21.x
-    upstream: main
+    upstream: release-v0.43.0
     versions:
       - "1.21"
