@@ -1,0 +1,28 @@
+# Generated for Konflux Application tekton-kueue by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: "true"
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: tekton-kueue-0-1-rp
+spec:
+  application: tekton-kueue-0-1
+  tenantPipeline:
+    serviceAccountName: release-registry-tekton-kueue-0-1
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: https://github.com/openshift-pipelines-konflux/hack.git
+        - name: revision
+          # value: release-v0.1.x 
+          value: main
+        - name: pathInRepo
+          value: pipelines/release-pipeline.yaml
+    params:
+      - name: release_version
+        value: "0.1.0"
+      - name: release_to_github
+        value: "false"
