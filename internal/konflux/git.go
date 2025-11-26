@@ -104,13 +104,7 @@ func commitAndPullRequest(ctx context.Context, repo Repository, dir string) erro
 			return fmt.Errorf("failed to create the pr: %s, %s", err, out)
 		}
 	} else {
-		log.Printf("[%s] PR already exists, Updating", out)
-		if out, err := run(ctx, dir, "gh", "pr", "edit", prNumber,
-			//"--label=hack", "--label=automated",
-			"--title", fmt.Sprintf("[bot:%s] update konflux configuration", head),
-		); err != nil {
-			return fmt.Errorf("failed to edit the pr: %s, %s", err, out)
-		}
+		log.Printf("[%s] PR already exists", prNumber)
 	}
 	return nil
 }
