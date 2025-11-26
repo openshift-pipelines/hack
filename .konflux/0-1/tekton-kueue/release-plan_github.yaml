@@ -15,7 +15,7 @@ spec:
       resolver: git
       params:
         - name: url
-          value: https://github.com/openshift-pipelines-konflux/hack.git
+          value: https://github.com/openshift-pipelines/hack.git
         - name: revision
           # value: release-v0.1.x 
           value: main
