@@ -20,7 +20,7 @@ const (
 func main() {
 	flag.Parse()
 	configFiles := flag.Args()
-	configFile := "config/konflux.yaml"
+	configFile := "config/downstream/konflux.yaml"
 	if len(configFiles) == 1 {
 		configFile = configFiles[0]
 	}
@@ -91,7 +91,8 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 
 	for _, applicationConfig := range applicationConfigs {
 		org := applicationConfig.Org
-		if org != "" {
+		if org == "" {
+			log.Printf("Using Org application: %s", organization)
 			org = organization
 		}
 		application := k.Application{
@@ -112,7 +113,7 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)
 
-			log.Printf("Loaded repository: %s", repo.Name)
+			//log.Printf("Loaded repository: %s", repo.Name)
 		}
 		applications = append(applications, application)
 
@@ -178,7 +179,7 @@ func readRepository(dir, repoName string, app *k.Application, branch k.Branch) (
 
 // UpdateComponent function can be modified  if we want to override the fields at component level.
 func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error {
-	log.Printf("Updating component: %s", c.Name)
+	//log.Printf("Updating component: %s", c.Name)
 	version := *app.Release
 
 	c.Version = version
