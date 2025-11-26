@@ -1,6 +1,7 @@
 package konflux
 
 type Config struct {
+	Organization string `yaml:"organization"`
 	Applications []string
 	Versions     []string
 	Repositories []Repository `json:"repos" yaml:"repos"`

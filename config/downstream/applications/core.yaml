@@ -2,22 +2,22 @@
   namespace: tekton-ecosystem-tenant
   repos:
     - tektoncd-operator
-#- name: openshift-pipelines-cli
-#  repos:
-#    - tektoncd-cli
-#    - opc
-#- name: openshift-pipelines-core
-#  repos:
-#    - console-plugin
-#    - git-init
-#    - manual-approval-gate
-#    - pipelines-as-code
-#    - tekton-assist
-#    - tekton-caches
-#    - tekton-kueue
-#    - tektoncd-chains
-#    - tektoncd-hub
-#    - tektoncd-pipeline
-#    - tektoncd-pruner
-#    - tektoncd-results
-#    - tektoncd-triggers
+- name: openshift-pipelines-cli
+  repos:
+    - tektoncd-cli
+    - opc
+- name: openshift-pipelines-core
+  repos:
+    - console-plugin
+    - git-init
+    - manual-approval-gate
+    - pipelines-as-code
+    - tekton-assist
+    - tekton-caches
+    - tekton-kueue
+    - tektoncd-chains
+    - tektoncd-hub
+    - tektoncd-pipeline
+    - tektoncd-pruner
+    - tektoncd-results
+    - tektoncd-triggers

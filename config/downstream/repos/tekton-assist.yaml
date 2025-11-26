@@ -1,4 +1,4 @@
-name: tekton-assist
+name: tektoncd-assist
 upstream: openshift-pipelines/tekton-assist
 no-prefix-upstream: true
 components:

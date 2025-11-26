@@ -1,4 +1,4 @@
-name: pipelines-as-code
+name: pac-downstream
 upstream: openshift-pipelines/pipelines-as-code
 components:
   - name: controller
