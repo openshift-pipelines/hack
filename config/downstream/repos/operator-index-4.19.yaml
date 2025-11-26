@@ -1,4 +1,4 @@
-name: tektoncd-operator
+name: operator
 components:
   - name: index-4.19
     dockerfile: .konflux/olm-catalog/index/v4.19/Dockerfile.catalog

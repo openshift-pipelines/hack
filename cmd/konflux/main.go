@@ -8,12 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	k "github.com/openshift-pipelines-konflux/hack/internal/konflux"
+	k "github.com/openshift-pipelines/hack/internal/konflux"
 	"gopkg.in/yaml.v2"
 )
 
 const (
-	GithubOrg          = "openshift-pipelines-konflux"
 	DefaultImageSuffix = "-rhel9"
 	DefaultImagePrefix = "pipeline-"
 )
@@ -42,7 +41,7 @@ func main() {
 		log.Printf("%v", versionConfig)
 		for _, applicationName := range config.Applications {
 			// Read application using the generic readResource function
-			applications, err := readApplications(configDir, applicationName, versionConfig)
+			applications, err := readApplications(configDir, applicationName, versionConfig, config.Organization)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -80,7 +79,7 @@ func readResource[T any](dir, resourceType, resourceName string) (T, error) {
 }
 
 // Helper functions using the generic readResource function
-func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig) ([]k.Application, error) {
+func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig, organization string) ([]k.Application, error) {
 
 	log.Printf("Reading application: %s", applicationName)
 	applicationConfigs, err := readResource[[]k.ApplicationConfig](dir, "applications", applicationName)
@@ -91,11 +90,15 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 	var applications []k.Application
 
 	for _, applicationConfig := range applicationConfigs {
+		org := applicationConfig.Org
+		if org != "" {
+			org = organization
+		}
 		application := k.Application{
 			Name:            applicationConfig.Name,
 			Components:      []k.Component{},
 			Release:         &versionConfig.Version,
-			Org:             applicationConfig.Org,
+			Org:             org,
 			ReleaseToGitHub: applicationConfig.ReleaseToGitHub,
 			AutoRelease:     true,
 			Namespace:       applicationConfig.Namespace,
@@ -119,9 +122,6 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 
 func updateRepository(repo *k.Repository, a k.Application) error {
 	repo.Application = a
-	if a.Org == "" {
-		a.Org = GithubOrg
-	}
 	if repo.Url == "" {
 		repository := fmt.Sprintf("https://github.com/%s/%s.git", a.Org, repo.Name)
 		repo.Url = repository

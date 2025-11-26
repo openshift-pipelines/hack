@@ -1,4 +1,4 @@
-name: opc
+name: tektoncd-opc
 upstream: openshift-pipelines/opc
 no-prefix-upstream: true
 components:
