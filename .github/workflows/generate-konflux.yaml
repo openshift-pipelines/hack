@@ -46,6 +46,8 @@ jobs:
       - name: Generate  ${{matrix.config}} configurations and pull-requests
         run: |
           echo "Let's go"
+          git config user.name openshift-pipelines-bot
+          git config user.email pipelines-extcomm@redhat.com
           gh auth status
           gh auth setup-git        
           go run ./cmd/konflux/  config/${{matrix.config}}/konflux.yaml
