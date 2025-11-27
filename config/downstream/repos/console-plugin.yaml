@@ -1,4 +1,4 @@
-name: tektoncd-console-plugin
+name: p12n-console-plugin
 upstream: openshift-pipelines/console-plugin
 no-prefix-upstream: true
 components:

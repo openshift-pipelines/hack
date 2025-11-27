@@ -6,8 +6,10 @@ components:
   - name: proxy
   - name: bundle
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
+    no-image-suffix: true
+    image-prefix: pipelines-operator-
     nudges:
-      - operator-{{hyphenize .Version.Version}}-index-4-18
+      - operator-index-4-20-{{hyphenize .Version.Version}}
     tekton:
       watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
 github:
