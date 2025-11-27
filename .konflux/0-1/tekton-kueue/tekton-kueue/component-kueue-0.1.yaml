@@ -10,7 +10,7 @@ spec:
   componentName: kueue
   application: tekton-kueue-0-1
   build-nudges-ref:
-  - tektoncd-operator-0-1-bundle
+  - operator-bundle-0-1
   source:
     git:
       url: https://github.com/konflux-ci/tekton-kueue.git
