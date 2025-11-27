@@ -41,7 +41,7 @@ func main() {
 		log.Printf("%v", versionConfig)
 		for _, applicationName := range config.Applications {
 			// Read application using the generic readResource function
-			applications, err := readApplications(configDir, applicationName, versionConfig, config.Organization)
+			applications, err := readApplications(configDir, applicationName, versionConfig, config)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -79,7 +79,7 @@ func readResource[T any](dir, resourceType, resourceName string) (T, error) {
 }
 
 // Helper functions using the generic readResource function
-func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig, organization string) ([]k.Application, error) {
+func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig, config k.Config) ([]k.Application, error) {
 
 	log.Printf("Reading application: %s", applicationName)
 	applicationConfigs, err := readResource[[]k.ApplicationConfig](dir, "applications", applicationName)
@@ -90,16 +90,17 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 	var applications []k.Application
 
 	for _, applicationConfig := range applicationConfigs {
-		org := applicationConfig.Org
-		if org == "" {
-			log.Printf("Using Org application: %s", organization)
-			org = organization
+		if applicationConfig.Org == "" {
+			applicationConfig.Org = config.Organization
+		}
+		if applicationConfig.Namespace == "" {
+			applicationConfig.Namespace = config.Namespace
 		}
 		application := k.Application{
 			Name:            applicationConfig.Name,
 			Components:      []k.Component{},
 			Release:         &versionConfig.Version,
-			Org:             org,
+			Org:             applicationConfig.Org,
 			ReleaseToGitHub: applicationConfig.ReleaseToGitHub,
 			AutoRelease:     true,
 			Namespace:       applicationConfig.Namespace,
@@ -199,17 +200,20 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 	if c.PrefetchInput == "" {
 		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
 	}
-	if version.ImageSuffix != "None" {
+	if version.ImageSuffix != "None" && !c.NoImageSuffix {
 		c.ImageSuffix = version.ImageSuffix
 		if c.ImageSuffix == "" {
 			c.ImageSuffix = DefaultImageSuffix
 		}
 	}
 	// This is the case for git-init where we don't require upstream name because comet created is pipelines-git-init-rhel8
-	c.ImagePrefix = version.ImagePrefix
-	if !repo.NoPrefixUpstream && repo.Upstream != "" {
-		c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
+	if !c.NoImagePrefix && c.ImagePrefix == "" {
+		c.ImagePrefix = version.ImagePrefix
+		if !repo.NoPrefixUpstream && repo.Upstream != "" {
+			c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
+		}
 	}
+
 	//log.Printf("Using image prefix: %s", c.ImagePrefix)
 	return nil
 }

@@ -2,6 +2,7 @@ package konflux
 
 type Config struct {
 	Organization string `yaml:"organization"`
+	Namespace    string `yaml:"namespace"`
 	Applications []string
 	Versions     []string
 	Repositories []Repository `json:"repos" yaml:"repos"`
@@ -48,6 +49,7 @@ type Component struct {
 	Application   Application
 	Tekton        Tekton
 	NoImagePrefix bool `json:"no-image-prefix" yaml:"no-image-prefix"`
+	NoImageSuffix bool `json:"no-image-suffix" yaml:"no-image-suffix"`
 }
 
 type Tekton struct {

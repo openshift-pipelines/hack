@@ -1,7 +1,8 @@
 organization: openshift-pipelines
+namespace: tekton-ecosystem-tenant
 applications:
-  - core
   - index
+  - core
 
 versions:
   - "1.22"

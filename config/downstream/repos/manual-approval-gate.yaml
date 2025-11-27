@@ -1,4 +1,4 @@
-name: tektoncd-manual-approval-gate
+name: p12n-manual-approval-gate
 upstream: openshift-pipelines/manual-approval-gate
 components:
   - name: controller

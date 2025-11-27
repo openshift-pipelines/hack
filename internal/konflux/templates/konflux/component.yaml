@@ -15,7 +15,7 @@ spec:
   - {{eval $nudge $dot}}
   {{- end }}
   {{- else }}
-  - tektoncd-operator-{{hyphenize .Version.Version}}-bundle
+  - operator-bundle-{{hyphenize .Version.Version}}
   {{- end }}
   source:
     git:
