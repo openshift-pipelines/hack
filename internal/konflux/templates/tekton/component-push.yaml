@@ -39,6 +39,10 @@ spec:
     value: quay.io/redhat-user-workloads/{{.Application.Namespace}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:{{"{{revision}}"}}
   - name: dockerfile
     value: {{.Dockerfile}}
+  - name: additional-tags
+    value:
+      - "{{- .Version.Version}}"
+      - "{{- .Application.Release.PatchVersion}}"
   {{- if contains (printf "%s-%s-%s" (basename .Repository.Name | hyphenize) (hyphenize .Version.Version) .Name) "bundle" }}
   - name: build-platforms
     value:

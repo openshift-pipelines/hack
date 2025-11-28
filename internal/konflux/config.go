@@ -6,6 +6,8 @@ type Config struct {
 	Applications []string
 	Versions     []string
 	Repositories []Repository `json:"repos" yaml:"repos"`
+	ImagePrefix  string       `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix  string       `json:"image-suffix" yaml:"image-suffix"`
 }
 
 type Application struct {
@@ -17,6 +19,7 @@ type Application struct {
 	ReleaseToGitHub bool `yaml:"release-to-github"`
 	AutoRelease     bool
 	Namespace       string
+	Config          Config
 }
 
 type Repository struct {
@@ -38,18 +41,19 @@ type Branch struct {
 }
 
 type Component struct {
-	Name          string
-	Nudges        []string
-	Dockerfile    string
-	ImagePrefix   string `json:"image-prefix" yaml:"image-prefix"`
-	ImageSuffix   string `json:"image-suffix" yaml:"image-suffix"`
-	PrefetchInput string `json:"prefetch-input" yaml:"prefetch-input"`
-	Version       Release
-	Repository    Repository
-	Application   Application
-	Tekton        Tekton
-	NoImagePrefix bool `json:"no-image-prefix" yaml:"no-image-prefix"`
-	NoImageSuffix bool `json:"no-image-suffix" yaml:"no-image-suffix"`
+	Name             string
+	Nudges           []string
+	Dockerfile       string
+	ImagePrefix      string `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix      string `json:"image-suffix" yaml:"image-suffix"`
+	PrefetchInput    string `json:"prefetch-input" yaml:"prefetch-input"`
+	Version          Release
+	Repository       Repository
+	Application      Application
+	Tekton           Tekton
+	NoImagePrefix    bool `json:"no-image-prefix" yaml:"no-image-prefix"`
+	NoImageSuffix    bool `json:"no-image-suffix" yaml:"no-image-suffix"`
+	NoPrefixUpstream bool `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
 }
 
 type Tekton struct {
