@@ -83,19 +83,21 @@ func generateGitHubConfig(repo Repository, targetDir string) error {
 		return err
 	}
 
-	filename := fmt.Sprintf("auto-merge-upstream-%s.yaml", repo.Name)
-	if err := generateFileFromTemplate("auto-merge-upstream.yaml", repo, filepath.Join(target, "workflows", filename), repo.Application); err != nil {
+	filename := "auto-merge-upstream.yaml"
+	if err := generateFileFromTemplate(filename, repo, filepath.Join(target, "workflows", filename), repo.Application); err != nil {
 		return err
 	}
-	filename = fmt.Sprintf("update-sources-%s.yaml", repo.Name)
-	if err := generateFileFromTemplate("update-sources.yaml", repo, filepath.Join(target, "workflows", filename), repo.Application); err != nil {
-		return err
-	}
-	_, err := run(context.Background(), ".github", "cp", "renovate.json", target)
-	if err != nil {
+	filename = "update-sources.yaml"
+	if err := generateFileFromTemplate(filename, repo, filepath.Join(target, "workflows", filename), repo.Application); err != nil {
 		return err
 	}
 
+	if repo.Branch.Name == "main" {
+		_, err := run(context.Background(), ".github", "cp", "renovate.json", target)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

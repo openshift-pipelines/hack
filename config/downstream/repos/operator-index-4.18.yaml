@@ -3,5 +3,6 @@ components:
   - name: index-4.18
     dockerfile: .konflux/olm-catalog/index/v4.18/Dockerfile.catalog
     nudges: [ "" ]
+    no-image-suffix: true
 tekton:
   watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())

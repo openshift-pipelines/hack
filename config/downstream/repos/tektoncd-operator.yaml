@@ -2,12 +2,14 @@ name: operator
 upstream: tektoncd/operator
 components:
   - name: operator
+    image-prefix: rhel9-
+    no-prefix-upstream: true
+    no-image-suffix: true
   - name: webhook
   - name: proxy
   - name: bundle
     dockerfile: .konflux/olm-catalog/bundle/Dockerfile
     no-image-suffix: true
-    image-prefix: pipelines-operator-
     nudges:
       - operator-index-4-20-{{hyphenize .Version.Version}}
     tekton:

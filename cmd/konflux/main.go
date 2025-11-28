@@ -37,6 +37,8 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
 		versionConfig.Version.Version = version
 		log.Printf("%v", versionConfig)
 		for _, applicationName := range config.Applications {
@@ -104,6 +106,7 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			ReleaseToGitHub: applicationConfig.ReleaseToGitHub,
 			AutoRelease:     true,
 			Namespace:       applicationConfig.Namespace,
+			Config:          config,
 		}
 		for _, repoName := range applicationConfig.Repositories {
 			repo, err := readRepository(dir, repoName, &application, versionConfig.Branches[repoName])
@@ -207,9 +210,9 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		}
 	}
 	// This is the case for git-init where we don't require upstream name because comet created is pipelines-git-init-rhel8
-	if !c.NoImagePrefix && c.ImagePrefix == "" {
-		c.ImagePrefix = version.ImagePrefix
-		if !repo.NoPrefixUpstream && repo.Upstream != "" {
+	if !c.NoImagePrefix {
+		c.ImagePrefix = version.ImagePrefix + c.ImagePrefix
+		if !(c.NoPrefixUpstream || repo.NoPrefixUpstream) && repo.Upstream != "" {
 			c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
 		}
 	}
