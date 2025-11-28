@@ -40,7 +40,7 @@ spec:
     value: {{.Dockerfile}}
   - name: additional-tags
     value:
-      - "on-pr{{- .Version.Version}}"
+      - "on-pr-{{- .Version.Version}}"
       - "on-pr-{{- .Application.Release.PatchVersion}}"
   - name: build-platforms
     value:

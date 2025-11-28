@@ -1,5 +1,6 @@
 name: tektoncd-pipeline
 upstream: tektoncd/pipeline
+no-prefix-upstream: true
 components:
   - name: controller
   - name: entrypoint

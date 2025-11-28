@@ -87,7 +87,6 @@ spec:
             - "true"
       runAfter:
         - publish-images
-        - init
       taskSpec:
         stepTemplate:
           env:

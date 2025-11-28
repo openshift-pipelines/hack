@@ -5,6 +5,6 @@ components:
   - name: kueue
     dockerfile: Dockerfile
     prefetch-input: |
-      {"type": "gomod", "path": "."}
+      {"type": "gomod", "path": "upstream"}
 tekton:
   watched-sources: '"***".pathChanged()'

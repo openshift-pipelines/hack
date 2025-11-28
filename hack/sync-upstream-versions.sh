@@ -23,10 +23,9 @@ for file in "$REPO_DIR"/*.yaml; do
   fi
 
 
-#  TAG=$(gh release view --repo $upstream --json tagName -q .tagName)
-  echo "Fetching Latest Release"
+  echo "Fetching Latest Release for $upstream"
   if LATEST=$(gh release view --repo $upstream --json tagName -q .tagName 2>/dev/null); then
-    echo "Latest release: $LATEST"
+    echo "Latest release for $upstream : $LATEST"
   else
     echo "⚠ No releases found for $upstream"
     continue
