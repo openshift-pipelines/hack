@@ -19,12 +19,11 @@ on:
           For new releases patch version  defaults to 0 and for new-patch action patch version is auto increased.
 
         required: true
-        default: 'next'
+        default: '1.23'
         type: string
 permissions:
-  contents: read
-  issues: write
-  repository-projects: write
+  contents: write
+  pull-requests: write
 jobs:
   run-release:
     runs-on: ubuntu-latest
@@ -38,17 +37,28 @@ jobs:
           echo "Version: ${{ github.event.inputs.version }}"
 
       - name: Run Release Script
+        env:
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         run: |
-          ./release-manager.sh \
+          ./hack/release-manager.sh \
             --action "${{ github.event.inputs.action }}" \
             --version "${{ github.event.inputs.version }}" 
+
       - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -x
+          git config user.name openshift-pipelines-bot
+          git config user.email pipelines-extcomm@redhat.com
+
           BASE_BRANCH=${GITHUB_REF#refs/heads/}
-          SOURCE_BRANCH=actions/hack/${{ github.event.inputs.action }}-${{ github.event.inputs.version }}
+          SOURCE_BRANCH=actions/update/${{ github.event.inputs.action }}
           
           git checkout -b ${SOURCE_BRANCH}
-          git add -f .
+          git add -f config .github
           
           if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
             echo "No change, exiting"
@@ -65,7 +75,3 @@ jobs:
             echo "creating PR..."
             gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated  --fill
           fi
-          
-
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
