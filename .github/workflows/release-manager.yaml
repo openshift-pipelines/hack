@@ -1,0 +1,71 @@
+name: Automated Release Actions
+on:
+  schedule:
+    - cron: "0 0 * * *" # At every day at 00
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select Action'
+        required: true
+        type: choice
+        options:
+          - new-release
+          - new-patch
+          - update-upstream-versions
+      version:
+        description: |
+          Provide Release Version for the action. Eg 1.22 or 1.23'
+          Please do not attach the patch version in this. 
+          For new releases patch version  defaults to 0 and for new-patch action patch version is auto increased.
+
+        required: true
+        default: 'next'
+        type: string
+permissions:
+  contents: read
+  issues: write
+  repository-projects: write
+jobs:
+  run-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Debug inputs
+        run: |
+          echo "Action: ${{ github.event.inputs.action }}"
+          echo "Version: ${{ github.event.inputs.version }}"
+
+      - name: Run Release Script
+        run: |
+          ./release-manager.sh \
+            --action "${{ github.event.inputs.action }}" \
+            --version "${{ github.event.inputs.version }}" 
+      - name: Create Pull Request
+        run: |
+          BASE_BRANCH=${GITHUB_REF#refs/heads/}
+          SOURCE_BRANCH=actions/hack/${{ github.event.inputs.action }}-${{ github.event.inputs.version }}
+          
+          git checkout -b ${SOURCE_BRANCH}
+          git add -f .
+          
+          if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+            echo "No change, exiting"
+            exit 0
+          fi
+          
+          git commit -F- <<EOF
+            [bot: ${{ github.event.inputs.version }}] Action: ${{ github.event.inputs.action }}"
+          EOF
+          
+          git push -f origin ${SOURCE_BRANCH}  
+        
+          if [ "$(gh pr list --base ${BASE_BRANCH} --head ${SOURCE_BRANCH} --json url --jq 'length')" = "0" ]; then
+            echo "creating PR..."
+            gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated  --fill
+          fi
+          
+
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
