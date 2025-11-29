@@ -1,0 +1,28 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: application-developer
+  name: {{basename .Name| hyphenize}}-{{hyphenize .Release.Version}}-rpa
+  annotations:
+    rhel_target: el9
+spec:
+  applications:
+    - {{basename .Name| hyphenize}}-{{hyphenize .Release.Version}}
+  origin: {{.Namespace}}
+  data:
+    mapping:
+      components:
+        {{- $dot := .}}
+        {{- range $c := .Components }}
+        - name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+          repositories:
+            - url: quay.io/rh-ee-prbindal/{{ printf "%s%s%s" .ImagePrefix .Name .ImageSuffix }}
+        {{- end }}
+      defaults:
+        tags:
+          - v{{.Release.Version}}
+          - v{{.Release.PatchVersion}}
+
