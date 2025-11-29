@@ -3,7 +3,7 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: pipelines-pipeline-webhook-rhel9
+  name: pipelines-webhook-rhel9
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-1-22
 spec:
   image:
-    name: pipelines-pipeline-webhook-rhel9
+    name: pipelines-webhook-rhel9
     visibility: public
   notifications:
     - config:

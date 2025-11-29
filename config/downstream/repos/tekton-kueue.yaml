@@ -3,8 +3,5 @@ upstream: konflux-ci/tekton-kueue
 no-prefix-upstream: true
 components:
   - name: kueue
-    dockerfile: Dockerfile
     prefetch-input: |
       {"type": "gomod", "path": "upstream"}
-tekton:
-  watched-sources: '"***".pathChanged()'

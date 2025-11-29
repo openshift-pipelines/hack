@@ -5,14 +5,14 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: tekton-kueue-kueue-1-22
+  name: p12n-tekton-caches-cache-1-22
 spec:
-  componentName: kueue
+  componentName: cache
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
   - operator-bundle-1-22
   source:
     git:
-      url: https://github.com/openshift-pipelines/tekton-kueue.git
-      dockerfileUrl: .konflux/dockerfiles/kueue.Dockerfile
+      url: https://github.com/openshift-pipelines/p12n-tekton-caches.git
+      dockerfileUrl: .konflux/dockerfiles/cache.Dockerfile
       revision: release-v1.22.x
