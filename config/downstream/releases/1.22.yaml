@@ -1,5 +1,5 @@
 version: 1.22
-patch-version: 1.22.0
+patch-version: 1.22.1
 image-suffix: "-rhel9"
 branches:
   git-init:
