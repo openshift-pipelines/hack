@@ -6,3 +6,4 @@ applications:
   - index
 versions:
   - "1.22"
+  - "1.23"
