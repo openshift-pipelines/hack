@@ -9,9 +9,10 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 source $SCRIPT_DIR/common-functions.sh
 
 # Default values
-ACTION="update-upstream-versions"
-VERSION="next"
-ENVIRONMENT="dev"
+DEFAULT_ACTION="update-upstream-versions"
+DEFAULT_VERSION="next"
+ACTION=""
+VERSION=""
 
 
 help() {
@@ -56,10 +57,6 @@ while [[ $# -gt 0 ]]; do
       VERSION="$2"
       shift 2
       ;;
-    --env|--environment | -e)
-      ENVIRONMENT="$2"
-      shift 2
-      ;;
     --help|-h)
       help
       ;;
@@ -70,10 +67,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Validate required params
-if [[ -z "$ACTION" || -z "$VERSION"  ]]; then
-  echo "Missing required parameters!"
-  help
+# Use Default Values for required params
+if [[ -z "$ACTION"  ]]; then
+  echo "Using default action $DEFAULT_ACTION!"
+  ACTION=$DEFAULT_ACTION
+fi
+if [[ -z "$VERSION"  ]]; then
+  echo "Using default version $DEFAULT_VERSION!"
+  VERSION=$DEFAULT_VERSION
 fi
 
 # Call specific function based on ACTION

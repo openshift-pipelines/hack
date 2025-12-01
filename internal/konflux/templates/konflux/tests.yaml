@@ -10,7 +10,7 @@ spec:
       name: application
   params:
     - name: POLICY_CONFIGURATION
-      value: {{- if  not (contains .Name "index") }} tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers {{- else}} tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes {{- end}}
+      value: {{- if  not (contains "index" .Name ) }} tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers {{- else}} tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes {{- end}}
     - name: TIMEOUT
       value: "15m0s"
     - name: SINGLE_COMPONENT

@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+
+	"github.com/Masterminds/sprig/v3"
 )
 
 //go:embed templates/*/*.yaml templates/*/*/*.yaml
@@ -42,6 +44,10 @@ func generateFileFromTemplate(templateFile string, data interface{}, filePath st
 		"indent":    indent,
 		"contains":  strings.Contains,
 		"eval":      Eval,
+	}
+	// merge Sprig funcs into your map
+	for k, v := range sprig.FuncMap() {
+		funcMap[k] = v
 	}
 	tmpl, err := template.New(templateFile).Funcs(funcMap).ParseFS(templateFS, "templates/*/*.yaml", "templates/*/*/*.yaml")
 	if err != nil {

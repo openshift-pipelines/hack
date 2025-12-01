@@ -1,9 +1,13 @@
 name: update-sources-{{.Name}}
-
+  {{- $minorVersion := "0" -}}
+  {{- $versionParts := splitList "." .Application.Release.Version  }}
+  {{- if ge (len $versionParts) 2 }}
+  {{- $minorVersion = index $versionParts 1 -}}
+  {{- end }}
 on:
   workflow_dispatch: {}
   schedule:
-  - cron: "0 1 * * *" # At 1AM everyday
+  - cron: "0 {{add (mod $minorVersion 23) 1}} * * *" # At {{add (mod $minorVersion 24) 1}}:00 everyday
 
 jobs:
 

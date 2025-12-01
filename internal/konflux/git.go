@@ -24,16 +24,17 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 	}
 	if exists {
 		// Repository exists, fetch the latest changes
-		if out, err := run(ctx, dir, "rm", "-rf", dir); err != nil {
-			return dir, fmt.Errorf("failed to delete exisiting dir: %s,  Error: %v, Output: %v", dir, err, out)
+		if out, err := run(ctx, dir, "git", "fetch", "--all"); err != nil {
+			return dir, fmt.Errorf("failed to fetch repository: %s, %s", err, out)
 		}
-	}
-	// Repository does not exist, clone the repository
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return "", err
-	}
-	if out, err := run(ctx, dir, "git", "clone", repo.Url, "."); err != nil {
-		return dir, fmt.Errorf("failed to clone repository: %s, %s", err, out)
+	} else {
+		// Repository does not exist, clone the repository
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return "", err
+		}
+		if out, err := run(ctx, dir, "git", "clone", repo.Url, "."); err != nil {
+			return dir, fmt.Errorf("failed to clone repository: %s, %s", err, out)
+		}
 	}
 
 	if out, err := run(ctx, dir, "git", "reset", "--hard", "HEAD", "--"); err != nil {
