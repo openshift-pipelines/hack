@@ -37,6 +37,7 @@ jobs:
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.18.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.19.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.20.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.21.yaml
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
