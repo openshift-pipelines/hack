@@ -22,9 +22,8 @@ function create-new-release() {
 
   #Add Release name in $RELEASE_YAML
   yq -i e ".version = \"$RELEASE_VERSION\"" $RELEASE_YAML
-  yq -i e ".patch-version = \"$RELEASE_VERSION.0\"" $RELEASE_YAML
   yq -i e ".image-suffix = \"-rhel9\"" $RELEASE_YAML
-
+  create-new-patch $RELEASE_VERSION
   update-upstream-versions $RELEASE_VERSION
 }
 
@@ -33,14 +32,19 @@ function create-new-patch(){
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
 
-  patch_version=$(yq ".patch-version" $RELEASE_YAML)
-  echo "Current Patch Version: $patch_version"
-
-  next_version=$(echo $patch_version | awk -F. '{printf "%d.%d.%d\n", $1, $2, $3+1}')
+  if [[ "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    patch_version=$(yq ".patch-version" $RELEASE_YAML)
+    echo "Current Patch Version $patch_version"
+    if [[ -z "$patch_version" || "$patch_version" == "null" ]]; then
+      next_version="${RELEASE_VERSION}.0"
+    else
+      next_version=$(echo "$patch_version" | awk -F. '{printf "%d.%d.%d\n", $1, $2, $3+1}')
+    fi
+  else
+      next_version="$RELEASE_VERSION"
+  fi
   echo "next patch Version: $next_version"
-
   yq -i e ".patch-version = \"$next_version\"" $RELEASE_YAML
-
 }
 
 update-upstream-versions() {
