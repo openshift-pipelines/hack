@@ -1,0 +1,8 @@
+name: openshift-pipelines-index-4.21
+versions:
+  "1.21":
+    image-suffix: "None"
+    version: "1.21"
+    auto-release: true
+resources:
+  - operator-index-4.21
