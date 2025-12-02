@@ -1,0 +1,9 @@
+name: lightspeed-rag-content
+components:
+  - name: lightspeed-rag-content
+tekton:
+  watched-sources: '"***".pathChanged()'
+branches:
+  - name: next
+    versions:
+      - next
