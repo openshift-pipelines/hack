@@ -32,7 +32,7 @@ patches: &patches
       git checkout HEAD go.mod vendor/modules.txt
 branches:
   - name: release-v1.19.x
-    upstream: release-v0.35.x
+    upstream: release-v0.35.4
     patches: *patches
     versions:
       - "1.19"
