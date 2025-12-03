@@ -7,3 +7,4 @@ applications:
 versions:
   - "1.22"
   - "next"
+  - "1.24"
