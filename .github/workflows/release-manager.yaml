@@ -15,11 +15,7 @@ on:
       version:
         description: |
           Provide Release Version for the action. Eg 1.22 or 1.23'
-          Please do not attach the patch version in this. 
-          For new releases patch version  defaults to 0 and for new-patch action patch version is auto increased.
-
         required: true
-        default: '1.23'
         type: string
 permissions:
   contents: write
@@ -27,14 +23,17 @@ permissions:
 jobs:
   run-release:
     runs-on: ubuntu-latest
+    env:
+      ACTION: ${{ github.event.inputs.action || 'update-upstream-versions' }}
+      VERSION: ${{ github.event.inputs.version || 'next' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: Debug inputs
         run: |
-          echo "Action: ${{ github.event.inputs.action }}"
-          echo "Version: ${{ github.event.inputs.version }}"
+          echo "Action: $ACTION"
+          echo "Version: $VERSION"
 
       - name: Run Release Script
         env:
@@ -42,8 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         run: |
           ./hack/release-manager.sh \
-            --action "${{ github.event.inputs.action }}" \
-            --version "${{ github.event.inputs.version }}" 
+            --action "$ACTION" \
+            --version "$VERSION" 
 
       - name: Create Pull Request
         env:
@@ -53,9 +52,9 @@ jobs:
           set -x
           git config user.name openshift-pipelines-bot
           git config user.email pipelines-extcomm@redhat.com
-
+          
           BASE_BRANCH=${GITHUB_REF#refs/heads/}
-          SOURCE_BRANCH=actions/update/${{ github.event.inputs.action }}
+          SOURCE_BRANCH=actions/$BASE_BRANCH/$ACTION-$VERSION
           
           git checkout -b ${SOURCE_BRANCH}
           git add -f config .github
@@ -66,7 +65,7 @@ jobs:
           fi
           
           git commit -F- <<EOF
-            Release Action: ${{ github.event.inputs.action }} ${{ github.event.inputs.version }}
+            [bot: $VERSION] Release Action: $ACTION
           EOF
           
           git push -f origin ${SOURCE_BRANCH}  
