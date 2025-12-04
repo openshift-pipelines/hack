@@ -30,6 +30,8 @@ spec:
   params:
   - name: git-url
     value: '{{"{{source_url}}"}}'
+  - name: upstream-git-url
+    value: 'https://github.com/{{.Repository.Upstream}}'
   - name: revision
     value: '{{"{{revision}}"}}'
   - name: output-image
@@ -40,7 +42,6 @@ spec:
     value: {{.Dockerfile}}
   - name: additional-tags
     value:
-      - "on-pr-{{- .Version.Version}}"
       - "on-pr-{{- .Application.Release.PatchVersion}}"
   - name: build-platforms
     value:
