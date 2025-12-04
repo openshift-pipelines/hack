@@ -25,7 +25,7 @@ metadata:
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
-    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+    appstudio.openshift.io/component: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
     pipelines.appstudio.openshift.io/type: build
   name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-on-push
   namespace: {{.Application.Namespace}}
@@ -58,7 +58,7 @@ spec:
   pipelineRef:
     name: {{- if  not (contains "index" .Name ) }} docker-build-ta {{- else}} fbc-build {{- end }}
   taskRunTemplate:
-    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+    serviceAccountName: build-pipeline-{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
   workspaces:
   - name: git-auth
     secret:
