@@ -42,7 +42,7 @@ jobs:
         run: |
           ./hack/release-manager.sh \
             --action "$ACTION" \
-            --version "VERSION" 
+            --version "$VERSION" 
 
       - name: Create Pull Request
         env:
