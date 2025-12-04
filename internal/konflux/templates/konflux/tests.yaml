@@ -6,8 +6,8 @@ metadata:
 spec:
   application: {{hyphenize .Name}}-{{hyphenize .Release.Version}}
   contexts:
-    - description: execute the integration test for an application
-      name: application
+    - description: execute the integration test for a component
+      name: component
   params:
     - name: POLICY_CONFIGURATION
       value: {{- if  not (contains "index" .Name ) }} tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers {{- else}} tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes {{- end}}
