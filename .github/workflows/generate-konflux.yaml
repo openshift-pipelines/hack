@@ -2,8 +2,8 @@
 name: Generate konflux configurations
 
 on:
-  push:
-  workflow_dispatch: # Manual workflow trigger
+#  push:
+#  workflow_dispatch: # Manual workflow trigger
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
