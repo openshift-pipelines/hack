@@ -10,9 +10,9 @@ components:
   - name: bundle
     no-image-suffix: true
     nudges:
-      - operator-index-4-20-{{hyphenize .Version.Version}}
+      - operator-index-{{hyphenize .Version.Version}}-4-20
     tekton:
-      watched-sources: (".konflux/patches/***".pathChanged() || ".konflux/olm-catalog/bundle/***".pathChanged())
+      watched-sources: (".konflux/olm-catalog/bundle/***".pathChanged())
 github:
   update-sources: |
     - name: fetch-payload
