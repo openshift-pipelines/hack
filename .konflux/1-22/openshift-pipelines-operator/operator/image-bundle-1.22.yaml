@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: operator-bundle-1-22
+    appstudio.redhat.com/component: operator-1-22-bundle
     appstudio.redhat.com/application: openshift-pipelines-operator-1-22
 spec:
   image:

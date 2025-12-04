@@ -5,14 +5,14 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: tektoncd-hub-api-next
+  name: tektoncd-hub-next-api
 spec:
   componentName: api
   application: openshift-pipelines-core-next
   build-nudges-ref:
-  - operator-bundle-next
+  - operatornext-bundle
   source:
     git:
       url: https://github.com/openshift-pipelines/tektoncd-hub.git
       dockerfileUrl: .konflux/dockerfiles/api.Dockerfile
-      revision: main
+      revision: next

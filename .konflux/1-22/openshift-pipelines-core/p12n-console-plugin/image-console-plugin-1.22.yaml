@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: p12n-console-plugin-console-plugin-1-22
+    appstudio.redhat.com/component: p12n-console-plugin-1-22-console-plugin
     appstudio.redhat.com/application: openshift-pipelines-core-1-22
 spec:
   image:

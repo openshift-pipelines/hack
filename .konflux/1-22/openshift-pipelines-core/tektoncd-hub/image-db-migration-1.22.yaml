@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: tektoncd-hub-db-migration-1-22
+    appstudio.redhat.com/component: tektoncd-hub-1-22-db-migration
     appstudio.redhat.com/application: openshift-pipelines-core-1-22
 spec:
   image:

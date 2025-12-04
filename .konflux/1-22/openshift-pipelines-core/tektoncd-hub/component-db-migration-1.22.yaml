@@ -5,12 +5,12 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: tektoncd-hub-db-migration-1-22
+  name: tektoncd-hub-1-22-db-migration
 spec:
   componentName: db-migration
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
-  - operator-bundle-1-22
+  - operator1-22-bundle
   source:
     git:
       url: https://github.com/openshift-pipelines/tektoncd-hub.git

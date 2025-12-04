@@ -5,12 +5,12 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: tekton-kueue-kueue-1-22
+  name: tekton-kueue-1-22-kueue
 spec:
   componentName: kueue
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
-  - operator-bundle-1-22
+  - operator1-22-bundle
   source:
     git:
       url: https://github.com/openshift-pipelines/tekton-kueue.git
