@@ -1,7 +1,6 @@
 name: operator
 components:
   - name: index-4.21
-    dockerfile: .konflux/olm-catalog/index/v4.21/Dockerfile.catalog
     nudges: [ "" ]
     no-image-suffix: true
 tekton:
