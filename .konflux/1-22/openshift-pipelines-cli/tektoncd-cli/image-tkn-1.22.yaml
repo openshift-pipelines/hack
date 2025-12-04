@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: tektoncd-cli-tkn-1-22
+    appstudio.redhat.com/component: tektoncd-cli-1-22-tkn
     appstudio.redhat.com/application: openshift-pipelines-cli-1-22
 spec:
   image:

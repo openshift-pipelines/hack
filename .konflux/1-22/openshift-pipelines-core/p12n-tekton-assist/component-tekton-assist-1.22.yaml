@@ -5,12 +5,12 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: p12n-tekton-assist-tekton-assist-1-22
+  name: p12n-tekton-assist-1-22-tekton-assist
 spec:
   componentName: tekton-assist
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
-  - operator-bundle-1-22
+  - operator-1-22-bundle
   source:
     git:
       url: https://github.com/openshift-pipelines/p12n-tekton-assist.git
