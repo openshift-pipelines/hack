@@ -5,12 +5,12 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: pac-downstream-webhook-1-22
+  name: pac-downstream-1-22-webhook
 spec:
   componentName: webhook
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
-  - operator-bundle-1-22
+  - operator-1-22-bundle
   source:
     git:
       url: https://github.com/openshift-pipelines/pac-downstream.git

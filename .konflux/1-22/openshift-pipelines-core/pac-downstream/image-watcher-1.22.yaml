@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: pac-downstream-watcher-1-22
+    appstudio.redhat.com/component: pac-downstream-1-22-watcher
     appstudio.redhat.com/application: openshift-pipelines-core-1-22
 spec:
   image:
