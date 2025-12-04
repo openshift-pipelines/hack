@@ -8,7 +8,6 @@ components:
   - name: webhook
   - name: proxy
   - name: bundle
-    dockerfile: .konflux/olm-catalog/bundle/Dockerfile
     no-image-suffix: true
     nudges:
       - operator-index-4-20-{{hyphenize .Version.Version}}
