@@ -135,11 +135,11 @@ func updateRepository(repo *k.Repository, a k.Application) error {
 	var branchName, upstreamBranch string
 
 	if a.Release.Version == "main" || a.Release.Version == "next" {
-		branchName = "main"
+		branchName = "next"
 		upstreamBranch = "main"
 	} else {
 		branchName = "release-v" + a.Release.Version + ".x"
-		upstreamBranch = "main"
+		upstreamBranch = branchName
 	}
 
 	branch := &repo.Branch
