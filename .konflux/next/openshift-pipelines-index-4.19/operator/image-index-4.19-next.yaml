@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: operator-index-4-19-next
+    appstudio.redhat.com/component: operator-next-index-4-19
     appstudio.redhat.com/application: openshift-pipelines-index-4-19-next
 spec:
   image:

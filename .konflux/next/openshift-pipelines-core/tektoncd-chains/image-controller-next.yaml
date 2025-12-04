@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: tektoncd-chains-controller-next
+    appstudio.redhat.com/component: tektoncd-chains-next-controller
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:

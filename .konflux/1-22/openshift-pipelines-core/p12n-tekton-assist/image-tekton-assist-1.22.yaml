@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: p12n-tekton-assist-tekton-assist-1-22
+    appstudio.redhat.com/component: p12n-tekton-assist-1-22-tekton-assist
     appstudio.redhat.com/application: openshift-pipelines-core-1-22
 spec:
   image:

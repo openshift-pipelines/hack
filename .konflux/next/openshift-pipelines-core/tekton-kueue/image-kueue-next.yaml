@@ -8,7 +8,7 @@ metadata:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: tekton-kueue-kueue-next
+    appstudio.redhat.com/component: tekton-kueue-next-kueue
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:

@@ -5,7 +5,7 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: operator-index-4-16-next
+  name: operator-next-index-4-16
 spec:
   componentName: index-4-16
   application: openshift-pipelines-index-4-16-next
@@ -15,4 +15,4 @@ spec:
     git:
       url: https://github.com/openshift-pipelines/operator.git
       dockerfileUrl: .konflux/olm-catalog/index/v4.16/Dockerfile.catalog
-      revision: main
+      revision: next

@@ -5,7 +5,7 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: pac-downstream-cli-1-22
+  name: pac-downstream-1-22-cli
 spec:
   componentName: cli
   application: openshift-pipelines-core-1-22
