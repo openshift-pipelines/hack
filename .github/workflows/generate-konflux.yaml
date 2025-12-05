@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'gh*'
   workflow_dispatch: # Manual workflow trigger
 
 concurrency:
