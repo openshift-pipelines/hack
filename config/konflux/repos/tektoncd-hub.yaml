@@ -9,6 +9,6 @@ components:
 branches:
   # - name: main
   - name: release-v1.20.x
-    upstream: release-v1.22.3
+    upstream: release-v1.22.7
     versions:
       - "1.20"
