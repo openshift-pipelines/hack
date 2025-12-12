@@ -32,15 +32,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, version := range config.Versions {
-		versionConfig, err := readResource[k.ReleaseConfig](configDir, "releases", version)
-		if err != nil {
-			log.Fatal(err)
+	// Add main  version by default to add some main specific config.
+	for _, version := range append(config.Versions, "main") {
+		versionConfig := k.ReleaseConfig{
+			Version: k.Release{
+				Version: version,
+			},
+		}
+		if version != "main" {
+			versionConfig, err = readResource[k.ReleaseConfig](configDir, "releases", version)
+			if err != nil {
+				log.Fatal(err)
+			}
+			versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
+			versionConfig.Version.Version = version
 		}
 
-		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
-		versionConfig.Version.Version = version
-		log.Printf("%v", versionConfig)
 		for _, applicationName := range config.Applications {
 			// Read application using the generic readResource function
 			applications, err := readApplications(configDir, applicationName, versionConfig, config)
@@ -135,7 +142,7 @@ func updateRepository(repo *k.Repository, a k.Application) error {
 	var branchName, upstreamBranch string
 
 	if a.Release.Version == "main" || a.Release.Version == "next" {
-		branchName = "next"
+		branchName = a.Release.Version
 		upstreamBranch = "main"
 	} else {
 		branchName = "release-v" + a.Release.Version + ".x"

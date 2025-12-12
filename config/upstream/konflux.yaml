@@ -1,4 +1,4 @@
 applications:
-#  - tekton-kueue
+  - tekton-kueue
 versions:
-  - 0.1
+  - 0.2
