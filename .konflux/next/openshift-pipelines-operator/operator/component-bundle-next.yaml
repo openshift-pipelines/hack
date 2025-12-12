@@ -10,7 +10,7 @@ spec:
   componentName: bundle
   application: openshift-pipelines-operator-next
   build-nudges-ref:
-  - operator-index-4-20-next
+  - operator-next-index-4-20
   source:
     git:
       url: https://github.com/openshift-pipelines/operator.git

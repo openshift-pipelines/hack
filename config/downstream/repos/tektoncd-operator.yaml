@@ -10,7 +10,7 @@ components:
   - name: bundle
     no-image-suffix: true
     nudges:
-      - operator-index-{{hyphenize .Version.Version}}-4-20
+      - operator-{{hyphenize .Version.Version}}-index-4-20
     tekton:
       watched-sources: (".konflux/olm-catalog/bundle/***".pathChanged())
 github:
