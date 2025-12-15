@@ -1,5 +1,6 @@
 name: tektoncd-hub
 upstream: tektoncd/hub
+use-patch-branch: true
 components:
   - name: db-migration
   - name: api

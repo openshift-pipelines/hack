@@ -59,6 +59,7 @@ update-upstream-versions() {
     # Extract values with yq
     downstream="$(basename "$file" .yaml)"
     upstream=$(yq e '.upstream' "$file")
+    UsePatchBranch=$(yq e '.use-patch-branch' "$file")
     # Skip when upstream is empty
     [ "$upstream" = "null" ] && upstream=""
     if [ -z "$upstream" ]; then
@@ -72,7 +73,12 @@ update-upstream-versions() {
       echo "⚠ No releases found for $upstream"
       continue
     fi
-    BRANCH="release-${LATEST%.*}.x"
+    echo "UsePatchBranch : $UsePatchBranch"
+    if [[ "$UsePatchBranch" == "true" ]]; then
+      BRANCH="release-${LATEST}"
+    else
+      BRANCH="release-${LATEST%.*}.x"
+    fi
     yq -i e ".branches.$downstream.upstream = \"$BRANCH\"" $RELEASE_YAML
   done
 }

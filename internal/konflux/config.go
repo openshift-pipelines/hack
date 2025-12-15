@@ -33,6 +33,7 @@ type Repository struct {
 	GitHub           GitHub
 	Patches          []Patch
 	NoPrefixUpstream bool `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
+	UsePatchBranch   bool `json:"use-patch-branch" yaml:"use-patch-branch"`
 }
 type Branch struct {
 	Name           string

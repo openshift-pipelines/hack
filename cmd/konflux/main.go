@@ -18,7 +18,9 @@ const (
 )
 
 func main() {
+	version := flag.String("version", "", "Release version")
 	flag.Parse()
+
 	configFiles := flag.Args()
 	configFile := "config/downstream/konflux.yaml"
 	if len(configFiles) == 1 {
@@ -32,8 +34,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if *version != "" {
+		config.Versions = []string{*version}
+	}
+
 	// Add main  version by default to add some main specific config.
 	for _, version := range append(config.Versions, "main") {
+		log.Printf("Konflux v%s", version)
 		versionConfig := k.ReleaseConfig{
 			Version: k.Release{
 				Version: version,
@@ -139,8 +146,8 @@ func updateRepository(repo *k.Repository, a k.Application) error {
 		repo.Url = repository
 	}
 
+	//  Default Branch and Upstream if not defined in release.yaml
 	var branchName, upstreamBranch string
-
 	if a.Release.Version == "main" || a.Release.Version == "next" {
 		branchName = a.Release.Version
 		upstreamBranch = "main"

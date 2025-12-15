@@ -10,8 +10,10 @@ import (
 )
 
 func GenerateConfig(application Application) error {
-	if err := generateKonfluxConfig(application); err != nil {
-		return err
+	if application.Release.Version != "main" {
+		if err := generateKonfluxConfig(application); err != nil {
+			return err
+		}
 	}
 	if err := generateRepositoryConfig(application); err != nil {
 		return err
@@ -81,21 +83,23 @@ func generateGitHubConfig(repo Repository, targetDir string) error {
 		return err
 	}
 
-	filename := "auto-merge-upstream.yaml"
-	if err := generateFileFromTemplate(filename, repo, filepath.Join(target, "workflows", filename), repo.Application); err != nil {
-		return err
-	}
-
-	updateSourcesFilename := "update-sources.yaml"
+	autoMergeTemplateFile := "auto-merge-upstream.yaml"
 	updateSourcesTemplateFile := "update-sources.yaml"
+
+	autoMergeWorkflowFile := autoMergeTemplateFile
+	updateSourcesWorkflowFile := updateSourcesTemplateFile
 	if repo.Branch.Name == "main" {
 		_, err := run(context.Background(), ".github", "cp", "renovate.json", target)
 		if err != nil {
 			return err
 		}
-		updateSourcesTemplateFile = "update-sources-main.yaml"
+		updateSourcesTemplateFile = "update-sources-all.yaml"
+		autoMergeTemplateFile = "auto-merge-upstream-all.yaml"
 	}
-	if err := generateFileFromTemplate(updateSourcesTemplateFile, repo, filepath.Join(target, "workflows", updateSourcesFilename), repo.Application); err != nil {
+	if err := generateFileFromTemplate(autoMergeTemplateFile, repo, filepath.Join(target, "workflows", autoMergeWorkflowFile), repo.Application); err != nil {
+		return err
+	}
+	if err := generateFileFromTemplate(updateSourcesTemplateFile, repo, filepath.Join(target, "workflows", updateSourcesWorkflowFile), repo.Application); err != nil {
 		return err
 	}
 	return nil
