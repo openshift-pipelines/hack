@@ -125,7 +125,7 @@ spec:
                 value: $(tasks.publish-images.results.git-url)
           - name: generate-artifacts
             workingDir: /workspace
-            image: quay.io/openshift-pipeline/ci:latest
+            image: quay.io/openshift-pipeline/ci:kueue
             script: |
               set -x
               echo $IMG
