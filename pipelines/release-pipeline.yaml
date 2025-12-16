@@ -23,8 +23,15 @@ spec:
     - name: git_secret_key
       default: github-token
     - name: release_to_github
-      default: "false"
+      default: "true"
   tasks:
+    - name: init
+      taskSpec:
+        steps:
+          - name: print-env
+            image: quay.io/konflux-ci/release-service-utils
+            script: |
+              env
     - name: publish-images
       taskSpec:
         results:
@@ -87,6 +94,7 @@ spec:
             - "true"
       runAfter:
         - publish-images
+        - init
       taskSpec:
         stepTemplate:
           env:
