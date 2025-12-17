@@ -15,7 +15,7 @@ branches:
   tekton-caches:
     upstream: release-v0.3.x
   tekton-kueue:
-    upstream: release-v0.1.x
+    upstream: release-v0.2.x
   tektoncd-chains:
     upstream: release-v0.26.x
   tektoncd-cli:
