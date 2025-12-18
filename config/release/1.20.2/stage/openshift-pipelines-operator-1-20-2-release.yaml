@@ -93,4 +93,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-operator-1-20-gmvgd
+  snapshot: openshift-pipelines-operator-1-20-nvv2m

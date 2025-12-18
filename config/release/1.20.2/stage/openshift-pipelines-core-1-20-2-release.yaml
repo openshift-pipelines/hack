@@ -55,4 +55,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-20-mb5h9
+  snapshot: openshift-pipelines-core-1-20-5bxx2
