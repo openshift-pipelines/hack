@@ -72,7 +72,7 @@ spec:
           https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/1.20/html/release_notes/op-release-notes-1-20#op-release-notes-1-20_op-release-notes
       issues:
         fixed:
-          - id: SRVKP-7157
+          - id: SRVKP-9472
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -90,4 +90,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-20-prod-release-as-op
-  snapshot: openshift-pipelines-operator-1-20-mchbt
+  snapshot: openshift-pipelines-operator-1-20-mkzxs

@@ -19,25 +19,15 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-8993
+          - id: SRVKP-9425
             source: issues.redhat.com
-          - id: SRVKP-8910
+          - id: SRVKP-9397
             source: issues.redhat.com
-          - id: SRVKP-8908
+          - id: SRVKP-9248
             source: issues.redhat.com
-          - id: SRVKP-8902
+          - id: SRVKP-9204
             source: issues.redhat.com
-          - id: SRVKP-8616
-            source: issues.redhat.com
-          - id: SRVKP-8891
-            source: issues.redhat.com
-          - id: SRVKP-8930
-            source: issues.redhat.com
-          - id: SRVKP-8480
-            source: issues.redhat.com
-          - id: SRVKP-8894
-            source: issues.redhat.com
-          - id: SRVKP-9054
+          - id: SRVKP-9211
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -55,4 +45,4 @@ spec:
       type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-20-prod-release-as-op
-  snapshot: openshift-pipelines-core-1-20-k2pwg
+  snapshot: openshift-pipelines-core-1-20-sgvd6
