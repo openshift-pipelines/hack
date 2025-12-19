@@ -90,7 +90,7 @@ else
     echo ""
     echo "Next steps:"
     echo "1. Review the changes made to the configuration files"
-    echo "2. Generate the Konflux files: go run ./cmd/konflux/ config/konflux/<appropriate-files>"
+    echo "2. Generate the Konflux files: go run ./cmd/konflux/ -config config/konflux/<appropriate-files>"
     echo "3. Commit and push the changes"
 fi
 echo "===================================================================" 
