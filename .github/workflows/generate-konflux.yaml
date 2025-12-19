@@ -2,7 +2,9 @@
 name: Generate konflux configurations
 
 on:
-#  push:
+ push:
+   branches:
+     - "never"
 #  workflow_dispatch: # Manual workflow trigger
 
 concurrency:
