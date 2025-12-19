@@ -48,7 +48,7 @@ versions for unreleased versions which you can do by this workflow.
 - Run Workflow
 - Select appropriate Branch
 - Action : update-upstream-versions
-- Version: Provide the version you want to add e.g 1.23
+- Version: Provide the downstream minor version you want to add or update. e.g "1.23" or "next"
 - Run Workflow
 - This workflow will add new PR to hack repo with updated version configuration.
 - Verify the PR and merge
