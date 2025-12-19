@@ -10,6 +10,6 @@ components:
       - tektoncd-cli-{{hyphenize .Version.Version}}-tkn
 branches:
   - name: next
-    upstream: release-v0.39.x
+    upstream: release-v0.40.x
     versions:
       - next
