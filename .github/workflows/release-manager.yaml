@@ -1,11 +1,13 @@
 name: Automated Release Actions
+run-name: Execute ${{ github.event.inputs.action || 'update-upstream-versions' }} for version ${{ github.event.inputs.version || 'next' }}
+
 on:
   schedule:
     - cron: "0 0 * * *" # At every day at 00
   workflow_dispatch:
     inputs:
       action:
-        description: 'Select Action'
+        description: 'Select Action (see README for details)'
         required: true
         type: choice
         options:
@@ -14,7 +16,7 @@ on:
           - update-upstream-versions
       version:
         description: |
-          Provide Release Version for the action. Eg 1.22 or 1.23'
+          Downstream Release Version. Eg: "1.22", "1.23", "next"
         required: true
         type: string
 permissions:
@@ -24,6 +26,7 @@ jobs:
   run-release:
     runs-on: ubuntu-latest
     env:
+      # NOTE: in case of update, the defaults here are also specified in the run-name
       ACTION: ${{ github.event.inputs.action || 'update-upstream-versions' }}
       VERSION: ${{ github.event.inputs.version || 'next' }}
     steps:
