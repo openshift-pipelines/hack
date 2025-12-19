@@ -18,16 +18,13 @@ const (
 )
 
 func main() {
+	var configFile *string = flag.String("config", "config/downstream/konflux.yaml", "path to config file")
+	var dryRun *bool = flag.Bool("dry-run", false, "do not commit or push any changes")
 	flag.Parse()
-	configFiles := flag.Args()
-	configFile := "config/downstream/konflux.yaml"
-	if len(configFiles) == 1 {
-		configFile = configFiles[0]
-	}
-	configDir := filepath.Dir(configFile)
+	configDir := filepath.Dir(*configFile)
 
 	// Read the main konflux config using the generic readResource function
-	config, err := readConfig(configDir, filepath.Base(configFile))
+	config, err := readConfig(configDir, filepath.Base(*configFile))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +53,7 @@ func main() {
 			}
 			for _, application := range applications {
 				log.Printf("Loaded application: %s", application.Name)
-				if err := k.GenerateConfig(application); err != nil {
+				if err := k.GenerateConfig(application, *dryRun); err != nil {
 					log.Fatal(err)
 				}
 			}
