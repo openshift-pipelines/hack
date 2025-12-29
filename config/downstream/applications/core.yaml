@@ -20,4 +20,4 @@
 - name: openshift-pipelines-cli
   repos:
     - tektoncd-cli
-#    - opc
+    - opc

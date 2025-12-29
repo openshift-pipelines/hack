@@ -1,23 +1,23 @@
-name: update-sources-{{.Name}}
+name: update-sources-{{.Upstream}}
 on:
   workflow_dispatch: {}
   schedule:
     - cron: "0 0 * * *"
 concurrency:
-  group: {{ print "${{ github.workflow }}-${{ github.ref }}" }}
+  group: {{ "${{ github.workflow }}-${{ github.ref }}" }}
   cancel-in-progress: true
 
 jobs:
   collect-branches:
     runs-on: ubuntu-latest
     outputs:
-      matrix: {{ print "${{ steps.set-matrix.outputs.matrix }}"}}
+      matrix: {{ "${{ steps.set-matrix.outputs.matrix }}" }}
     steps:
       - name: Get branches matching pattern
         id: set-matrix
         run: |
           # List all branches and filter
-          branches=$(gh api repos/{{print "${{ github.repository }}"}}/branches --paginate -q '.[] | .name' | grep -E '^(release-v.*\.x$|next$)')
+          branches=$(gh api repos/{{"${{ github.repository }}"}}/branches --paginate -q '.[] | .name' | grep -E '^(release-v.*\.x$|next$)')
           echo "Found branches:"
           echo "$branches"
           

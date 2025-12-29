@@ -1,8 +1,0 @@
-# Generated for Konflux Application openshift-pipelines-cli by openshift-pipelines/hack. DO NOT EDIT
----
-apiVersion: appstudio.redhat.com/v1alpha1
-kind: Application
-metadata:
-  name: openshift-pipelines-cli-main
-spec:
-  displayName: openshift-pipelines-cli-main

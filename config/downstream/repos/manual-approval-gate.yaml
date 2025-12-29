@@ -1,5 +1,6 @@
 name: p12n-manual-approval-gate
 upstream: openshift-pipelines/manual-approval-gate
+use-patch-branch: true
 components:
   - name: controller
   - name: webhook

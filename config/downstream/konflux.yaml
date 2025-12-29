@@ -3,7 +3,6 @@ namespace: tekton-ecosystem-tenant
 image-prefix: pipelines-
 applications:
   - core
-  - index
+#  - index
 versions:
-  - "next"
   - "1.22"
