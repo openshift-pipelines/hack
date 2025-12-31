@@ -8,82 +8,70 @@ import (
 	"os/exec"
 	"os/signal"
 	"path/filepath"
-
-	k "github.com/openshift-pipelines/hack/internal/konflux"
-	"gopkg.in/yaml.v2"
+	"strings"
 )
 
 const (
 	konfluxDir = ".konflux"
-	osp        = "https://github.com/openshift-pipelines/"
 )
 
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
 	defer cancel()
 
-	config := flag.String("config", filepath.Join("config", "konflux", "repository.yaml"), "specify the repository configuration")
+	versions := flag.String("versions", "", "comma-separated versions to apply (e.g., '1-22,0-2'). If not provided, applies all versions in .konflux/")
+	dryRun := flag.Bool("dry-run", false, "print commands without executing")
 	flag.Parse()
 
-	in, err := os.ReadFile(*config)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	c := &k.Config{}
-	if err := yaml.UnmarshalStrict(in, c); err != nil {
-		log.Fatalln("Unmarshal config", err)
-	}
-
-	for _, b := range c.Branches {
-		var versions []string
-		if len(b.Versions) == 0 {
-			versions = []string{b.Name}
-		} else {
-			for _, v := range b.Versions {
-				versions = append(versions, v.Version)
+	if *versions != "" {
+		// Apply specific versions
+		for _, version := range strings.Split(*versions, ",") {
+			version = strings.TrimSpace(version)
+			if version == "" {
+				continue
+			}
+			versionDir := filepath.Join(konfluxDir, version)
+			if _, err := os.Stat(versionDir); os.IsNotExist(err) {
+				log.Fatalf("Version directory %s does not exist", versionDir)
+			}
+			if err := apply(ctx, versionDir, *dryRun); err != nil {
+				log.Fatalln(err)
 			}
 		}
-
-		// Create temporary folder
-		dir, err := os.MkdirTemp("", "konflux-apply")
+	} else {
+		// Apply all versions in .konflux/
+		entries, err := os.ReadDir(konfluxDir)
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalf("Failed to read %s directory: %v", konfluxDir, err)
 		}
 
-		// Clone repository
-		if err := gitClone(ctx, dir, c.Repository, b.Name); err != nil {
-			log.Fatalln(err)
-		}
-		//Kubectl apply
-		if err := apply(ctx, dir, versions); err != nil {
-			log.Fatalln(err)
-		}
-	}
-}
-
-func apply(ctx context.Context, dir string, versions []string) error {
-	for _, version := range versions {
-		log.Printf("Apply %s on the cluster\n", version)
-		cmd := exec.CommandContext(ctx, "kubectl", "apply", "-R", "-f", filepath.Join(konfluxDir, version))
-		cmd.Dir = dir
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-
-		log.Printf("Final CMD : %s\n", cmd.String())
-
-		if err := cmd.Run(); err != nil {
-			return err
+		for _, entry := range entries {
+			if !entry.IsDir() {
+				continue
+			}
+			versionDir := filepath.Join(konfluxDir, entry.Name())
+			if err := apply(ctx, versionDir, *dryRun); err != nil {
+				log.Fatalln(err)
+			}
 		}
 	}
-	return nil
+
+	log.Println("Done applying Konflux manifests")
 }
 
-func gitClone(ctx context.Context, dir, repository string, branch string) error {
-	log.Printf("Cloning %s in %s\n", osp+repository, dir)
-	cmd := exec.CommandContext(ctx, "git", "clone", "-b", branch, osp+repository, ".")
-	cmd.Dir = dir
+func apply(ctx context.Context, dir string, dryRun bool) error {
+	log.Printf("Applying manifests from %s\n", dir)
+
+	args := []string{"apply", "-R", "-f", dir}
+	if dryRun {
+		args = []string{"apply", "--dry-run=client", "-R", "-f", dir}
+	}
+
+	cmd := exec.CommandContext(ctx, "kubectl", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
+	log.Printf("Running: %s\n", cmd.String())
 
 	return cmd.Run()
 }
