@@ -1,8 +1,42 @@
 # Konflux Apply
 
-The Konflux manifests are applied automatically via the [konflux-apply](../../.github/workflows/apply-konflux-manifests.yaml) Github Workflow.
+A tool to apply generated Konflux manifests from the `.konflux/` directory to the Konflux cluster.
 
-For this workflow, we use a token for Konflux setup as described in [the docs](https://gitlab.cee.redhat.com/konflux/docs/users/-/blob/main/topics/getting-started/getting-access.md#logging-to-the-internal-cluster-with-a-token). Therefor we need to setup a service account, role & rolebinding:
+## Usage
+
+The tool applies all YAML manifests from `.konflux/{version}/` directories recursively.
+
+```bash
+# Apply all versions in .konflux/
+go run ./cmd/konflux-apply/
+
+# Apply specific version
+go run ./cmd/konflux-apply/ --versions 1-22
+
+# Apply multiple versions (comma-separated)
+go run ./cmd/konflux-apply/ --versions "1-22,0-2"
+
+# Dry run (shows what would be applied without executing)
+go run ./cmd/konflux-apply/ --dry-run
+```
+
+## GitHub Workflow
+
+The Konflux manifests can be applied automatically via the [konflux-apply](../../.github/workflows/apply-konflux-manifests.yaml) GitHub Workflow. The workflow supports:
+
+- **Automatic triggers**: On push to `main` or `release-v*` branches
+- **Manual triggers**: With optional comma-separated versions input
+
+### Required Secrets
+
+| Secret | Description |
+|--------|-------------|
+| `KONFLUX_API_URL` | The Konflux cluster API URL |
+| `KONFLUX_SA_TOKEN` | The service account token (see setup below) |
+
+## Token Setup
+
+For the workflow, we use a token for Konflux setup as described in [the docs](https://gitlab.cee.redhat.com/konflux/docs/users/-/blob/main/topics/getting-started/getting-access.md#logging-to-the-internal-cluster-with-a-token). Therefore we need to setup a service account, role & rolebinding:
 
 1. Service account `gh-action`:
     ```
@@ -11,16 +45,16 @@ For this workflow, we use a token for Konflux setup as described in [the docs](h
 2. Role with minimal permissions to apply the Konflux manifests:
     ```
     kubectl apply -f ./manifests/gh-action-role.yaml
-      ```
+    ```
 3. Rolebinding
     ```
     kubectl apply -f ./manifests/gh-action-rolebinding.yaml
     ```
-4. Use the token from the `gh-action` Service account as the `KONFLUX_SA_TOKEN` repository secret used by the Github workflow
+4. Use the token from the `gh-action` Service account as the `KONFLUX_SA_TOKEN` repository secret used by the GitHub workflow
     ```
     kubectl create token gh-action --duration $((6*30*24))h
     ```
-   
+
 ## Revoke and Recreate Token
 
 As we use by default Tokens with a validity of 6 months, we need to recreate them periodically. This is done via the following:

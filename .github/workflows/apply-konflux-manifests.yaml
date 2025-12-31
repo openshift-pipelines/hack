@@ -1,0 +1,60 @@
+---
+name: Apply Konflux manifests to Openshift Cluster
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'release-v*'
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: 'Comma-separated versions to apply (e.g., 1-22,0-2). Leave empty to apply all versions.'
+        required: false
+        default: ''
+
+env:
+  KONFLUX_NAMESPACE: tekton-ecosystem-tenant
+
+jobs:
+  apply-konflux-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Download oc CLI
+        run: |
+          echo "Downloading stable oc from mirror.openshift.com"
+          curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+          tar -xzf openshift-client-linux.tar.gz
+          sudo mv oc kubectl /usr/local/bin/
+          rm openshift-client-linux.tar.gz README.md
+          echo "Download complete!"
+          oc version
+
+      - name: Login to Openshift Cluster
+        run: |
+          echo "Logging in to Konflux cluster"
+          oc login ${{ secrets.KONFLUX_API_URL }} --token=${{ secrets.KONFLUX_SA_TOKEN }}
+          echo "Login successful!"
+          oc project ${{ env.KONFLUX_NAMESPACE }}
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Apply Enterprise Contract Policy
+        run: |
+          echo "Applying Enterprise Contract Policy"
+          kubectl apply -f ./cmd/konflux-apply/manifests/entreprise-contract-policy.yaml
+
+      - name: Apply Konflux manifests
+        run: |
+          echo "Applying Konflux configuration"
+          if [ -n "${{ github.event.inputs.versions }}" ]; then
+            go run ./cmd/konflux-apply/ --versions "${{ github.event.inputs.versions }}"
+          else
+            go run ./cmd/konflux-apply/
+          fi
