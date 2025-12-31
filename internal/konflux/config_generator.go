@@ -149,6 +149,10 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		return err
 	}
 
+	if err := generateFileFromTemplate("release-plan-admission.yaml", application, filepath.Join(targetDir, "release-plan-admission.yaml"), application); err != nil {
+		return err
+	}
+
 	return nil
 }
 
