@@ -5,10 +5,10 @@ kind: IntegrationTestScenario
 metadata:
   name: openshift-pipelines-index-4-16-1-16-enterprise-contract
 spec:
-  application: operator-1-16-index-4-16-application
+  application: openshift-pipelines-index-4-16-1-16
   contexts:
     - description: execute the integration test for a Snapshot of the `component` type
-      name: component_operator-1-16-index-4-16
+      name: component
   params:
     - name: POLICY_CONFIGURATION
       value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-indexes
