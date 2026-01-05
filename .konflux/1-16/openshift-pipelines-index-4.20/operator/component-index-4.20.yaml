@@ -1,0 +1,18 @@
+# Generated for Konflux Application openshift-pipelines-index-4.20-1.16 by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"fbc-builder","bundle":"latest"}'
+  name: operator-1-16-index-4-20
+spec:
+  componentName: index-4-20
+  application: operator-1-16-index-4-20-application
+  build-nudges-ref:
+  - 
+  source:
+    git:
+      url: https://github.com/openshift-pipelines/operator.git
+      dockerfileUrl: .konflux/olm-catalog/index/v4.20/Dockerfile.catalog
+      revision: release-v1.16.x
