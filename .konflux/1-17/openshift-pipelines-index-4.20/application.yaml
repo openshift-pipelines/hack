@@ -3,6 +3,6 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Application
 metadata:
-  name: openshift-pipelines-index-4.20-1-17
+  name: openshift-pipelines-index-4-20-1-17
 spec:
   displayName: openshift-pipelines-index-4.20 1.17
