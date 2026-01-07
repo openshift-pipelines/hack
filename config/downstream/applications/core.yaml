@@ -14,7 +14,6 @@
     - tektoncd-results
     - tektoncd-triggers
 - name: openshift-pipelines-operator
-  namespace: tekton-ecosystem-tenant
   repos:
     - tektoncd-operator
 - name: openshift-pipelines-cli
