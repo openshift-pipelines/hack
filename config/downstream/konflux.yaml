@@ -5,4 +5,5 @@ applications:
   - core
 #  - index
 versions:
+  - "next"
   - "1.22"

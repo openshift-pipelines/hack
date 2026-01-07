@@ -1,0 +1,6 @@
+- name: syncer-service
+  org: openshift-pipelines
+  namespace: tekton-ecosystem-tenant
+  release-to-github: true
+  repos:
+  - syncer-service

@@ -1,0 +1,4 @@
+applications:
+  - syncer-service
+versions:
+  - 0.1

@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Add main  version by default to add some main specific config.
-	for _, version := range append(config.Versions, "main") {
+	for _, version := range append([]string{"main"}, config.Versions...) {
 		versionConfig := k.ReleaseConfig{
 			Version: k.Release{
 				Version: version,

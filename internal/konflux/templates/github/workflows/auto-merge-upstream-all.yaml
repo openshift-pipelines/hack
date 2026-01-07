@@ -1,4 +1,4 @@
-name: auto-merge-upstream-{{.Upstream}}
+name: auto-merge-upstream
 on:
   workflow_dispatch: {}
   schedule:
