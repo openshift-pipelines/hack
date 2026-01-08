@@ -20,3 +20,4 @@
   repos:
     - tektoncd-cli
     - opc
+    - serve-tkn-cli

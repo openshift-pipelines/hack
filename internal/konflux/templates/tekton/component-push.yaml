@@ -3,10 +3,10 @@ kind: PipelineRun
 metadata:
   annotations:
     pipelinesascode.tekton.dev/cancel-in-progress: "true" # Cancel in-progress pipelines
-    {{- if  and (ne .Repository.Branch.Name "main") (contains "index" .Name) }}
-    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/fbc-build.yaml"
-    {{- else }}{{- if  or (ne .Repository.Branch.Name "main") (ne .Repository.Name "operator") }}
-    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/main/.tekton/docker-build-ta.yaml"
+    {{- if  and (ne .Repository.Branch.Name "next") (contains "index" .Name) }}
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/next/.tekton/fbc-build.yaml"
+    {{- else }}{{- if  or (ne .Repository.Branch.Name "next") (ne .Repository.Name "operator") }}
+    pipelinesascode.tekton.dev/pipeline: "https://raw.githubusercontent.com/openshift-pipelines/operator/refs/heads/next/.tekton/docker-build-ta.yaml"
     {{- end }}
     {{- end }}
     build.appstudio.openshift.io/repo: {{.Repository.Url}}?rev={{"{{revision}}"}}
@@ -17,7 +17,7 @@ metadata:
       == "{{.Repository.Branch.Name}}" &&
       ({{.Tekton.WatchedSources}} ||
       "{{.Dockerfile}}".pathChanged() ||
-      {{- if  and (eq .Repository.Branch.Name "main")  (eq .Repository.Name "tektoncd-operator") }} ".tekton/*build*.yaml".pathChanged() || {{- end }}
+      {{- if  and (eq .Repository.Branch.Name "next")  (eq .Repository.Name "operator") }} ".tekton/*build*.yaml".pathChanged() || {{- end }}
       ".tekton/{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-push.yaml".pathChanged())
     {{- if .Tekton.NudgeFiles }}
     build.appstudio.openshift.io/build-nudge-files: "{{.Tekton.NudgeFiles}}"
