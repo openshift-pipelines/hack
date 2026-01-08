@@ -37,4 +37,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-21-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-21-cv4dm
+  snapshot: openshift-pipelines-core-1-21-dbhbw
