@@ -2,9 +2,16 @@
 name: Generate konflux configurations
 
 on:
+  pull_request:
+    branches:
+      - 'main'
+      - 'next'
+      - 'release-v*'
   push:
     branches:
       - 'main'
+      - 'next'
+      - 'release-v*'
   workflow_dispatch: # Manual workflow trigger
 
 concurrency:
@@ -50,11 +57,13 @@ jobs:
           git config user.email pipelines-extcomm@redhat.com
           gh auth status
           gh auth setup-git
-          go run ./cmd/konflux/ -config config/${{matrix.config}}/konflux.yaml
+          go run ./cmd/konflux/ --config config/${{ matrix.config }}/konflux.yaml --dry-run ${{ github.event_name == 'pull_request'}}
+
         env:
           GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
           GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
       - name: Commit new changes
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name openshift-pipelines-bot
           git config user.email pipelines-extcomm@redhat.com

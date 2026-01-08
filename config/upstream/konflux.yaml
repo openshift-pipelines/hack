@@ -1,4 +1,4 @@
 applications:
-  - tekton-kueue
+  - syncer-service
 versions:
-  - 0.2
+  - 0.1

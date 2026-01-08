@@ -106,6 +106,9 @@ func generateGitHubConfig(repo Repository, targetDir string) error {
 }
 
 func generateKonfluxConfig(application Application) error {
+	if application.Release.Version == "main" {
+		return nil
+	}
 	targetDir := filepath.Join(konfluxDir, hyphenize(application.Release.Version), application.Name)
 
 	log.Printf("Delete Konflux dir in %s\n", targetDir)

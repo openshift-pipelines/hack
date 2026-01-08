@@ -1,0 +1,5 @@
+name: serve-tkn-cli
+components:
+  - name: serve-tkn-cli
+tekton:
+  watched-sources: '"***".pathChanged()'
