@@ -19,7 +19,83 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-7999
+          - id: SRVKP-3504
+            source: issues.redhat.com
+          - id: SRVKP-4602
+            source: issues.redhat.com
+          - id: SRVKP-5837
+            source: issues.redhat.com
+          - id: SRVKP-6211
+            source: issues.redhat.com
+          - id: SRVKP-7152
+            source: issues.redhat.com
+          - id: SRVKP-7187
+            source: issues.redhat.com
+          - id: SRVKP-7303
+            source: issues.redhat.com
+          - id: SRVKP-7364
+            source: issues.redhat.com
+          - id: SRVKP-7417
+            source: issues.redhat.com
+          - id: SRVKP-7506
+            source: issues.redhat.com
+          - id: SRVKP-8006
+            source: issues.redhat.com
+          - id: SRVKP-8026
+            source: issues.redhat.com
+          - id: SRVKP-8165
+            source: issues.redhat.com
+          - id: SRVKP-8205
+            source: issues.redhat.com
+          - id: SRVKP-8324
+            source: issues.redhat.com
+          - id: SRVKP-8326
+            source: issues.redhat.com
+          - id: SRVKP-8363
+            source: issues.redhat.com
+          - id: SRVKP-8608
+            source: issues.redhat.com
+          - id: SRVKP-8663
+            source: issues.redhat.com
+          - id: SRVKP-8835
+            source: issues.redhat.com
+          - id: SRVKP-8902
+            source: issues.redhat.com
+          - id: SRVKP-8908
+            source: issues.redhat.com
+          - id: SRVKP-8910
+            source: issues.redhat.com
+          - id: SRVKP-8976
+            source: issues.redhat.com
+          - id: SRVKP-8984
+            source: issues.redhat.com
+          - id: SRVKP-8993
+            source: issues.redhat.com
+          - id: SRVKP-8998
+            source: issues.redhat.com
+          - id: SRVKP-9031
+            source: issues.redhat.com
+          - id: SRVKP-9044
+            source: issues.redhat.com
+          - id: SRVKP-9050
+            source: issues.redhat.com
+          - id: SRVKP-9067
+            source: issues.redhat.com
+          - id: SRVKP-9122
+            source: issues.redhat.com
+          - id: SRVKP-9151
+            source: issues.redhat.com
+          - id: SRVKP-9152
+            source: issues.redhat.com
+          - id: SRVKP-9315
+            source: issues.redhat.com
+          - id: SRVKP-9336
+            source: issues.redhat.com
+          - id: SRVKP-9337
+            source: issues.redhat.com
+          - id: SRVKP-9397
+            source: issues.redhat.com
+          - id: SRVKP-9456
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
