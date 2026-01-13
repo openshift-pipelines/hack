@@ -1,16 +1,6 @@
 name: serve-tkn-cli
 components:
-  - name: tkn
-    nudges:
-      - serve-tkn-cli-{{hyphenize .Version.Version}}-serve-tkn-cli
-  - name: opc
-    nudges:
-      - serve-tkn-cli-{{hyphenize .Version.Version}}-serve-tkn-cli
-  - name: tkn-pac
-    nudges:
-      - serve-tkn-cli-{{hyphenize .Version.Version}}-serve-tkn-cli
   - name: serve-tkn-cli
-  - name: cli
 
 tekton:
   watched-sources: '"***".pathChanged()'
