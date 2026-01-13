@@ -69,5 +69,6 @@ type Version struct {
 	ImagePrefix string `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix string `json:"image-suffix" yaml:"image-suffix"`
 	AutoRelease bool   `json:"auto-release" yaml:"auto-release"`
+	Released    bool   `json:"released" yaml:"released"`
 	Branch      *Branch
 }
