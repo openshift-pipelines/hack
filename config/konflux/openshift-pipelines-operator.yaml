@@ -3,6 +3,6 @@ versions:
   "1.21":
     version: "1.21"
     image-suffix: -rhel9
-    auto-release: true
+    released: true
 resources:
   - operator
