@@ -57,7 +57,7 @@ jobs:
           git config user.email pipelines-extcomm@redhat.com
           gh auth status
           gh auth setup-git
-          go run ./cmd/konflux/ --config config/${{ matrix.config }}/konflux.yaml --dry-run ${{ github.event_name == 'pull_request'}}
+          go run ./cmd/konflux/ --config config/${{ matrix.config }}/konflux.yaml --dry-run=${{ github.event_name == 'pull_request'}}
 
         env:
           GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
