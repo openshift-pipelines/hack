@@ -2,7 +2,5 @@ name: syncer-service
 components:
   - name: syncer-service
     dockerfile: Dockerfile
-    prefetch-input: |
-      {"type": "gomod", "path": "."}
 tekton:
   watched-sources: '"***".pathChanged()'

@@ -19,7 +19,7 @@ spec:
     - name: release_dir
       default: release
     - name: git_secret_name
-      default: github
+      default: github-release
     - name: git_secret_key
       default: github-token
     - name: release_to_github
