@@ -1,0 +1,6 @@
+- name: multicluster-proxy-aae
+  org: openshift-pipelines
+  namespace: tekton-ecosystem-tenant
+  release-to-github: true
+  repos:
+  - multicluster-proxy-aae
