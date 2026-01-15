@@ -1,0 +1,4 @@
+applications:
+  - multicluster-proxy-aae
+versions:
+  - 0.1

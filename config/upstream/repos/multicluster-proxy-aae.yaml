@@ -1,0 +1,6 @@
+name: multicluster-proxy-aae
+components:
+  - name: multicluster-proxy-aae
+    dockerfile: Dockerfile
+tekton:
+  watched-sources: '"***".pathChanged()'
