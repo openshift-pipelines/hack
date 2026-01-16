@@ -1,4 +1,5 @@
 applications:
   - syncer-service
+  - multicluster-proxy-aae
 versions:
   - 0.1
