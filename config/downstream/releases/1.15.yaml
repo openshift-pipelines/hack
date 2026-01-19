@@ -1,6 +1,0 @@
-version: "1.15"
-patch-version: 1.15.4
-image-suffix: "-rhel8"
-branches:
-  tektoncd-operator:
-    upstream: release-v0.73.x
