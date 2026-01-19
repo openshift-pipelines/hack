@@ -1,3 +1,6 @@
+- name: openshift-pipelines-index-4.15
+  repos:
+    - operator-index-4.15
 - name: openshift-pipelines-index-4.16
   repos:
     - operator-index-4.16
