@@ -100,4 +100,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-21-stage-release-as-op
-  snapshot: openshift-pipelines-operator-1-21-zkrg8
+  snapshot: openshift-pipelines-operator-1-21-z5rjq

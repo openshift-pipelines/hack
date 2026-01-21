@@ -33,4 +33,4 @@ spec:
       type: RHEA
   gracePeriodDays: 10
   releasePlan: serve-tkn-cli-1-21-stage-release-as-op
-  snapshot: serve-tkn-cli-1-21-pj858
+  snapshot: serve-tkn-cli-1-21-gn79j
