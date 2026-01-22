@@ -13,6 +13,7 @@
     - tektoncd-pruner
     - tektoncd-results
     - tektoncd-triggers
+    - syncer-service
 - name: openshift-pipelines-operator
   namespace: tekton-ecosystem-tenant
   repos:
