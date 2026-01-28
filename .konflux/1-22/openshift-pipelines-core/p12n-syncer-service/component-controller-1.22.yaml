@@ -5,7 +5,7 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: syncer-service-1-22-controller
+  name: p12n-syncer-service-1-22-controller
 spec:
   componentName: controller
   application: openshift-pipelines-core-1-22
@@ -13,6 +13,6 @@ spec:
   - operator-1-22-bundle
   source:
     git:
-      url: https://github.com/openshift-pipelines/syncer-service.git
+      url: https://github.com/openshift-pipelines/p12n-syncer-service.git
       dockerfileUrl: .konflux/dockerfiles/controller.Dockerfile
       revision: release-v1.22.x
