@@ -1,4 +1,4 @@
-name: syncer-service
+name: p12n-syncer-service
 upstream: openshift-pipelines/syncer-service
 use-patch-branch: true
 components:
