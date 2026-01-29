@@ -14,6 +14,7 @@
     - tektoncd-results
     - tektoncd-triggers
     - syncer-service
+    - multicluster-proxy-aae
 - name: openshift-pipelines-operator
   namespace: tekton-ecosystem-tenant
   repos:
