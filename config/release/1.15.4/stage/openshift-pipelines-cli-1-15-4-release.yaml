@@ -21,6 +21,12 @@ spec:
         fixed:
           - id: SRVKP-7481
             source: issues.redhat.com
+          - id: SRVKP-7344
+            source: issues.redhat.com
+          - id: SRVKP-7201
+            source: issues.redhat.com
+          - id: SRVKP-7198
+            source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -34,7 +40,7 @@ spec:
       topic: |
         The 1.15.4 release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
-      type: RHBA
+      type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-15-stage-release-as-op
   snapshot: openshift-pipelines-cli-1-15-g84s7
