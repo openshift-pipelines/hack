@@ -1,0 +1,22 @@
+# Generated for Konflux Application openshift-pipelines-operator by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: operator-next-operator
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: operator-next-operator
+    appstudio.redhat.com/application: openshift-pipelines-operator-next
+spec:
+  image:
+    name: pipelines-rhel9-operator
+    visibility: public
+  notifications:
+    - config:
+        url: https://bombino.api.redhat.com/v1/sbom/quay/push
+      event: repo_push
+      method: webhook
+      title: SBOM-event-to-Bombino
