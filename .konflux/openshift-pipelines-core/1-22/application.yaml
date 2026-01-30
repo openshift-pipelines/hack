@@ -1,0 +1,8 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Application
+metadata:
+  name: openshift-pipelines-core-1-22
+spec:
+  displayName: openshift-pipelines-core-1-22
