@@ -1,6 +1,6 @@
-version: next
+version: multicluster
 image-suffix: -rhel9
-patch-version: next
+patch-version: multicluster
 branches:
   git-init:
     upstream: release-v1.2.x
@@ -22,8 +22,6 @@ branches:
     upstream: release-v0.43.x
   tektoncd-hub:
     upstream: release-v1.23.6
-  tektoncd-operator:
-    upstream: release-v0.78.x
   tektoncd-pipeline:
     upstream: release-v1.9.x
   tektoncd-pruner:
