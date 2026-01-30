@@ -219,6 +219,9 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		if !(c.NoPrefixUpstream || repo.NoPrefixUpstream) && repo.Upstream != "" {
 			c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
 		}
+		if repo.Upstream == "" {
+			c.ImagePrefix = repo.Name + "/" + c.ImagePrefix
+		}
 	}
 
 	//log.Printf("Using image prefix: %s", c.ImagePrefix)

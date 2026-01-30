@@ -9,7 +9,7 @@ metadata:
 spec:
   application: {{.Name | hyphenize}}-{{hyphenize .Release.Version}}
   tenantPipeline:
-    serviceAccountName: release-registry-{{.Name | hyphenize}}-{{hyphenize .Release.Version}}
+    serviceAccountName: release-registry-{{.Name | hyphenize}}
     pipelineRef:
       resolver: git
       params:

@@ -109,10 +109,18 @@ func generateKonfluxConfig(application Application) error {
 	if application.Release.Version == "main" {
 		return nil
 	}
-	targetDir := filepath.Join(konfluxDir, hyphenize(application.Release.Version), application.Name)
+	appDir := filepath.Join(konfluxDir, application.Name)
+	targetDir := filepath.Join(appDir, hyphenize(application.Release.Version))
 
 	log.Printf("Delete Konflux dir in %s\n", targetDir)
 	if err := os.RemoveAll(targetDir); err != nil {
+		return err
+	}
+
+	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(appDir, "service-account.yaml"), application); err != nil {
+		return err
+	}
+	if err := generateFileFromTemplate("role.yaml", application, filepath.Join(appDir, "role.yaml"), application); err != nil {
 		return err
 	}
 
@@ -132,12 +140,6 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		return err
 	}
 	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(targetDir, "tests.yaml"), application); err != nil {
-		return err
-	}
-	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(targetDir, "service-account.yaml"), application); err != nil {
-		return err
-	}
-	if err := generateFileFromTemplate("role.yaml", application, filepath.Join(targetDir, "role.yaml"), application); err != nil {
 		return err
 	}
 	if application.ReleaseToGitHub {
