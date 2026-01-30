@@ -1,0 +1,28 @@
+# Generated for Konflux Application multicluster-proxy-aae by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: "false"
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: multicluster-proxy-aae-0-1-github-rp
+spec:
+  application: multicluster-proxy-aae-0-1
+  tenantPipeline:
+    serviceAccountName: release-registry-multicluster-proxy-aae
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: https://github.com/openshift-pipelines/hack.git
+        - name: revision
+          # value: release-v0.1.x 
+          value: main
+        - name: pathInRepo
+          value: pipelines/release-pipeline.yaml
+    params:
+      - name: release_version
+        value: "v0.1.0"
+      - name: release_to_github
+        value: "true"
