@@ -1,8 +1,7 @@
-name: p12n-console-plugin
-upstream: openshift-pipelines/console-plugin
-no-prefix-upstream: true
+name: console-plugin
 components:
   - name: console-plugin
-    no-image-prefix: true
     prefetch-input: |-
-      [{"type": "rpm", "path": ".konflux/rpms"}, {"type": "yarn", "path": "upstream"}]
+      [{"type": "yarn"}, {"type": "npm", "path": ".konflux/npm"}]
+tekton:
+  watched-sources: '"***".pathChanged()'
