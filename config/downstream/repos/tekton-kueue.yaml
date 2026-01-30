@@ -2,6 +2,6 @@ name: tekton-kueue
 upstream: konflux-ci/tekton-kueue
 no-prefix-upstream: true
 components:
-  - name: kueue
+  - name: scheduler
     prefetch-input: |
       {"type": "gomod", "path": "upstream"}

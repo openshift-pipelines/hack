@@ -1,12 +1,12 @@
-#- name: openshift-pipelines-core
-#  repos:
+- name: openshift-pipelines-core
+  repos:
 #    - console-plugin
 #    - git-init
 #    - manual-approval-gate
 #    - pipelines-as-code
 #    - tekton-assist
 #    - tekton-caches
-#    - tekton-kueue
+    - tekton-kueue
 #    - tektoncd-chains
 #    - tektoncd-hub
 #    - tektoncd-pipeline
