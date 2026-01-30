@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	k "github.com/openshift-pipelines/hack/internal/konflux"
@@ -137,8 +138,8 @@ func updateRepository(repo *k.Repository, a k.Application) error {
 	}
 
 	var branchName, upstreamBranch string
-
-	if a.Release.Version == "main" || a.Release.Version == "next" {
+	_, err := strconv.ParseFloat(a.Release.Version, 64)
+	if err != nil {
 		branchName = a.Release.Version
 		upstreamBranch = "main"
 	} else {
@@ -224,7 +225,8 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		}
 	}
 
-	//log.Printf("Using image prefix: %s", c.ImagePrefix)
+	log.Printf("Using  ImagePrefix: %s", c.ImagePrefix)
+	log.Printf("Using  ImageSuffix: %s", c.ImageSuffix)
 	return nil
 }
 
