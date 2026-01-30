@@ -7,12 +7,14 @@
 #    - tekton-assist
 #    - tekton-caches
     - tekton-kueue
-#    - tektoncd-chains
-#    - tektoncd-hub
-#    - tektoncd-pipeline
-#    - tektoncd-pruner
-#    - tektoncd-results
-#    - tektoncd-triggers
+    - tektoncd-chains
+    - tektoncd-hub
+    - tektoncd-pipeline
+    - tektoncd-pruner
+    - tektoncd-results
+    - tektoncd-triggers
+    - syncer-service
+    - multicluster-proxy-aae
 - name: openshift-pipelines-operator
   repos:
     - tektoncd-operator

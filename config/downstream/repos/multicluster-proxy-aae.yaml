@@ -1,0 +1,5 @@
+name: p12n-multicluster-proxy-aae
+upstream: openshift-pipelines/multicluster-proxy-aae
+use-patch-branch: true
+components:
+  - name: proxy-server
