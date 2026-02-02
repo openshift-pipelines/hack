@@ -6,4 +6,4 @@ applications:
   - core
   - index
 versions:
-  - "multicluster"
+  - "next"
