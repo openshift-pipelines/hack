@@ -109,7 +109,7 @@ func generateKonfluxConfig(application Application) error {
 	if application.Release.Version == "main" {
 		return nil
 	}
-	appDir := filepath.Join(konfluxDir, application.Name)
+	appDir := filepath.Join(konfluxDir, application.Config.Product, application.Name)
 	targetDir := filepath.Join(appDir, hyphenize(application.Release.Version))
 
 	log.Printf("Delete Konflux dir in %s\n", targetDir)

@@ -1,6 +1,7 @@
 organization: openshift-pipelines
 namespace: tekton-ecosystem-tenant
 image-prefix: pipelines-
+product: openshift-pipelines
 applications:
   - core
   - index
