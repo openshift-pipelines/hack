@@ -44,6 +44,11 @@ func main() {
 			}
 			versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
 			versionConfig.Version.Version = version
+			if versionConfig.Version.Version == "next" {
+				versionConfig.Version.PatchVersion = version
+			} else if !strings.HasPrefix(versionConfig.Version.PatchVersion, "v") {
+				versionConfig.Version.PatchVersion = "v" + versionConfig.Version.PatchVersion
+			}
 		}
 
 		for _, applicationName := range config.Applications {
@@ -159,9 +164,12 @@ func updateRepository(repo *k.Repository, a k.Application) error {
 	if repo.Tekton == (k.Tekton{}) {
 		repo.Tekton = k.Tekton{}
 		if repo.Tekton.WatchedSources == "" {
-			repo.Tekton.WatchedSources = `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`
+			if repo.Upstream != "" {
+				repo.Tekton.WatchedSources = `"upstream/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()`
+			} else {
+				repo.Tekton.WatchedSources = `"***".pathChanged()`
+			}
 		}
-
 	}
 
 	return nil

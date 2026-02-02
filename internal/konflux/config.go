@@ -8,6 +8,7 @@ type Config struct {
 	Repositories []Repository `json:"repos" yaml:"repos"`
 	ImagePrefix  string       `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix  string       `json:"image-suffix" yaml:"image-suffix"`
+	Product      string       `json:"product" yaml:"product"`
 }
 
 type Application struct {
