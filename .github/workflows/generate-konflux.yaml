@@ -11,6 +11,7 @@ on:
     branches:
       - 'main'
       - 'next'
+      - 'multi-cluster'
       - 'release-v*'
   workflow_dispatch: # Manual workflow trigger
 
