@@ -6,4 +6,3 @@ applications:
   - index
 versions:
   - "next"
-  - "1.22"
