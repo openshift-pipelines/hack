@@ -5,7 +5,7 @@ on:
   pull_request:
     branches:
       - 'main'
-      - 'next'
+      - 'multi-cluster'
       - 'release-v*'
   push:
     branches:
