@@ -11,4 +11,4 @@ metadata:
 spec:
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-1-21-fbc-4-18-prod-release-as-op
-  snapshot: openshift-pipelines-index-4-18-1-21-rg9vs
+  snapshot: openshift-pipelines-index-4-18-1-21-wdn5b

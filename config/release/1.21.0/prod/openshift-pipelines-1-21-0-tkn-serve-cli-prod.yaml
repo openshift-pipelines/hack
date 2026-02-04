@@ -20,7 +20,7 @@ spec:
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      release-name: openshift-pipelines-next
+      release-name: openshift-pipelines-1.21.0
       solution: |
         Before applying this update, make sure all previously released advisory
         relevant to your system have been applied.
@@ -28,9 +28,9 @@ spec:
         https://access.redhat.com/articles/11258
       synopsis: "Red Hat OpenShift Pipelines Release 1.21.0"
       topic: |
-        The 1.21.0 release of Red Hat OpenShift Pipelines Operator..
-        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+        The 1.21.0 release of Red Hat OpenShift Pipelines Operator.
+        For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHEA
   gracePeriodDays: 10
   releasePlan: serve-tkn-cli-1-21-prod-release-as-op
-  snapshot: serve-tkn-cli-1-21-pj858
+  snapshot: serve-tkn-cli-1-21-xqd4t

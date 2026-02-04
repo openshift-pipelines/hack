@@ -20,7 +20,7 @@ spec:
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      release-name: openshift-pipelines-next
+      release-name: openshift-pipelines-1.21.0
       solution: |
         Before applying this update, make sure all previously released advisory
         relevant to your system have been applied.
