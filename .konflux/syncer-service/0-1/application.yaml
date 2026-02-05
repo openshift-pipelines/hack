@@ -1,0 +1,8 @@
+# Generated for Konflux Application syncer-service by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Application
+metadata:
+  name: syncer-service-0-1
+spec:
+  displayName: syncer-service-0-1
