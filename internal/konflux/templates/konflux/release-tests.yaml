@@ -2,9 +2,9 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{hyphenize .Name}}-{{hyphenize .Version.Version}}-release-tests
+  name: {{hyphenize .Name}}-{{hyphenize .Release.Version}}-release-tests
 spec:
-  application: {{hyphenize .Name}}-{{hyphenize .Version.Version}}
+  application: {{hyphenize .Name}}-{{hyphenize .Release.Version}}
   contexts:
     - description: execute the integration test for a Snapshot created for a `push` event
       name: push
@@ -15,5 +15,5 @@ spec:
       - name: revision
         value: main
       - name: pathInRepo
-        value: .konflux/tekton/bundle-e2e-pipeline.yaml
+        value: .konflux/tekton/release-test-pipeline.yaml
     resolver: git
