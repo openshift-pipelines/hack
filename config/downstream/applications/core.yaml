@@ -13,8 +13,8 @@
     - tektoncd-pruner
     - tektoncd-results
     - tektoncd-triggers
-#    - syncer-service
-#    - multicluster-proxy-aae
+    - syncer-service
+    - multicluster-proxy-aae
 - name: openshift-pipelines-operator
   repos:
     - tektoncd-operator
