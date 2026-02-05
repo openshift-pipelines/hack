@@ -142,14 +142,12 @@ func generateKonfluxApplication(application Application, targetDir string) error
 	if err := generateFileFromTemplate("tests.yaml", application, filepath.Join(targetDir, "tests.yaml"), application); err != nil {
 		return err
 	}
-	if application.ReleaseToGitHub {
-		tempApplication := application
-		tempApplication.AutoRelease = false
-		if err := generateFileFromTemplate("release-plan.yaml", tempApplication, filepath.Join(targetDir, "release-plan_github.yaml"), tempApplication); err != nil {
+	log.Printf("Create Release Tests in %s\n", targetDir)
+	if strings.Contains(application.Name, "index") {
+		if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(targetDir, "release-tests.yaml"), application); err != nil {
 			return err
 		}
 	}
-	application.ReleaseToGitHub = false
 	if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(targetDir, "release-plan.yaml"), application); err != nil {
 		return err
 	}

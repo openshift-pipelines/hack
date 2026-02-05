@@ -1,16 +1,13 @@
 name: operator
-upstream: openshift-pipelines/operator-multicluster
-no-prefix-upstream: true
+upstream: tektoncd/operator
 components:
   - name: operator
     image-prefix: rhel9-
+    no-prefix-upstream: true
     no-image-suffix: true
   - name: webhook
-    image-prefix: operator-
   - name: proxy
-    image-prefix: operator-
   - name: bundle
-    image-prefix: operator-
     no-image-suffix: true
     nudges:
       - operator-{{hyphenize .Version.Version}}-index-4-20
