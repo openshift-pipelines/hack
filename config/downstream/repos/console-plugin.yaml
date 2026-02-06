@@ -1,7 +1,6 @@
 name: console-plugin
+upstream: openshift-pipelines/p12n-console-plugin
 components:
   - name: console-plugin
     prefetch-input: |-
       [{"type": "yarn"}, {"type": "npm", "path": ".konflux/npm"}]
-tekton:
-  watched-sources: '"***".pathChanged()'
