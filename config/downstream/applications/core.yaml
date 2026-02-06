@@ -1,6 +1,5 @@
 - name: openshift-pipelines-core
   repos:
-    - console-plugin
     - git-init
     - manual-approval-gate
     - pipelines-as-code
@@ -15,11 +14,8 @@
     - tektoncd-triggers
     - syncer-service
     - multicluster-proxy-aae
-- name: openshift-pipelines-operator
-  repos:
-    - tektoncd-operator
-- name: openshift-pipelines-cli
-  repos:
+    - console-plugin
     - tektoncd-cli
     - opc
     - serve-tkn-cli
+    - tektoncd-operator
