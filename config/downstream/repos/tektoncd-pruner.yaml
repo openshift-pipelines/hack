@@ -2,3 +2,4 @@ name: tektoncd-pruner
 upstream: tektoncd/pruner
 components:
   - name: controller
+  - name: webhook
