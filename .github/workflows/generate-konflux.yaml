@@ -31,11 +31,13 @@ jobs:
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-core.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-cli.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-operator.yaml
-        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.15.yaml 
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.14.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.16.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.17.yaml 
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.18.yaml
         go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.19.yaml
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.20.yaml 
+        go run ./cmd/konflux/ config/konflux/openshift-pipelines-index-4.21.yaml 
       env:
         GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
