@@ -1,0 +1,22 @@
+# Generated for Konflux Application multicluster-proxy-aae by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ImageRepository
+metadata:
+  name: multicluster-proxy-aae-0-1-multicluster-proxy-aae
+  annotations:
+    image-controller.appstudio.redhat.com/update-component-image: "true"
+    image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
+  labels:
+    appstudio.redhat.com/component: multicluster-proxy-aae-0-1-multicluster-proxy-aae
+    appstudio.redhat.com/application: multicluster-proxy-aae-0-1
+spec:
+  image:
+    name: multicluster-proxy-aae/multicluster-proxy-aae-rhel9
+    visibility: public
+  notifications:
+    - config:
+        url: https://bombino.api.redhat.com/v1/sbom/quay/push
+      event: repo_push
+      method: webhook
+      title: SBOM-event-to-Bombino
