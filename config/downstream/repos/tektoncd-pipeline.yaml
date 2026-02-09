@@ -8,7 +8,7 @@ components:
   - name: nop
   - name: resolvers
     tekton:
-      watched-sources: ("dependencies/tini/***".pathChanged())
+      watched-sources: ("dependencies/tini/***".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged() )
   - name: sidecarlogresults
   - name: webhook
   - name: workingdirinit

@@ -1,4 +1,4 @@
-name: p12n-tekton-assist
+repo: p12n-tekton-assist
 upstream: openshift-pipelines/tekton-assist
 no-prefix-upstream: true
 components:

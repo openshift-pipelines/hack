@@ -24,6 +24,7 @@ type Application struct {
 }
 
 type Repository struct {
+	Repo             string
 	Name             string
 	Upstream         string
 	Url              string
