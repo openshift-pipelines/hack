@@ -1,4 +1,4 @@
-name: p12n-opc
+repo: p12n-opc
 upstream: openshift-pipelines/opc
 no-prefix-upstream: true
 components:

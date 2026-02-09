@@ -135,10 +135,16 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 	return applications, nil
 }
 
-func updateRepository(repo *k.Repository, a k.Application) error {
+func updateRepository(name string, repo *k.Repository, a k.Application) error {
 	repo.Application = a
+	if repo.Name == "" {
+		repo.Name = name
+	}
+	if repo.Repo == "" {
+		repo.Repo = repo.Name
+	}
 	if repo.Url == "" {
-		repository := fmt.Sprintf("https://github.com/%s/%s.git", a.Org, repo.Name)
+		repository := fmt.Sprintf("https://github.com/%s/%s.git", a.Org, repo.Repo)
 		repo.Url = repository
 	}
 
@@ -183,7 +189,7 @@ func readRepository(dir, repoName string, app *k.Application, branch k.Branch) (
 	}
 
 	repository.Branch = branch
-	if err := updateRepository(&repository, *app); err != nil {
+	if err := updateRepository(repoName, &repository, *app); err != nil {
 		return k.Repository{}, err
 	}
 	for i := range repository.Components {
@@ -222,6 +228,7 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 			c.ImageSuffix = DefaultImageSuffix
 		}
 	}
+
 	// This is the case for git-init where we don't require upstream name because comet created is pipelines-git-init-rhel8
 	if !c.NoImagePrefix {
 		c.ImagePrefix = version.ImagePrefix + c.ImagePrefix
