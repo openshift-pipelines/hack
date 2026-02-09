@@ -3,5 +3,23 @@ components:
   - name: index-4.21
     nudges: [ "" ]
     no-image-suffix: true
+  - name: index-4.20
+    nudges: [ "" ]
+    no-image-suffix: true
+  - name: index-4.19
+    nudges: [ "" ]
+    no-image-suffix: true
+  - name: index-4.19
+    nudges: [ "" ]
+    no-image-suffix: true
+  - name: index-4.18
+    nudges: [ "" ]
+    no-image-suffix: true
+  - name: index-4.17
+    nudges: [ "" ]
+    no-image-suffix: true
+  - name: index-4.16
+    nudges: [ "" ]
+    no-image-suffix: true
 tekton:
   watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())

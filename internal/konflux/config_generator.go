@@ -61,10 +61,10 @@ func generateTektonConfig(repo Repository, targetDir string) error {
 
 	for _, c := range repo.Components {
 		v := c.Version
-		if err := generateFileFromTemplate("component-pull-request.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(repo.Name)), hyphenize(v.Version), c.Name)), repo.Application); err != nil {
+		if err := generateFileFromTemplate("component-pull-request.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-pull-request.yaml", hyphenize(basename(c.Repository.Name)), hyphenize(v.Version), c.Name)), repo.Application); err != nil {
 			return err
 		}
-		if err := generateFileFromTemplate("component-push.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(repo.Name)), hyphenize(v.Version), c.Name)), repo.Application); err != nil {
+		if err := generateFileFromTemplate("component-push.yaml", c, filepath.Join(target, fmt.Sprintf("%s-%s-%s-push.yaml", hyphenize(basename(c.Repository.Name)), hyphenize(v.Version), c.Name)), repo.Application); err != nil {
 			return err
 		}
 	}

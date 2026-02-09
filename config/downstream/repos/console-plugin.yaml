@@ -1,5 +1,6 @@
-name: console-plugin
-upstream: openshift-pipelines/p12n-console-plugin
+repo: p12n-console-plugin
+upstream: openshift-pipelines/console-plugin
+no-prefix-upstream: true
 components:
   - name: console-plugin
     prefetch-input: |-
