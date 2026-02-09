@@ -1,4 +1,4 @@
-name: p12n-multicluster-proxy-aae
+repo: p12n-multicluster-proxy-aae
 upstream: openshift-pipelines/multicluster-proxy-aae
 components:
   - name: proxy-server

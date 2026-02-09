@@ -1,4 +1,4 @@
-name: p12n-tekton-caches
+repo: p12n-tekton-caches
 upstream: openshift-pipelines/tekton-caches
 no-prefix-upstream: true
 components:
