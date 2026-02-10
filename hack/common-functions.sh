@@ -62,11 +62,11 @@ update-upstream-versions() {
     UsePatchBranch=$(yq e '.use-patch-branch' "$file")
     # Skip when upstream is empty
     [ "$upstream" = "null" ] && upstream=""
-    if [ -z "$upstream" ]; then
+    if [[ -z "$upstream" || "$upstream" == "tektoncd/operator" ]]; then
       continue
     fi
 
-    echo "Upstream: $upstream, Downstream: $downstream"
+    echo "Downstream: $downstream , Upstream: $upstream"
     if LATEST=$(gh release view --repo $upstream --json tagName -q .tagName 2>/dev/null); then
       echo "Latest release for $upstream : $LATEST"
     else
