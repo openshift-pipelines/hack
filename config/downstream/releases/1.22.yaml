@@ -36,3 +36,5 @@ branches:
     upstream: release-v0.1.x
   multicluster-proxy-aae:
     upstream: release-v0.1.x
+  operator:
+    upstream: main
