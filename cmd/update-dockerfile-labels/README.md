@@ -2,6 +2,13 @@
 
 This tool updates CPE labels in Dockerfiles across all component repositories.
 
+## Features
+
+- ✅ **Validation**: Checks that each Dockerfile has a LABEL block with a required `name` key
+- ✅ **Smart Updates**: Appends CPE label to existing multi-line LABEL blocks
+- ✅ **Re-run Safe**: Re-running the tool updates existing PRs via force push (no duplicates)
+- ✅ **Error Handling**: Clear warnings and errors for missing required fields
+
 ## Usage
 
 ### Via GitHub Actions (Recommended)

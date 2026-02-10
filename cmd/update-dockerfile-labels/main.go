@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -140,27 +141,111 @@ func updateDockerfileLabel(dockerfilePath, cpeLabel string) error {
 	}
 
 	lines := strings.Split(string(content), "\n")
-	updatedLines := []string{}
-	labelExists := false
 	
+	// First, validate that the Dockerfile has a LABEL block with "name" key
+	hasLabelBlock := false
+	hasNameKey := false
 	for _, line := range lines {
-		// Check if line contains CPE label
-		if strings.Contains(line, "LABEL") && strings.Contains(line, "cpe=") {
-			// Replace existing CPE label
-			updatedLines = append(updatedLines, "LABEL "+cpeLabel)
-			labelExists = true
-		} else {
-			updatedLines = append(updatedLines, line)
+		trimmed := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmed, "LABEL") {
+			hasLabelBlock = true
+		}
+		if strings.Contains(line, "name=") && (strings.HasPrefix(trimmed, "name=") || strings.Contains(line, "\"name=")) {
+			hasNameKey = true
 		}
 	}
-
-	// If label doesn't exist, add it at the end
-	if !labelExists {
-		// Remove empty trailing line if exists
-		if len(updatedLines) > 0 && updatedLines[len(updatedLines)-1] == "" {
-			updatedLines = updatedLines[:len(updatedLines)-1]
+	
+	if !hasLabelBlock {
+		return fmt.Errorf("no LABEL block found in Dockerfile")
+	}
+	
+	if !hasNameKey {
+		log.Printf("WARNING: Dockerfile %s does not have 'name' key in LABEL block", dockerfilePath)
+		return fmt.Errorf("LABEL block missing required 'name' key")
+	}
+	
+	// Get the latest UBI9 minimal image digest
+	latestUbi9Digest, err := getLatestUbi9Digest()
+	if err != nil {
+		log.Printf("WARNING: Failed to get latest UBI9 digest: %v. Skipping base image update.", err)
+	}
+	
+	updatedLines := []string{}
+	labelExists := false
+	inLabelBlock := false
+	labelBlockEnd := -1
+	
+	for i, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		
+		// Update UBI9 base image if found (skip GO_BUILDER)
+		if strings.HasPrefix(trimmed, "ARG RUNTIME=") && strings.Contains(line, "ubi9/ubi-minimal") && latestUbi9Digest != "" {
+			// Extract the part before @sha256
+			parts := strings.Split(line, "@sha256:")
+			if len(parts) == 2 {
+				// Replace with new digest
+				updatedLines = append(updatedLines, parts[0]+"@"+latestUbi9Digest)
+				continue
+			}
 		}
-		updatedLines = append(updatedLines, "", "LABEL "+cpeLabel)
+		
+		// Check if this line contains CPE label already
+		if strings.Contains(line, "cpe=") {
+			// Replace existing CPE label
+			if strings.HasPrefix(trimmed, "LABEL") {
+				updatedLines = append(updatedLines, "LABEL "+cpeLabel)
+			} else {
+				// Part of multi-line LABEL, replace just this line
+				indent := strings.Repeat(" ", len(line)-len(trimmed))
+				updatedLines = append(updatedLines, indent+cpeLabel)
+			}
+			labelExists = true
+			continue
+		}
+		
+		// Track if we're in a LABEL block
+		if strings.HasPrefix(trimmed, "LABEL") {
+			inLabelBlock = true
+		}
+		
+		// Check if this is the end of a multi-line LABEL block
+		if inLabelBlock {
+			// If line doesn't end with backslash, this is the end of the LABEL block
+			if !strings.HasSuffix(trimmed, "\\") && trimmed != "" {
+				labelBlockEnd = i
+				inLabelBlock = false
+			}
+		}
+		
+		updatedLines = append(updatedLines, line)
+	}
+
+	// If label doesn't exist, append to the last LABEL block found
+	if !labelExists {
+		if labelBlockEnd >= 0 {
+			// Insert CPE into the existing LABEL block
+			// Get indentation from previous label line
+			prevLine := updatedLines[labelBlockEnd]
+			indent := ""
+			if strings.Contains(prevLine, "      ") {
+				indent = "      "
+			}
+			
+			// Add backslash to the previous line if it doesn't have one
+			if !strings.HasSuffix(strings.TrimSpace(updatedLines[labelBlockEnd]), "\\") {
+				updatedLines[labelBlockEnd] = updatedLines[labelBlockEnd] + " \\"
+			}
+			
+			// Insert the CPE label after the last label line
+			newLine := indent + cpeLabel
+			updatedLines = append(updatedLines[:labelBlockEnd+1], append([]string{newLine}, updatedLines[labelBlockEnd+1:]...)...)
+		} else {
+			// No LABEL block found, add at the end
+			if len(updatedLines) > 0 && updatedLines[len(updatedLines)-1] == "" {
+				updatedLines = updatedLines[:len(updatedLines)-1]
+			}
+			updatedLines = append(updatedLines, "", "LABEL "+cpeLabel)
+		}
 	}
 
 	newContent := strings.Join(updatedLines, "\n")
@@ -225,27 +310,41 @@ func commitAndPullRequest(ctx context.Context, dir, branch string, config k.Conf
 		return fmt.Errorf("failed to add: %s, %s", err, out)
 	}
 	
-	commitMsg := fmt.Sprintf("[bot:%s] Update Dockerfile CPE labels\n\nAdd CPE label: %s", branch, cpeLabel)
+	commitMsg := fmt.Sprintf("[bot:%s] Update Dockerfile CPE labels and base images\n\nAdd CPE label: %s\nUpdate UBI9 base image to latest", branch, cpeLabel)
 	if out, err := run(ctx, dir, "git", "commit", "-m", commitMsg); err != nil {
+		// Check if commit failed because there are no changes (e.g., re-run with same changes)
+		if strings.Contains(string(out), "nothing to commit") {
+			log.Printf("[%s] No new changes to commit", dir)
+			return nil
+		}
 		return fmt.Errorf("failed to commit: %s, %s", err, out)
 	}
 	
+	// Force push to update the branch (handles re-runs gracefully)
+	log.Printf("[%s] Pushing changes to branch %s", dir, branchPrefix+branch)
 	if out, err := run(ctx, dir, "git", "push", "-f", "origin", branchPrefix+branch); err != nil {
 		return fmt.Errorf("failed to push: %s, %s", err, out)
 	}
 	
-	if out, err := run(ctx, dir, "bash", "-c", "gh pr list --base "+branch+" --head "+branchPrefix+branch+" --json url --jq 'length'"); err != nil {
+	// Check if PR already exists
+	if out, err := run(ctx, dir, "bash", "-c", "gh pr list --base "+branch+" --head "+branchPrefix+branch+" --json number,url --jq '.[0].number'"); err != nil {
 		return fmt.Errorf("failed to check if a pr exists: %s, %s", err, out)
-	} else if strings.TrimSpace(string(out)) == "0" {
-		prBody := fmt.Sprintf("This PR updates Dockerfile CPE labels.\n\nLabel added: %s\n\nThis PR was automatically generated by the update-dockerfile-labels command from openshift-pipelines/hack repository", cpeLabel)
+	} else if strings.TrimSpace(string(out)) == "" {
+		// PR doesn't exist, create new one
+		log.Printf("[%s] Creating new PR", dir)
+		prBody := fmt.Sprintf("This PR updates Dockerfile CPE labels and base images.\n\n**Changes:**\n- Label added to existing LABEL block: %s\n- Updated UBI9 base image to latest digest\n\nThis PR was automatically generated by the update-dockerfile-labels command from openshift-pipelines/hack repository", cpeLabel)
 		if out, err := run(ctx, dir, "gh", "pr", "create",
 			"--base", branch,
 			"--head", branchPrefix+branch,
 			"--label=hack", "--label=automated",
-			"--title", fmt.Sprintf("[bot:%s:%s] Update Dockerfile CPE labels", config.Name, branch),
+			"--title", fmt.Sprintf("[bot:%s:%s] Update Dockerfile CPE labels and base images", config.Name, branch),
 			"--body", prBody); err != nil {
 			return fmt.Errorf("failed to create the pr: %s, %s", err, out)
 		}
+	} else {
+		// PR already exists, just update it via force push (already done above)
+		prNumber := strings.TrimSpace(string(out))
+		log.Printf("[%s] PR #%s already exists and has been updated with force push", dir, prNumber)
 	}
 	
 	return nil
@@ -260,4 +359,50 @@ func run(ctx context.Context, dir string, name string, args ...string) ([]byte, 
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
+}
+
+func getLatestUbi9Digest() (string, error) {
+	// Try to get the latest digest using docker/podman
+	// First try skopeo (most reliable)
+	if out, err := exec.Command("skopeo", "inspect", "docker://registry.access.redhat.com/ubi9/ubi-minimal:latest").Output(); err == nil {
+		var result map[string]interface{}
+		if err := json.Unmarshal(out, &result); err == nil {
+			if digest, ok := result["Digest"].(string); ok {
+				log.Printf("Found latest UBI9 digest via skopeo: %s", digest)
+				return digest, nil
+			}
+		}
+	}
+	
+	// Fallback: try docker
+	if out, err := exec.Command("docker", "pull", "registry.access.redhat.com/ubi9/ubi-minimal:latest").CombinedOutput(); err == nil {
+		lines := strings.Split(string(out), "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "Digest:") {
+				parts := strings.Fields(line)
+				if len(parts) >= 2 {
+					digest := parts[len(parts)-1]
+					log.Printf("Found latest UBI9 digest via docker: %s", digest)
+					return digest, nil
+				}
+			}
+		}
+	}
+	
+	// Fallback: try podman
+	if out, err := exec.Command("podman", "pull", "registry.access.redhat.com/ubi9/ubi-minimal:latest").CombinedOutput(); err == nil {
+		lines := strings.Split(string(out), "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "Digest:") {
+				parts := strings.Fields(line)
+				if len(parts) >= 2 {
+					digest := parts[len(parts)-1]
+					log.Printf("Found latest UBI9 digest via podman: %s", digest)
+					return digest, nil
+				}
+			}
+		}
+	}
+	
+	return "", fmt.Errorf("could not determine latest UBI9 digest using skopeo, docker, or podman")
 }
