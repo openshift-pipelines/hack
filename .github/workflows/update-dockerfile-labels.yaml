@@ -1,0 +1,48 @@
+---
+name: Update Dockerfile CPE Labels
+
+on:
+  workflow_dispatch: # Manual workflow trigger only
+    inputs:
+      version:
+        description: 'Version for CPE label (e.g., 1.21)'
+        required: true
+        default: '1.21'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-dockerfile-labels:
+    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
+      with:
+        go-version: 1.22.x
+    - name: Update Dockerfile labels and create pull-requests
+      run: |
+        echo "Updating Dockerfile CPE labels to version ${{ github.event.inputs.version }}"
+        gh auth status
+        gh auth setup-git
+        
+        # TEST: Only updating tektoncd-triggers repository
+        go run ./cmd/update-dockerfile-labels/ \
+          --version ${{ github.event.inputs.version }} \
+          config/konflux/test-triggers-only.yaml
+        
+        # FULL RUN (uncomment when ready to update all repositories):
+        # go run ./cmd/update-dockerfile-labels/ \
+        #   --version ${{ github.event.inputs.version }} \
+        #   config/konflux/openshift-pipelines-core.yaml \
+        #   config/konflux/openshift-pipelines-cli.yaml \
+        #   config/konflux/openshift-pipelines-operator.yaml
+      env:
+        GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+        GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}

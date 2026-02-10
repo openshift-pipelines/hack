@@ -1,0 +1,8 @@
+name: openshift-pipelines-core-test
+versions:
+  "1.20":
+    version: "1.20"
+    image-suffix: -rhel9
+    auto-release: false
+resources:
+  - tektoncd-triggers
