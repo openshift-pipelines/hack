@@ -239,9 +239,9 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 			c.ImagePrefix = repo.Name + "/" + c.ImagePrefix
 		}
 	}
+	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Name, c.ImageSuffix)
 
-	log.Printf("Using  ImagePrefix: %s", c.ImagePrefix)
-	log.Printf("Using  ImageSuffix: %s", c.ImageSuffix)
+	log.Printf("Using  Image: %s", c.Image)
 	return nil
 }
 

@@ -18,4 +18,4 @@
     - tektoncd-cli
     - opc
     - serve-tkn-cli
-    - tektoncd-operator
+    - operator
