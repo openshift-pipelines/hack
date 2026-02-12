@@ -29,7 +29,7 @@ branches:
   tektoncd-pruner:
     upstream: release-v0.3.x
   tektoncd-results:
-    upstream: release-v0.17.x
+    upstream: release-v0.18.x
   tektoncd-triggers:
     upstream: release-v0.34.x
   syncer-service:
