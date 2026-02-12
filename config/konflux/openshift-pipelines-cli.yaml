@@ -5,4 +5,5 @@ versions:
     image-suffix: -rhel8
     auto-release: true
 resources:
+  - serve-tkn-cli
   - tektoncd-cli
