@@ -1,0 +1,14 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  labels:
+    appstudio.openshift.io/application: operator-1-15-index-4-18-application
+    pac.test.appstudio.openshift.io/event-type: push
+    pac.test.appstudio.openshift.io/url-org: openshift-pipelines
+    release.appstudio.openshift.io/author: rh-ee-sashture
+  generateName: openshift-pipelines-1-15-4-fbc-4-18-prod-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-1-15-fbc-4-18-prod-release-as-op
+  snapshot: SNAPSHOT_PLACEHOLDER
