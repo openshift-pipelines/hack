@@ -31,7 +31,7 @@ branches:
   tektoncd-results:
     upstream: release-v0.18.x
   tektoncd-triggers:
-    upstream: release-v0.34.x
+    upstream: release-v0.35.x
   syncer-service:
     upstream: release-v0.1.x
   multicluster-proxy-aae:
