@@ -1,6 +1,7 @@
 version: 1.22
 patch-version: 1.22.0
 image-suffix: "-rhel9"
+code-freeze: true
 branches:
   git-init:
     upstream: release-v1.2.x
