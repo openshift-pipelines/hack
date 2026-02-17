@@ -79,6 +79,7 @@ type Release struct {
 	PatchVersion string `json:"patch-version" yaml:"patch-version"`
 	ImagePrefix  string `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix  string `json:"image-suffix" yaml:"image-suffix"`
+	CodeFreeze   bool   `json:"code-freeze" yaml:"code-freeze"`
 }
 
 type ApplicationConfig struct {
