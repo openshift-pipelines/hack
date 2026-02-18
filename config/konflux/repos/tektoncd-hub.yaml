@@ -8,6 +8,6 @@ components:
       [{"type": "npm", "path": "upstream/ui"}, {"type": "rpm", "path": ".konflux/rpms"}]
 branches:
   - name: release-v1.15.x
-    upstream: release-v1.17.1
+    upstream: release-v1.17.2
     versions:
       - "1.15"
