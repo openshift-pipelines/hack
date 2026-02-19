@@ -123,6 +123,8 @@ spec:
                 value: /workspace
               - name: URL
                 value: $(tasks.publish-images.results.git-url)
+              - name: REVISION
+                value: $(tasks.publish-images.results.commit-sha)
           - name: generate-artifacts
             workingDir: /workspace
             image: quay.io/openshift-pipeline/ci:kueue
