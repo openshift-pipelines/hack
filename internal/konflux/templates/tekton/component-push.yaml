@@ -38,7 +38,7 @@ spec:
   - name: revision
     value: '{{"{{revision}}"}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/{{.Application.Namespace}}/{{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}:{{"{{revision}}"}}
+    value: quay.io/redhat-user-workloads/{{.Application.Namespace}}/{{.Image}}:{{"{{revision}}"}}
   - name: dockerfile
     value: {{.Dockerfile}}
   - name: additional-tags

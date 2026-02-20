@@ -235,11 +235,12 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		if !(c.NoPrefixUpstream || repo.NoPrefixUpstream) && repo.Upstream != "" {
 			c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
 		}
-		if repo.Upstream == "" {
-			c.ImagePrefix = repo.Name + "/" + c.ImagePrefix
-		}
 	}
-	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Name, c.ImageSuffix)
+	if c.Image == "" {
+		c.Image = c.Name
+	}
+
+	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Image, c.ImageSuffix)
 
 	log.Printf("Using  Image: %s", c.Image)
 	return nil
