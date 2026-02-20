@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: syncer-service-0-1
 spec:
   image:
-    name: syncer-service/syncer-service-rhel9
+    name: syncer-service-rhel9
     visibility: public
   notifications:
     - config:

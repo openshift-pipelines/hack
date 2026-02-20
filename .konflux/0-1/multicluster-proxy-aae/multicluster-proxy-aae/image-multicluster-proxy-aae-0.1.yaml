@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: multicluster-proxy-aae-0-1
 spec:
   image:
-    name: multicluster-proxy-aae/multicluster-proxy-aae-rhel9
+    name: multicluster-proxy-aae-rhel9
     visibility: public
   notifications:
     - config:
