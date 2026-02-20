@@ -70,7 +70,7 @@ func generateTektonConfig(repo Repository, targetDir string) error {
 			return err
 		}
 		if err := updateDockerFiles(c, targetDir); err != nil {
-			return err
+			log.Printf("Error while updating docker files: %s", err)
 		}
 	}
 

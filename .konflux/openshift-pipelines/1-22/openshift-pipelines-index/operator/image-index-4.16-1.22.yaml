@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-index-1-22
 spec:
   image:
-    name: operator/pipelines-index-4.16
+    name: pipelines-index-4.16
     visibility: public
   notifications:
     - config:
