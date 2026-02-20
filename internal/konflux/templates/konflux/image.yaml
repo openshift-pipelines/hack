@@ -11,7 +11,7 @@ metadata:
     appstudio.redhat.com/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
 spec:
   image:
-    name: {{.ImagePrefix}}{{.Name}}{{.ImageSuffix}}
+    name: {{.Image}}
     visibility: public
   notifications:
     - config:
