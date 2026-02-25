@@ -87,7 +87,7 @@ spec:
       topic: |
         The 1.20.3 release of Red Hat OpenShift Pipelines Operator.
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      type: RHBA
+      type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-20-prod-release-as-op
   snapshot: openshift-pipelines-operator-1-20-mkzxs

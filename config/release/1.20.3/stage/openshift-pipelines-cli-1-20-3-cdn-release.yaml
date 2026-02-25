@@ -2,11 +2,11 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: openshift-pipelines-core-1-20
+    appstudio.openshift.io/application: openshift-pipelines-cli-1-20
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-diagrawa
-  generateName: openshift-pipelines-core-1-20-3-stage-release-
+  generateName: openshift-pipelines-cli-1-20-3-cdn-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -17,28 +17,6 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      issues:
-        fixed:
-          - id: SRVKP-8993
-            source: issues.redhat.com
-          - id: SRVKP-8910
-            source: issues.redhat.com
-          - id: SRVKP-8908
-            source: issues.redhat.com
-          - id: SRVKP-8902
-            source: issues.redhat.com
-          - id: SRVKP-8616
-            source: issues.redhat.com
-          - id: SRVKP-8891
-            source: issues.redhat.com
-          - id: SRVKP-8930
-            source: issues.redhat.com
-          - id: SRVKP-8480
-            source: issues.redhat.com
-          - id: SRVKP-8894
-            source: issues.redhat.com
-          - id: SRVKP-9054
-            source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -54,5 +32,5 @@ spec:
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHSA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-core-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-20-5bxx2
+  releasePlan: openshift-pipelines-cli-1-20-cdn-stage-release-as-op
+  snapshot: openshift-pipelines-cli-1-20-wmzr6
