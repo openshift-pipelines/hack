@@ -2,11 +2,11 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
   labels:
-    appstudio.openshift.io/application: openshift-pipelines-core-1-15
+    appstudio.openshift.io/application: openshift-pipelines-cli-1-15
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-diagrawa
-  generateName: openshift-pipelines-core-1-15-4-stage-release-
+  generateName: openshift-pipelines-cli-1-15-4-cdn-prod-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -17,22 +17,6 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      cves:
-        - key: CVE-2024-37890
-        - key: CVE-2025-12816
-        - key: CVE-2025-13465
-        - key: CVE-2025-15284
-        - key: CVE-2025-6545
-        - key: CVE-2025-6547
-        - key: CVE-2025-66031
-        - key: CVE-2025-66506
-        - key: CVE-2025-66564
-        - key: CVE-2025-9287
-        - key: CVE-2025-9288
-      issues:
-        fixed:
-          - id: SRVKP-10310
-            source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -48,5 +32,5 @@ spec:
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHSA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-core-1-15-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-15-879rx
+  releasePlan: openshift-pipelines-cli-1-15-cdn-prod-release-as-op
+  snapshot: openshift-pipelines-cli-1-15-nc5sf

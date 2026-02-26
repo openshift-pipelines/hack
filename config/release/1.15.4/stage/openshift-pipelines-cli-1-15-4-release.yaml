@@ -17,10 +17,12 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
-      issues:
-        fixed:
-          - id: SRVKP-7051
-            source: issues.redhat.com
+      cves:
+        - key: CVE-2024-24790
+        - key: CVE-2025-22868
+        - key: CVE-2025-22869
+        - key: CVE-2025-27144
+        - key: CVE-2025-30204
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -32,8 +34,8 @@ spec:
         https://access.redhat.com/articles/11258
       synopsis: "Red Hat OpenShift Pipelines Release 1.15.4"
       topic: |
-        The 1.15.4 release of Red Hat OpenShift Pipelines Operator..
-        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+        The 1.15.4 release of Red Hat OpenShift Pipelines Operator.
+        For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-15-stage-release-as-op
