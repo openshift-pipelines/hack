@@ -5,7 +5,7 @@ metadata:
     appstudio.openshift.io/application: openshift-pipelines-core-1-15
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    release.appstudio.openshift.io/author: rh-ee-sashture
+    release.appstudio.openshift.io/author: rh-ee-diagrawa
   generateName: openshift-pipelines-core-1-15-4-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
@@ -19,7 +19,17 @@ spec:
         and VMs by abstracting away the underlying details.
       issues:
         fixed:
-          - id: SRVKP-XXXX
+          - id: SRVKP-7509
+            source: issues.redhat.com
+          - id: SRVKP-6405
+            source: issues.redhat.com
+          - id: SRVKP-7510
+            source: issues.redhat.com
+          - id: SRVKP-7511
+            source: issues.redhat.com
+          - id: SRVKP-7512
+            source: issues.redhat.com
+          - id: SRVKP-7513
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -34,7 +44,7 @@ spec:
       topic: |
         The 1.15.4 release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
-      type: RHBA
+      type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-15-stage-release-as-op
-  snapshot: SNAPSHOT_PLACEHOLDER
+  snapshot: openshift-pipelines-core-1-15-879rx

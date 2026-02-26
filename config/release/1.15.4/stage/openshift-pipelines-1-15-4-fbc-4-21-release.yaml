@@ -5,10 +5,10 @@ metadata:
     appstudio.openshift.io/application: operator-1-15-index-4-21-application
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    release.appstudio.openshift.io/author: rh-ee-sashture
+    release.appstudio.openshift.io/author: rh-ee-diagrawa
   generateName: openshift-pipelines-1-15-4-fbc-4-21-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-1-15-fbc-4-21-stage-release-as-op
-  snapshot: SNAPSHOT_PLACEHOLDER
+  snapshot: operator-1-15-index-4-21-application-4xsp2
