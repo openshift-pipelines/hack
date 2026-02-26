@@ -19,10 +19,14 @@ const (
 )
 
 func main() {
-	var configFile *string = flag.String("config", "config/downstream/konflux.yaml", "path to config file")
-	var dryRun *bool = flag.Bool("dry-run", false, "do not commit or push any changes")
+	var configFile = flag.String("config", "config/downstream/konflux.yaml", "path to config file")
+	var version = flag.String("version", "next", "Release version to generate config")
+	var dryRun = flag.Bool("dry-run", false, "do not commit or push any changes")
 	flag.Parse()
 	configDir := filepath.Dir(*configFile)
+
+	log.Printf("configDir: %s", configDir)
+	log.Printf("version: %s", *version)
 
 	// Read the main konflux config using the generic readResource function
 	config, err := readConfig(configDir, filepath.Base(*configFile))
@@ -31,40 +35,38 @@ func main() {
 	}
 
 	// Add main  version by default to add some main specific config.
-	for _, version := range append([]string{"main"}, config.Versions...) {
-		versionConfig := k.ReleaseConfig{
-			Version: k.Release{
-				Version: version,
-			},
+	versionConfig := k.ReleaseConfig{
+		Version: k.Release{
+			Version: *version,
+		},
+	}
+	if *version != "main" {
+		versionConfig, err = readResource[k.ReleaseConfig](configDir, "releases", *version)
+		if err != nil {
+			log.Fatal(err)
 		}
-		if version != "main" {
-			versionConfig, err = readResource[k.ReleaseConfig](configDir, "releases", version)
-			if err != nil {
+		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
+		versionConfig.Version.Version = *version
+		if versionConfig.Version.Version == "next" {
+			versionConfig.Version.PatchVersion = *version
+		} else if !strings.HasPrefix(versionConfig.Version.PatchVersion, "v") {
+			versionConfig.Version.PatchVersion = "v" + versionConfig.Version.PatchVersion
+		}
+	}
+
+	for _, applicationName := range config.Applications {
+		// Read application using the generic readResource function
+		applications, err := readApplications(configDir, applicationName, versionConfig, config)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, application := range applications {
+			log.Printf("Loaded application: %s", application.Name)
+			if err := k.GenerateConfig(application, *dryRun); err != nil {
 				log.Fatal(err)
-			}
-			versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
-			versionConfig.Version.Version = version
-			if versionConfig.Version.Version == "next" {
-				versionConfig.Version.PatchVersion = version
-			} else if !strings.HasPrefix(versionConfig.Version.PatchVersion, "v") {
-				versionConfig.Version.PatchVersion = "v" + versionConfig.Version.PatchVersion
 			}
 		}
 
-		for _, applicationName := range config.Applications {
-			// Read application using the generic readResource function
-			applications, err := readApplications(configDir, applicationName, versionConfig, config)
-			if err != nil {
-				log.Fatal(err)
-			}
-			for _, application := range applications {
-				log.Printf("Loaded application: %s", application.Name)
-				if err := k.GenerateConfig(application, *dryRun); err != nil {
-					log.Fatal(err)
-				}
-			}
-
-		}
 	}
 
 	log.Printf("Done:")

@@ -5,13 +5,10 @@ on:
   pull_request:
     branches:
       - 'main'
-      - 'multi-cluster'
       - 'release-v*'
   push:
     branches:
       - 'main'
-      - 'next'
-      - 'multi-cluster'
       - 'release-v*'
   workflow_dispatch: # Manual workflow trigger
 
@@ -28,20 +25,20 @@ jobs:
       - id: set-matrix
         name: set-matrix
         run: |
-          pushd config
-          CONFIGS=$(ls -d * | jq -R -s -c 'split("\n")[:-1]')
+          pushd config/downstream/releases
+          VERSIONS=$(ls *.yaml | jq -R -s -c 'split("\n")[:-1] | map(split(".yaml")[0])')
           popd
-          echo "Confgis: ${CONFIGS}"
-          echo "configs=${CONFIGS}" >> $GITHUB_OUTPUT
+          echo "Versions: ${VERSIONS}"
+          echo "versions=${VERSIONS}" >> $GITHUB_OUTPUT
     outputs:
-      configs: ${{ steps.set-matrix.outputs.configs }}
+      versions: ${{ steps.set-matrix.outputs.versions }}
   update-projects:
     needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        config: ${{ fromJSON(needs.build-matrix.outputs.configs) }}
+        version: ${{ fromJSON(needs.build-matrix.outputs.versions) }}
     permissions:
       contents: write
       pull-requests: write
@@ -50,15 +47,15 @@ jobs:
         uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.22.x
-      - name: Generate  ${{matrix.config}} configurations and pull-requests
+          go-version: 1.25.x
+      - name: Generate  ${{matrix.version}} configurations and pull-requests
         run: |
           echo "Let's go"
           git config user.name openshift-pipelines-bot
           git config user.email pipelines-extcomm@redhat.com
           gh auth status
           gh auth setup-git
-          go run ./cmd/konflux/ --config config/${{ matrix.config }}/konflux.yaml --dry-run=${{ github.event_name == 'pull_request'}}
+          go run ./cmd/konflux/ --version ${{ matrix.version }} --dry-run=${{ github.event_name == 'pull_request'}}
 
         env:
           GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}

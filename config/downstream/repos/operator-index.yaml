@@ -1,5 +1,8 @@
 name: operator
 components:
+  - name: index-4.22
+    nudges: [ "" ]
+    no-image-suffix: true
   - name: index-4.21
     nudges: [ "" ]
     no-image-suffix: true
