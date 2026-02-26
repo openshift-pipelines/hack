@@ -67,11 +67,11 @@ spec:
 
         - OpenShift documentation:
           https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/1.15/html/about_openshift_pipelines/op-release-notes
+      cves:
+        - key: CVE-2025-66506
       issues:
         fixed:
-          - id: SRVKP-7078
-            source: issues.redhat.com
-          - id: SRVKP-7050
+          - id: SRVKP-10639
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -84,8 +84,8 @@ spec:
         https://access.redhat.com/articles/11258
       synopsis: "Red Hat OpenShift Pipelines Release 1.15.4"
       topic: |
-        The 1.15.4 release of Red Hat OpenShift Pipelines Operator..
-        For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
+        The 1.15.4 release of Red Hat OpenShift Pipelines Operator.
+        For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-15-stage-release-as-op
