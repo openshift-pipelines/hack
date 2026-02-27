@@ -1,4 +1,4 @@
-name: Sync Organization Labels
+name: Sync Hack Repo Labels
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/labels.yml'
       - '.github/workflows/sync-org-labels.yaml'
+      - 'config/downstream/repos/*'
   workflow_dispatch:
 
 permissions:
@@ -13,7 +14,7 @@ permissions:
   issues: write
   repository-projects: write
 jobs:
-  sync:
+  sync-labels:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,14 +23,13 @@ jobs:
       - name: Sync labels
         uses: EndBug/label-sync@v2
         with:
-          token: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          token: ${{ secrets.HACK_LABELS_SECRET }}
           config-file: '.github/labels.yml'
       - name: Sync labels to each repo
         run: |
-          gh repo list openshift-pipelines --json name -q '.[].name' > repos.txt
-          for repo in $(cat repos.txt); do
+          for repo in $(yq -N e '.repo // .name' config/downstream/repos/*.yaml | sort -u) ; do
             echo "Syncing labels for $repo"
-            gh label clone openshift-pipelines/hack -R openshift-pipelines/$repo --force
+            gh label clone openshift-pipelines/hack -R openshift-pipelines/$repo --force || true
           done
         env:
           GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
