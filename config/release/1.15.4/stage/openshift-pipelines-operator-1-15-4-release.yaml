@@ -69,6 +69,11 @@ spec:
           https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/1.15/html/about_openshift_pipelines/op-release-notes
       cves:
         - key: CVE-2025-66506
+          component: operator-1-15-operator
+        - key: CVE-2025-66506
+          component: operator-1-15-proxy
+        - key: CVE-2025-66506
+          component: operator-1-15-bundle
       issues:
         fixed:
           - id: SRVKP-10639
@@ -89,4 +94,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-15-stage-release-as-op
-  snapshot: openshift-pipelines-operator-1-15-wrhrt
+  snapshot: openshift-pipelines-operator-1-15-20260227-061114-000
