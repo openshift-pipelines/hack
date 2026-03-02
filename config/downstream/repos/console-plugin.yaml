@@ -4,4 +4,4 @@ no-prefix-upstream: true
 components:
   - name: console-plugin
     prefetch-input: |-
-      [{"type": "yarn"}, {"type": "npm", "path": ".konflux/npm"}]
+      [{"type": "rpm", "path": ".konflux/rpms"}, {"type": "yarn", "path": "upstream"}]
