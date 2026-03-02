@@ -11,4 +11,4 @@ metadata:
 spec:
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-1-15-fbc-4-17-stage-release-as-op
-  snapshot: operator-1-15-index-4-17-application-66nf6
+  snapshot: operator-1-15-index-4-17-application-20260227-151501-000
