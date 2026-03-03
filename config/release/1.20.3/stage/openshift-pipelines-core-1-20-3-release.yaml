@@ -17,27 +17,24 @@ spec:
         flexible, Kubernetes-native, open-source CI/CD framework which enables
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
+      cves:
+        - key: CVE-2025-13465
+          component: console-plugin-1-20-console-plugin
+        - key: CVE-2025-15284
+          component: console-plugin-1-20-console-plugin
+        - key: CVE-2025-66506
+          component: tektoncd-chains-1-20-controller
+        - key: CVE-2025-66564
+          component: tektoncd-chains-1-20-controller
+        - key: CVE-2025-12816
+          component: console-plugin-1-20-console-plugin
       issues:
         fixed:
-          - id: SRVKP-8993
+          - id: SRVKP-10880
             source: issues.redhat.com
-          - id: SRVKP-8910
+          - id: SRVKP-10310
             source: issues.redhat.com
-          - id: SRVKP-8908
-            source: issues.redhat.com
-          - id: SRVKP-8902
-            source: issues.redhat.com
-          - id: SRVKP-8616
-            source: issues.redhat.com
-          - id: SRVKP-8891
-            source: issues.redhat.com
-          - id: SRVKP-8930
-            source: issues.redhat.com
-          - id: SRVKP-8480
-            source: issues.redhat.com
-          - id: SRVKP-8894
-            source: issues.redhat.com
-          - id: SRVKP-9054
+          - id: SRVKP-9976
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
@@ -55,4 +52,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-20-5bxx2
+  snapshot: openshift-pipelines-core-1-20-20260302-134700-000
