@@ -48,4 +48,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-cli-1-20-wmzr6
+  snapshot: openshift-pipelines-cli-1-20-20260303-094744-000
