@@ -52,4 +52,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-20-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-20-20260302-134700-000
+  snapshot: openshift-pipelines-core-1-20-20260303-082306-000
