@@ -67,7 +67,7 @@ jobs:
           git config user.email pipelines-extcomm@redhat.com
           
           BASE_BRANCH=${GITHUB_REF#refs/heads/}
-          SOURCE_BRANCH=actions/update/hack-update-konflux-${BASE_BRANCH}
+          SOURCE_BRANCH=actions/update/hack-update-konflux-${BASE_BRANCH}-${{matrix.version}}
           git checkout -b ${SOURCE_BRANCH}
           git add -f .konflux
           
