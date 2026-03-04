@@ -1,7 +1,11 @@
 name: update-sources
 on:
   workflow_dispatch: {}
-
+  push:
+    branches:
+     - {{.Branch.Name}}
+    paths:
+     - .github/workflows/update-sources.yaml
 jobs:
   update-sources:
     runs-on: ubuntu-latest
