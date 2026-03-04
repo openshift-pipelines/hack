@@ -26,7 +26,7 @@ jobs:
         name: set-matrix
         run: |
           pushd config/downstream/releases
-          VERSIONS=$(ls *.yaml | jq -R -s -c 'split("\n")[:-1] | map(split(".yaml")[0])')
+          VERSIONS=$(ls *.yaml | jq -R -s -c 'split("\n")[:-1] | map(split(".yaml")[0])+ ["main"]')
           popd
           echo "Versions: ${VERSIONS}"
           echo "versions=${VERSIONS}" >> $GITHUB_OUTPUT
