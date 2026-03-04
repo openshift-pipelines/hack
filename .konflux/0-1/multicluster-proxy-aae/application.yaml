@@ -1,8 +1,0 @@
-# Generated for Konflux Application multicluster-proxy-aae by openshift-pipelines/hack. DO NOT EDIT
----
-apiVersion: appstudio.redhat.com/v1alpha1
-kind: Application
-metadata:
-  name: multicluster-proxy-aae-0-1
-spec:
-  displayName: multicluster-proxy-aae-0-1
