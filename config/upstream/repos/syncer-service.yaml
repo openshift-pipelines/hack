@@ -2,5 +2,3 @@ name: syncer-service
 components:
   - name: syncer-service
     dockerfile: Dockerfile
-tekton:
-  watched-sources: '"***".pathChanged()'

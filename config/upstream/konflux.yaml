@@ -2,4 +2,6 @@ applications:
   - syncer-service
   - multicluster-proxy-aae
 versions:
-  - 0.1
+  - version: 0.1
+    patch-version: v0.1.1
+    image-suffix: "-rhel9"

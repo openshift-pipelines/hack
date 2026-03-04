@@ -1,3 +1,0 @@
-version: next
-patch-version: nightly
-image-suffix: "-rhel9"
