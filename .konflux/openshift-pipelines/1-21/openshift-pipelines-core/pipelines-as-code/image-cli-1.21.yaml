@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: multicluster-proxy-aae-1-21-proxy-server
+  name: pipelines-as-code-1-21-cli
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: multicluster-proxy-aae-1-21-proxy-server
+    appstudio.redhat.com/component: pipelines-as-code-1-21-cli
     appstudio.redhat.com/application: openshift-pipelines-core-1-21
 spec:
   image:
-    name: pipelines-multicluster-proxy-aae-proxy-server-rhel9
+    name: pipelines-pipelines-as-code-cli-rhel9
     visibility: public
   notifications:
     - config:
