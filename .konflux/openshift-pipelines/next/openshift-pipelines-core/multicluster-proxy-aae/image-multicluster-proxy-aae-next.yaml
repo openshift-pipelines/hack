@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: pac-downstream-next-controller
+  name: multicluster-proxy-aae-next-multicluster-proxy-aae
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: pac-downstream-next-controller
+    appstudio.redhat.com/component: multicluster-proxy-aae-next-multicluster-proxy-aae
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:
-    name: pipelines-pipelines-as-code-controller-rhel9
+    name: pipelines-multicluster-proxy-aae-rhel9
     visibility: public
   notifications:
     - config:

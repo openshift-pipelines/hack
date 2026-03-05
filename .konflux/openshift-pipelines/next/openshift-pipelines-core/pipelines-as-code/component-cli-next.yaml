@@ -5,14 +5,15 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: multicluster-proxy-aae-next-proxy-server
+  name: pipelines-as-code-next-cli
 spec:
-  componentName: proxy-server
+  componentName: cli
   application: openshift-pipelines-core-next
   build-nudges-ref:
   - operator-next-bundle
+  - tektoncd-cli-next-tkn
   source:
     git:
-      url: https://github.com/openshift-pipelines/p12n-multicluster-proxy-aae.git
-      dockerfileUrl: .konflux/dockerfiles/proxy-server.Dockerfile
+      url: https://github.com/openshift-pipelines/pac-downstream.git
+      dockerfileUrl: .konflux/dockerfiles/cli.Dockerfile
       revision: next

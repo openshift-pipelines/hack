@@ -3,12 +3,12 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: pac-downstream-next-webhook
+  name: pipelines-as-code-next-webhook
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: pac-downstream-next-webhook
+    appstudio.redhat.com/component: pipelines-as-code-next-webhook
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:
