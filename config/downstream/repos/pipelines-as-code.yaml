@@ -1,4 +1,4 @@
-name: pac-downstream
+repo: pac-downstream
 upstream: openshift-pipelines/pipelines-as-code
 components:
   - name: controller

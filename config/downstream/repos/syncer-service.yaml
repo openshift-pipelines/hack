@@ -1,4 +1,5 @@
 repo: p12n-syncer-service
 upstream: openshift-pipelines/syncer-service
+no-prefix-upstream: true
 components:
-  - name: controller
+  - name: syncer-service
