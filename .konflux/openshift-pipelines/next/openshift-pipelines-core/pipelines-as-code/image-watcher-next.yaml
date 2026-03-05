@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: multicluster-proxy-aae-next-proxy-server
+  name: pipelines-as-code-next-watcher
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: multicluster-proxy-aae-next-proxy-server
+    appstudio.redhat.com/component: pipelines-as-code-next-watcher
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:
-    name: pipelines-multicluster-proxy-aae-proxy-server-rhel9
+    name: pipelines-pipelines-as-code-watcher-rhel9
     visibility: public
   notifications:
     - config:

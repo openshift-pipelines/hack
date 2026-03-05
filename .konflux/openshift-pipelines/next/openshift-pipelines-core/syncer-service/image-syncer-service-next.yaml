@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: syncer-service-next-controller
+  name: syncer-service-next-syncer-service
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: syncer-service-next-controller
+    appstudio.redhat.com/component: syncer-service-next-syncer-service
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:
-    name: pipelines-syncer-service-controller-rhel9
+    name: pipelines-syncer-service-rhel9
     visibility: public
   notifications:
     - config:

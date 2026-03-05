@@ -5,14 +5,14 @@ kind: Component
 metadata:
   annotations:
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: syncer-service-next-controller
+  name: multicluster-proxy-aae-next-multicluster-proxy-aae
 spec:
-  componentName: controller
+  componentName: multicluster-proxy-aae
   application: openshift-pipelines-core-next
   build-nudges-ref:
   - operator-next-bundle
   source:
     git:
-      url: https://github.com/openshift-pipelines/p12n-syncer-service.git
-      dockerfileUrl: .konflux/dockerfiles/controller.Dockerfile
+      url: https://github.com/openshift-pipelines/p12n-multicluster-proxy-aae.git
+      dockerfileUrl: .konflux/dockerfiles/multicluster-proxy-aae.Dockerfile
       revision: next
