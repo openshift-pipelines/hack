@@ -94,4 +94,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-15-prod-release-as-op
-  snapshot: openshift-pipelines-operator-1-15-20260227-061114-000
+  snapshot: openshift-pipelines-operator-1-15-20260304-084239-000

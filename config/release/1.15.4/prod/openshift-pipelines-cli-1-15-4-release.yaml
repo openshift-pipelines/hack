@@ -44,4 +44,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-15-prod-release-as-op
-  snapshot: openshift-pipelines-cli-1-15-20260227-052942-000
+  snapshot: openshift-pipelines-cli-1-15-20260304-071635-000
