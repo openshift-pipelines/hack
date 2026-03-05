@@ -1,27 +1,49 @@
-name: Global Org PR Merger
+name: Global Hack PR Merger
+
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day
-  workflow_dispatch:      # Allows you to trigger it manually
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  repository-projects: write
 
 jobs:
   bulk-merge:
     runs-on: ubuntu-latest
+
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
       - name: Process All Repos
         env:
-          GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
           ORG_NAME: "openshift-pipelines"
           TARGET_LABEL: "hack"
         run: |
-          echo "Get List of Repos "
-          REPOS=$(yq -N e 'env(ORG_NAME)+"/"+.repo // .name' config/downstream/repos/*.yaml | sort -u)
+          echo "Getting repository list..."
+
+          REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml | sort -u)
+
           for REPO in $REPOS; do
-            echo "Searching $REPO for PRs with label: $TARGET_LABEL"          
+            echo "Searching $REPO for PRs with label: $TARGET_LABEL"
+
             PR_NUMS=$(gh pr list -R "$REPO" --label "$TARGET_LABEL" --json number --jq '.[].number')
+
+            if [[ -z "$PR_NUMS" ]]; then
+              echo "No PRs found in $REPO"
+              continue
+            fi
+
             for PR in $PR_NUMS; do
               echo "Attempting to merge PR #$PR in $REPO..."
-              # 3. Merge using 'auto' to respect branch protections
-              gh pr merge "$PR" -R "$REPO" --rebase --auto 
+              gh pr merge "$PR" -R "$REPO" --rebase --auto || true
             done
           done
