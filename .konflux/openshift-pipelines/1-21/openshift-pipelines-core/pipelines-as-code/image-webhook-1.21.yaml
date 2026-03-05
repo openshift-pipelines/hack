@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: pac-downstream-1-21-controller
+  name: pipelines-as-code-1-21-webhook
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: pac-downstream-1-21-controller
+    appstudio.redhat.com/component: pipelines-as-code-1-21-webhook
     appstudio.redhat.com/application: openshift-pipelines-core-1-21
 spec:
   image:
-    name: pipelines-pipelines-as-code-controller-rhel9
+    name: pipelines-pipelines-as-code-webhook-rhel9
     visibility: public
   notifications:
     - config:
