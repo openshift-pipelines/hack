@@ -70,10 +70,6 @@ spec:
 
         - OpenShift documentation:
           https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/1.20/html/release_notes/op-release-notes-1-20#op-release-notes-1-20_op-release-notes
-      issues:
-        fixed:
-          - id: SRVKP-9472
-            source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -87,7 +83,7 @@ spec:
       topic: |
         The 1.20.3 release of Red Hat OpenShift Pipelines Operator.
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      type: RHSA
+      type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-operator-1-20-prod-release-as-op
-  snapshot: openshift-pipelines-operator-1-20-mkzxs
+  snapshot: openshift-pipelines-operator-1-20-20260305-075012-000

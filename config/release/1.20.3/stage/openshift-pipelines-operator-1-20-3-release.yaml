@@ -70,10 +70,6 @@ spec:
 
         - OpenShift documentation:
           https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/1.20/html/release_notes/op-release-notes-1-20#op-release-notes-1-20_op-release-notes
-      issues:
-        fixed:
-          - id: SRVKP-9205
-            source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines

@@ -32,8 +32,6 @@ spec:
         fixed:
           - id: SRVKP-10880
             source: issues.redhat.com
-          - id: SRVKP-10310
-            source: issues.redhat.com
           - id: SRVKP-9976
             source: issues.redhat.com
       package-maintainer: pipelines-bots@redhat.com

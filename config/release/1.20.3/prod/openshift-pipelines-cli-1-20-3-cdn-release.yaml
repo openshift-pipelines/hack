@@ -30,7 +30,7 @@ spec:
       topic: |
         The 1.20.3 release of Red Hat OpenShift Pipelines Operator.
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      type: RHSA
+      type: RHBA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-20-cdn-prod-release-as-op
-  snapshot: openshift-pipelines-cli-1-20-nc5sf
+  snapshot: openshift-pipelines-cli-1-20-20260305-071006-000
