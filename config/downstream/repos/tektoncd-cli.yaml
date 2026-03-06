@@ -1,4 +1,5 @@
 name: tektoncd-cli
 upstream: tektoncd/cli
+use-patch-branch: true
 components:
   - name: tkn
