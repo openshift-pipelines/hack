@@ -1,5 +1,5 @@
 version: 1.21
-patch-version: 1.21.1
+patch-version: 1.21.2
 image-suffix: "-rhel9"
 code-freeze: false
 branches:
