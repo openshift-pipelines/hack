@@ -21,8 +21,6 @@ branches:
     upstream: release-v0.43.0
   tektoncd-hub:
     upstream: release-v1.23.6
-  tektoncd-operator:
-    upstream: main
   tektoncd-pipeline:
     upstream: release-v1.6.x
   tektoncd-pruner:
