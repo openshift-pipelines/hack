@@ -1,6 +1,6 @@
 version: "1.15"
 image-suffix: -rhel9
-patch-version: 1.15.4
+patch-version: 1.15.5
 branches:
   git-init:
     upstream: release-v1.2.x
