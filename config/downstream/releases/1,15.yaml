@@ -1,0 +1,36 @@
+version: 1,15
+image-suffix: -rhel9
+patch-version: 1,15
+branches:
+  git-init:
+    upstream: release-v1.2.x
+  manual-approval-gate:
+    upstream: release-v0.8.0
+  multicluster-proxy-aae:
+    upstream: release-v0.1.x
+  opc:
+    upstream: release-v1.22.x
+  pipelines-as-code:
+    upstream: release-v0.42.x
+  syncer-service:
+    upstream: release-v0.1.x
+  tekton-assist:
+    upstream: release-v0.1.x
+  tekton-caches:
+    upstream: release-v0.3.x
+  tekton-kueue:
+    upstream: release-v0.3.x
+  tektoncd-chains:
+    upstream: release-v0.26.x
+  tektoncd-cli:
+    upstream: release-v0.44.0
+  tektoncd-hub:
+    upstream: release-v1.23.6
+  tektoncd-pipeline:
+    upstream: release-v1.10.x
+  tektoncd-pruner:
+    upstream: release-v0.3.x
+  tektoncd-results:
+    upstream: release-v0.18.x
+  tektoncd-triggers:
+    upstream: release-v0.35.x
