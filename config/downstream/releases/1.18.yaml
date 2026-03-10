@@ -25,7 +25,7 @@ branches:
   tektoncd-cli:
     upstream: release-v0.44.x
   tektoncd-hub:
-    upstream: release-v1.23.6
+    upstream: release-v1.23.7
   tektoncd-pipeline:
     upstream: release-v1.10.x
   tektoncd-pruner:
