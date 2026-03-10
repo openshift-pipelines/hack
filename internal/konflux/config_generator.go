@@ -139,9 +139,14 @@ func generateKonfluxApplication(application Application, targetDir string) error
 	}
 	log.Printf("Create Release Tests in %s\n", targetDir)
 	if strings.Contains(application.Name, "index") {
-		if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(targetDir, "release-tests.yaml"), application); err != nil {
-			return err
+		for arch, instanceType := range instanceTypes {
+			application.InstanceType = instanceType
+			application.InstanceArch = arch
+			if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(targetDir, arch+"-release-tests.yaml"), application); err != nil {
+				return err
+			}
 		}
+
 	}
 	if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(targetDir, "release-plan.yaml"), application); err != nil {
 		return err
