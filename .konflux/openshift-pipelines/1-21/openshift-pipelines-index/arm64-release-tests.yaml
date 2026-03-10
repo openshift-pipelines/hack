@@ -3,12 +3,15 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: openshift-pipelines-index-1-21-release-tests
+  name: openshift-pipelines-index-1-21-release-tests-arm64
 spec:
   application: openshift-pipelines-index-1-21
   contexts:
     - description: execute the integration test for a Snapshot created for a `push` event
       name: push
+  params:
+    - name: INSTANCE_TYPE
+      value: m6g.2xlarge
   resolverRef:
     params:
       - name: url
