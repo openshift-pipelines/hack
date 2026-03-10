@@ -2,12 +2,15 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
-  name: {{hyphenize .Name}}-{{hyphenize .Release.Version}}-release-tests
+  name: {{hyphenize .Name}}-{{hyphenize .Release.Version}}-release-tests-{{hyphenize .InstanceArch}}
 spec:
   application: {{hyphenize .Name}}-{{hyphenize .Release.Version}}
   contexts:
     - description: execute the integration test for a Snapshot created for a `push` event
       name: push
+  params:
+    - name: INSTANCE_TYPE
+      value: {{.InstanceType}}
   resolverRef:
     params:
       - name: url
