@@ -145,6 +145,11 @@ func generateKonfluxApplication(application Application, targetDir string) error
 			if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(targetDir, arch+"-release-tests.yaml"), application); err != nil {
 				return err
 			}
+			if application.Release.Version == "next" || application.Release.Version >= "1.22" {
+				if err := generateFileFromTemplate("release-tests-multikueue.yaml", application, filepath.Join(targetDir, arch+"-release-tests-multikueue.yaml"), application); err != nil {
+					return err
+				}
+			}
 		}
 
 	}
