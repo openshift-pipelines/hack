@@ -3,7 +3,7 @@ namespace: tekton-ecosystem-tenant
 image-prefix: pipelines-
 product: openshift-pipelines
 applications:
-  - core
+#  - core
   - index
 versions:
   - "1.22"
