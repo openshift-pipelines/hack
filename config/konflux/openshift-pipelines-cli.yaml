@@ -6,5 +6,6 @@ versions:
     auto-release: true
     released: true
 resources:
+  - serve-tkn-cli
   - tektoncd-cli
   - opc
