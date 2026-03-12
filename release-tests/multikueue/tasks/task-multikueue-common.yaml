@@ -1,0 +1,211 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: multikueue-setup
+spec:
+  params:
+    - name: CATALOG_SOURCE
+      description: Provide catalog-source name through which user have to subscribe operator
+      default: redhat-operators
+    - name: IMAGE
+      default: quay.io/openshift-pipeline/ci
+    - name: OSP_INDEX_IMAGE
+      default: "quay.io/openshift-pipeline/pipelines-index-4.20:v1.22.0"
+    - name: KUEBECONFIG_SECRET
+      type: string
+    - name: MULTI_CLUSTER_ROLE
+      default: Spoke
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: $(params.KUEBECONFIG_SECRET)
+  stepTemplate:
+    image: $(params.IMAGE)
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /credentials
+    env:
+      - name: KUEUE_NAMESPACE
+        value: openshift-kueue-operator
+      - name: KUBECONFIG
+        value: /credentials/kubeconfig
+      - name: CATALOG_SOURCE
+        value: $(params.CATALOG_SOURCE)
+  steps:
+    - name: create-namespace
+      script: |
+        oc create ns $KUEUE_NAMESPACE --dry-run=client -o yaml | oc apply -f -
+        oc create ns cert-manager-operator --dry-run=client -o yaml | oc apply -f -
+    - name: create-operator-group
+      script: |
+        cat <<EOF | oc apply -f -
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: $KUEUE_NAMESPACE
+            namespace: $KUEUE_NAMESPACE
+          spec: {}
+        EOF
+    - name: install-cert-manager
+      script: |
+        cat << EOF | oc apply -f -
+        apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        metadata:
+          name: openshift-cert-manager-operator
+          namespace: cert-manager-operator
+        spec:
+          channel: stable-v1.18
+          installPlanApproval: Automatic
+          name: openshift-cert-manager-operator
+          source: redhat-operators
+          sourceNamespace: openshift-marketplace
+        EOF
+    - name: install-rhbok-operator
+      script: |
+        cat << EOF | oc apply -f -
+        apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        metadata:
+          name: kueue-operator-stable-v1.3
+          namespace: $KUEUE_NAMESPACE
+        spec:
+          channel: stable-v1.3
+          installPlanApproval: Automatic
+          name: kueue-operator
+          source: redhat-operators
+          sourceNamespace: openshift-marketplace
+        EOF
+    - name: create-osp-catalog
+      env:
+        - name: INDEX_IMAGE
+          value: "$(params.OSP_INDEX_IMAGE)"
+      script: |
+        #!/usr/bin/env bash
+        cat <<EOF | oc apply -f-
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: CatalogSource
+          metadata:
+            name: "custom-redhat-opeator"
+            namespace: openshift-marketplace
+          spec:
+            sourceType: grpc
+            image: $INDEX_IMAGE
+            displayName: "Custom OSP"
+            publisher: Red Hat
+            updateStrategy:
+            registryPoll:
+            interval: 30m
+        EOF
+
+    - name: install-pipelines-operator
+      script: |
+        cat <<EOF | oc apply -f-
+        apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        metadata:
+          name: openshift-pipelines-operator-rh
+          namespace: openshift-operators
+        spec:
+          name: openshift-pipelines-operator-rh
+          source: "custom-redhat-opeato"
+          sourceNamespace: openshift-marketplace
+          channel: latest
+        EOF
+    - name: check-rhbok-pods
+      script: |
+        oc -n $KUEUE_NAMESPACE get  po
+
+    - name: create-kueue-cr
+      script: |
+        cat << EOF | kubectl apply -f -
+        apiVersion: kueue.openshift.io/v1
+        kind: Kueue
+        metadata:
+          name: cluster
+        spec:
+          config:
+            integrations:
+              externalFrameworks:
+              - group: tekton.dev
+                resource: pipelineruns
+                version: v1
+              frameworks:
+              - BatchJob
+              - Pod
+              - Deployment
+            multiKueue:
+              externalFrameworks:
+              - group: tekton.dev
+                resource: pipelineruns
+                version: v1
+          logLevel: Normal
+          managementState: Managed
+          operatorLogLevel: Normal
+        EOF
+    - name: check-tekton-config
+      script: |
+        #!/usr/bin/env bash
+        oc get tektonconfig config
+        PHASE=$(oc get tektonconfig config -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}')
+        elapsed=0
+        timeout=1800  # 30 minutes
+        while [ "$PHASE" != "True" ];
+        do
+        oc get tektonconfig config
+        oc get po -n openshift-pipelines
+        
+        # Check pod status for actual error states only (exclude normal transitional states)
+        error_pods=$(oc get po -n openshift-pipelines --no-headers | grep -E "(Error|Failed|CrashLoopBackOff|ImagePullBackOff|ErrImagePull|InvalidImageName|CreateContainerConfigError|CreateContainerError|OOMKilled|Evicted)" || true)
+        if [ -n "$error_pods" ]; then
+          echo "Error: Pods in failed state detected:"
+          echo "$error_pods"
+          echo ""
+          # Show actual error messages for each failed pod
+          while IFS= read -r pod_line; do
+            if [ -n "$pod_line" ]; then
+              pod_name=$(echo "$pod_line" | tr -s ' ' | cut -d' ' -f1)
+              echo "Error for pod $pod_name:"
+              # Get the actual error message from events
+              oc describe pod "$pod_name" -n openshift-pipelines | grep -E "(Failed|Error|Warning)" | tail -3 || echo "No specific error found"
+              echo ""
+            fi
+          done <<< "$error_pods"
+          echo "TektonConfig installation failed due to pod errors"
+          exit 1
+        fi
+        
+        sleep 30
+        elapsed=$((elapsed + 30))
+        if [ $elapsed -ge $timeout ]; then
+          echo "Timeout: TektonConfig not ready after 30 minutes"
+          echo "TektonConfig status:"
+          oc get tektonconfig config || echo "Failed to get TektonConfig"
+          echo "Pods:"
+          oc get po -n openshift-pipelines || echo "Failed to get pods"
+          exit 1
+        fi
+        PHASE=$(oc get tektonconfig config -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}')
+        done
+        
+        echo "✅ TektonConfig is ready!"
+        oc get tektonconfig config
+
+
+    - name: enable-multi-cluster
+      script: |
+        set -x
+        kubectl patch tektonconfig config --type='merge' -p '
+        {
+          "spec": {
+            "scheduler": {
+              "disabled": false,
+              "multi-cluster-disabled": false,
+              "multi-cluster-role": "$(params.MULTI_CLUSTER_ROLE)"
+            }
+          }
+        }'
+
+
+
