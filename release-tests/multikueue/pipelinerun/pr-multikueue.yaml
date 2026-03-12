@@ -1,0 +1,75 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: multikueue-setup-
+  labels:
+    appstudio.openshift.io/application: openshift-pipelines-index-1-22
+    appstudio.openshift.io/component: operator-1-22-index-4-17
+spec:
+  pipelineSpec:
+    params:
+      - name: HUB_SECRET
+        default: "hub-kuebeconfig"
+      - name: SPOKE_SECRET_1
+        default: "spoke-kuebeconfig"
+    workspaces:
+      - name: credentials
+    tasks:
+      - name: configure-clusters
+        taskRef:
+          name:
+            multikueue-setup
+        matrix:
+          include:
+            - name: spoke-1
+              params:
+                - name: MULTI_CLUSTER_ROLE
+                  value: Spoke
+                - name: KUEBECONFIG_SECRET
+                  value: $(params.SPOKE_SECRET_1)
+#            - name: hub
+#              params:
+#                - name: MULTI_CLUSTER_ROLE
+#                  value: Hub
+#                - name: KUEBECONFIG_SECRET
+#                  value: $(params.HUB_SECRET)
+      - name: configure-spoke
+        matrix:
+          include:
+            - name: spoke-1
+              params:
+                - name: SPOKE_NAME
+                  value: spoke-x
+                - name: MULTI_CLUSTER_ROLE
+                  value: Spoke
+                - name: KUEBECONFIG_SECRET
+                  value: $(params.SPOKE_SECRET_1)
+        runAfter:
+          - configure-clusters
+        taskRef:
+          name: multikueue-spoke-setup
+        workspaces:
+          - name: credentials
+      - name: configure-hub
+        runAfter:
+          - configure-spoke
+        taskRef:
+          name: multikueue-hub-setup
+        params:
+          - name: KUEBECONFIG_SECRET
+            value: $(params.HUB_SECRET)
+          - name: SPOKES
+            value: "$(tasks.configure-spoke.results.kubeconfig[*])"
+        workspaces:
+          - name: credentials
+
+  workspaces:
+    - name: credentials
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce # Standard mode for a single node reading/writing
+          resources:
+            requests:
+              storage: 100Mi  # Specify the size of the PVC here

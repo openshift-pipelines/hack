@@ -1,0 +1,160 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: multikueue-hub-setup
+spec:
+  workspaces:
+    - name: credentials
+  params:
+    - name: IMAGE
+      default: quay.io/openshift-pipeline/ci
+    - name: MULTI_CLUSTER_ROLE
+      default: "Hub"
+    - name: KUEUE_NAMESPACE
+      default: "openshift-kueue-operator"
+    - name: KUEBECONFIG_SECRET
+      type: string
+    - name: SPOKES
+      type: array
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: $(params.KUEBECONFIG_SECRET)
+  stepTemplate:
+    image: $(params.IMAGE)
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /credentials
+    env:
+      - name: KUEUE_NAMESPACE
+        value: $(params.KUEUE_NAMESPACE)
+      - name: KUBECONFIG
+        value: /credentials/kubeconfig
+  steps:
+    - name: create-spoke-secrets
+      args:
+        - "$(params.SPOKES)"
+      script: |
+        #!/usr/bin/env bash
+        
+        # Loop through the array passed in via args
+        for spoke in "$@"; do
+          spoke=$(echo "$spoke" | tr -d '\n' | xargs)
+          echo "Current spoke: $spoke"
+          kubectl create secret generic "${spoke/./-}" --from-file=kubeconfig=$(workspaces.credentials.path)/${spoke} -n  $KUEUE_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+        done
+
+    - name: configure-rbac-for-tekton
+      script: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: kueue-tekton-permissions
+        rules:
+          - apiGroups:
+              - tekton.dev
+            resources:
+              - pipelineruns
+              - pipelineruns/status
+            verbs:
+              - create
+              - delete
+              - get
+              - list
+              - patch
+              - update
+              - watch
+        ---
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: kueue-tekton-permissions-binding
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: kueue-tekton-permissions
+        subjects:
+          - kind: ServiceAccount
+            name: kueue-controller-manager
+            namespace: $KUEUE_NAMESPACE
+        EOF
+
+
+    - name: apply-multikueue-hub-resources
+      when:
+        - input: $(params.MULTI_CLUSTER_ROLE)
+          operator: in
+          values: [ "Hub" ]
+      script: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: kueue.x-k8s.io/v1beta2
+        kind: ResourceFlavor
+        metadata:
+          name: "default-flavor"
+        ---
+        apiVersion: kueue.x-k8s.io/v1beta2
+        kind: ClusterQueue
+        metadata:
+          name: "cluster-queue"
+        spec:
+          namespaceSelector: {}
+          resourceGroups:
+          - coveredResources: ["cpu", "memory", "tekton.dev/pipelineruns"]
+            flavors:
+            - name: "default-flavor"
+              resources:
+              - name: "cpu"
+                nominalQuota: 9
+              - name: "memory"
+                nominalQuota: 36Gi
+              - name: "tekton.dev/pipelineruns"
+                nominalQuota: "10"
+          admissionChecksStrategy:
+            admissionChecks:
+              - name: sample-multikueue
+        ---
+        apiVersion: kueue.x-k8s.io/v1beta2
+        kind: LocalQueue
+        metadata:
+          name: "pipelines-queue"
+        spec:
+          clusterQueue: "cluster-queue"
+        ---
+        apiVersion: kueue.x-k8s.io/v1beta2
+        kind: AdmissionCheck
+        metadata:
+          name: sample-multikueue
+        spec:
+          controllerName: kueue.x-k8s.io/multikueue
+          parameters:
+            apiGroup: kueue.x-k8s.io
+            kind: MultiKueueConfig
+            name: multikueue-test
+        ---
+        apiVersion: kueue.x-k8s.io/v1beta2
+        kind: MultiKueueConfig
+        metadata:
+          name: multikueue-test
+        spec:
+          clusters:          
+        EOF
+
+    - name: enable-multi-cluster
+      script: |
+        set -x
+        kubectl patch tektonconfig config --type='merge' -p '
+        {
+          "spec": {
+            "scheduler": {
+              "disabled": false,
+              "multi-cluster-disabled": false,
+              "multi-cluster-role": "$(params.MULTI_CLUSTER_ROLE)"
+            }
+          }
+        }'
+    - name: verification
+      script: |
+        echo "Step: verification"
+
