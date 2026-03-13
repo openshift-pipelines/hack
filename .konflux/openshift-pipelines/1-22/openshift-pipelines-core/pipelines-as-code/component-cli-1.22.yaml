@@ -11,7 +11,6 @@ spec:
   application: openshift-pipelines-core-1-22
   build-nudges-ref:
   - operator-1-22-bundle
-  - tektoncd-cli-1-22-tkn
   source:
     git:
       url: https://github.com/openshift-pipelines/pac-downstream.git
