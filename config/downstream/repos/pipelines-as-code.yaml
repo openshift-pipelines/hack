@@ -1,10 +1,7 @@
 repo: pac-downstream
-upstream: openshift-pipelines/pipelines-as-code
+upstream: tektoncd/pipelines-as-code
 components:
   - name: controller
   - name: webhook
   - name: watcher
   - name: cli
-    nudges:
-      - operator-{{hyphenize .Version.Version}}-bundle
-      - tektoncd-cli-{{hyphenize .Version.Version}}-tkn
