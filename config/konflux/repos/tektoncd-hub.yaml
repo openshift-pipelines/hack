@@ -1,5 +1,5 @@
 name: tektoncd-hub
-upstream: tektoncd/hub
+upstream: openshift-pipelines/hub
 components:
   - name: db-migration
   - name: api
@@ -8,6 +8,6 @@ components:
       [{"type": "npm", "path": "upstream/ui"}, {"type": "rpm", "path": ".konflux/rpms"}]
 branches:
   - name: release-v1.15.x
-    upstream: release-v1.17.2
+    upstream: release-v1.17.4
     versions:
       - "1.15"
