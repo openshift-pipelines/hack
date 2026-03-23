@@ -18,7 +18,7 @@ metadata:
       == "{{.Repository.Branch.Name}}" &&
       ({{.Tekton.WatchedSources}} ||
       "{{.Dockerfile}}".pathChanged() ||
-      {{- if  and (eq .Repository.Branch.Name "next")  (eq .Repository.Name "tektoncd-operator") }} ".tekton/*build*.yaml".pathChanged() || {{- end }}
+      {{- if  and (eq .Repository.Branch.Name "next")  (eq .Repository.Name "operator") }} ".tekton/*build*.yaml".pathChanged() || {{- end }}
       ".tekton/{{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{.Name}}-pull-request.yaml".pathChanged())
   labels:
     appstudio.openshift.io/application: {{hyphenize .Application.Name}}-{{hyphenize .Version.Version}}
