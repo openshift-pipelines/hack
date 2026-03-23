@@ -35,6 +35,6 @@ spec:
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
       type: RHSA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-cli-1-21-cdn-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-21-20260316-144732-000
+  releasePlan: openshift-pipelines-core-1-21-cdn-stage-release-as-op
+  snapshot: openshift-pipelines-core-1-21-20260323-075035-000
 
