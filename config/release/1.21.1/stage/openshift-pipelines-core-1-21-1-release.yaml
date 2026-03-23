@@ -20,8 +20,8 @@ spec:
       cves:
         - key: CVE-2025-66506
           component: tektoncd-cli-1-21-tkn
-        - key: CVE-2026-25639 
-          componet: tektoncd-hub-1-21
+        - key: CVE-2026-25639
+          component: tektoncd-hub-1-21
       issues:
         fixed:
           - id: SRVKP-9976
@@ -46,4 +46,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-21-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-21-vl8vh
+  snapshot: openshift-pipelines-core-1-21-20260323-094214-000
