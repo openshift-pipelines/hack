@@ -5,7 +5,7 @@ metadata:
     appstudio.openshift.io/application: openshift-pipelines-core-1-21
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
-    release.appstudio.openshift.io/author: rh-ee-diagrawa
+    release.appstudio.openshift.io/author: rh-ee-shverma
   generateName: openshift-pipelines-core-1-21-1-cdn-stage-release-
   namespace: tekton-ecosystem-tenant
 spec:
@@ -33,7 +33,7 @@ spec:
       topic: |
         The 1.21.1 release of Red Hat OpenShift Pipelines Operator.
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      type: RHBA
+      type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-cli-1-21-cdn-stage-release-as-op
   snapshot: openshift-pipelines-core-1-21-20260316-144732-000
