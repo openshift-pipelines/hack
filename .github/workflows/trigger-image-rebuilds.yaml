@@ -13,6 +13,10 @@ on:
         type: string
         default: ''
 
+concurrency:
+  group: trigger-rebuilds-${{ inputs.version }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
