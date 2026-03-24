@@ -29,7 +29,11 @@ jobs:
 
       - name: Install yq
         run: |
-          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          YQ_VERSION="v4.52.4"
+          YQ_SHA256="0c4d965ea944b64b8fddaf7f27779ee3034e5693263786506ccd1c120f184e8c"
+          wget -q "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -O /tmp/yq
+          echo "$YQ_SHA256  /tmp/yq" | sha256sum --check --strict
+          sudo mv /tmp/yq /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
 
       - name: Trigger rebuilds via .konflux/patches/.placeholder
