@@ -69,6 +69,7 @@ jobs:
           OK=0
           SKIPPED=0
           FAILED=0
+          RESULTS=""
 
           for REPO in $REPOS; do
             if [[ -n "$TARGET_REPO" ]] && [[ "$REPO" != "$TARGET_REPO" ]]; then
@@ -81,6 +82,7 @@ jobs:
             # Check if branch exists
             if ! gh api "repos/$FULL_REPO/branches/$BRANCH" --silent 2>/dev/null; then
               echo "SKIP $REPO: branch $BRANCH not found"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | Skipped (no branch) | - |\n"
               SKIPPED=$((SKIPPED + 1))
               continue
             fi
@@ -99,10 +101,13 @@ jobs:
               "${SHA_ARGS[@]}" \
               --field branch="$BRANCH" 2>&1; then
               echo "FAILED $REPO ($BRANCH)"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | Failed | - |\n"
               FAILED=$((FAILED + 1))
               continue
             fi
+            COMMIT_URL="https://github.com/${FULL_REPO}/commits/${BRANCH}"
             echo "OK $REPO ($BRANCH)"
+            RESULTS="${RESULTS}| [${REPO}](${COMMIT_URL}) | ${BRANCH} | OK | [view](${COMMIT_URL}) |\n"
             OK=$((OK + 1))
           done
 
@@ -116,6 +121,19 @@ jobs:
 
           echo "---"
           echo "Summary: $TOTAL repos processed, $OK ok, $SKIPPED skipped, $FAILED failed"
+
+          # Write GitHub Step Summary
+          {
+            echo "## Trigger Image Rebuilds"
+            echo ""
+            echo "**Version:** ${VERSION} | **Branch:** ${BRANCH} | **Timestamp:** ${TIMESTAMP}"
+            echo ""
+            echo "| Repo | Branch | Status | Commit |"
+            echo "|------|--------|--------|--------|"
+            echo -e "$RESULTS"
+            echo ""
+            echo "**Total:** ${TOTAL} | **OK:** ${OK} | **Skipped:** ${SKIPPED} | **Failed:** ${FAILED}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
           if [[ $FAILED -gt 0 ]]; then
             exit 1
