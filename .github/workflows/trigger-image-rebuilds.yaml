@@ -58,9 +58,9 @@ jobs:
           REPOS=$(yq -N e '.repo // .name' config/downstream/repos/*.yaml | sort -u)
 
           TOTAL=0
-          UPDATED=0
-          CREATED=0
+          OK=0
           SKIPPED=0
+          FAILED=0
 
           for REPO in $REPOS; do
             if [[ -n "$TARGET_REPO" ]] && [[ "$REPO" != "$TARGET_REPO" ]]; then
@@ -80,28 +80,22 @@ jobs:
             # Check if .placeholder already exists on the target branch
             EXISTING_SHA=$(gh api "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH?ref=$BRANCH" --jq '.sha' 2>/dev/null || echo "")
 
-            CONTENT=$(echo -n "rebuild $TIMESTAMP" | base64)
+            CONTENT=$(echo -n "rebuild $TIMESTAMP" | base64 -w 0)
 
-            if [[ -n "$EXISTING_SHA" ]]; then
-              # Update existing file
-              gh api -X PUT "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH" \
-                --field message="rebuild: trigger image rebuild $TIMESTAMP" \
-                --field content="$CONTENT" \
-                --field sha="$EXISTING_SHA" \
-                --field branch="$BRANCH" \
-                --silent
-              echo "UPDATED $REPO ($BRANCH)"
-              UPDATED=$((UPDATED + 1))
-            else
-              # Create the file (GitHub API creates intermediate dirs automatically)
-              gh api -X PUT "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH" \
-                --field message="rebuild: trigger image rebuild $TIMESTAMP" \
-                --field content="$CONTENT" \
-                --field branch="$BRANCH" \
-                --silent
-              echo "CREATED $REPO ($BRANCH)"
-              CREATED=$((CREATED + 1))
+            SHA_ARGS=()
+            [[ -n "$EXISTING_SHA" ]] && SHA_ARGS=(--field "sha=$EXISTING_SHA")
+
+            if ! gh api -X PUT "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH" \
+              --field message="rebuild: trigger image rebuild $TIMESTAMP" \
+              --field content="$CONTENT" \
+              "${SHA_ARGS[@]}" \
+              --field branch="$BRANCH" 2>&1; then
+              echo "FAILED $REPO ($BRANCH)"
+              FAILED=$((FAILED + 1))
+              continue
             fi
+            echo "OK $REPO ($BRANCH)"
+            OK=$((OK + 1))
           done
 
           # Detect repo name typos
@@ -113,4 +107,8 @@ jobs:
           fi
 
           echo "---"
-          echo "Summary: $TOTAL repos processed, $UPDATED updated, $CREATED created, $SKIPPED skipped"
+          echo "Summary: $TOTAL repos processed, $OK ok, $SKIPPED skipped, $FAILED failed"
+
+          if [[ $FAILED -gt 0 ]]; then
+            exit 1
+          fi
