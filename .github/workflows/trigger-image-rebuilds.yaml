@@ -51,7 +51,7 @@ jobs:
           fi
 
           if [[ "$VERSION" == "next" ]]; then
-            BRANCH="main"
+            BRANCH="next"
           else
             BRANCH="release-v${VERSION}.x"
           fi
