@@ -1,0 +1,100 @@
+name: Trigger Image Rebuilds
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Downstream release version (e.g., "1.15", "1.22", "next")'
+        required: true
+        type: string
+      repo:
+        description: 'Specific repo name to target (leave empty for all downstream repos)'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  trigger-rebuilds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hack repo
+        uses: actions/checkout@v6
+
+      - name: Install yq
+        run: |
+          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Trigger rebuilds via .konflux/patches/.placeholder
+        env:
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          VERSION: ${{ inputs.version }}
+          TARGET_REPO: ${{ inputs.repo }}
+        run: |
+          if [[ "$VERSION" == "next" ]]; then
+            BRANCH="main"
+          else
+            BRANCH="release-v${VERSION}.x"
+          fi
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          ORG="openshift-pipelines"
+          PLACEHOLDER_PATH=".konflux/patches/.placeholder"
+
+          echo "Triggering image rebuilds on branch: $BRANCH"
+          echo "Timestamp: $TIMESTAMP"
+          echo "---"
+
+          REPOS=$(yq -N e '.repo // .name' config/downstream/repos/*.yaml | sort -u)
+
+          TOTAL=0
+          UPDATED=0
+          CREATED=0
+          SKIPPED=0
+
+          for REPO in $REPOS; do
+            if [[ -n "$TARGET_REPO" ]] && [[ "$REPO" != "$TARGET_REPO" ]]; then
+              continue
+            fi
+
+            TOTAL=$((TOTAL + 1))
+            FULL_REPO="$ORG/$REPO"
+
+            # Check if branch exists
+            if ! gh api "repos/$FULL_REPO/branches/$BRANCH" --silent 2>/dev/null; then
+              echo "SKIP $REPO: branch $BRANCH not found"
+              SKIPPED=$((SKIPPED + 1))
+              continue
+            fi
+
+            # Check if .placeholder already exists on the target branch
+            EXISTING_SHA=$(gh api "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH?ref=$BRANCH" --jq '.sha' 2>/dev/null || echo "")
+
+            CONTENT=$(echo -n "rebuild $TIMESTAMP" | base64)
+
+            if [[ -n "$EXISTING_SHA" ]]; then
+              # Update existing file
+              gh api -X PUT "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH" \
+                --field message="rebuild: trigger image rebuild $TIMESTAMP" \
+                --field content="$CONTENT" \
+                --field sha="$EXISTING_SHA" \
+                --field branch="$BRANCH" \
+                --silent
+              echo "UPDATED $REPO ($BRANCH)"
+              UPDATED=$((UPDATED + 1))
+            else
+              # Create the file (GitHub API creates intermediate dirs automatically)
+              gh api -X PUT "repos/$FULL_REPO/contents/$PLACEHOLDER_PATH" \
+                --field message="rebuild: trigger image rebuild $TIMESTAMP" \
+                --field content="$CONTENT" \
+                --field branch="$BRANCH" \
+                --silent
+              echo "CREATED $REPO ($BRANCH)"
+              CREATED=$((CREATED + 1))
+            fi
+          done
+
+          echo "---"
+          echo "Summary: $TOTAL repos processed, $UPDATED updated, $CREATED created, $SKIPPED skipped"
