@@ -34,6 +34,14 @@ jobs:
           VERSION: ${{ inputs.version }}
           TARGET_REPO: ${{ inputs.repo }}
         run: |
+          set -euo pipefail
+
+          # Validate version format
+          if [[ ! "$VERSION" =~ ^(next|[0-9]+\.[0-9]+)$ ]]; then
+            echo "ERROR: Invalid version format '$VERSION'. Expected 'next' or 'X.Y' (e.g., '1.22')"
+            exit 1
+          fi
+
           if [[ "$VERSION" == "next" ]]; then
             BRANCH="main"
           else
@@ -95,6 +103,14 @@ jobs:
               CREATED=$((CREATED + 1))
             fi
           done
+
+          # Detect repo name typos
+          if [[ -n "$TARGET_REPO" ]] && [[ $TOTAL -eq 0 ]]; then
+            echo "ERROR: repo '$TARGET_REPO' not found in config/downstream/repos/*.yaml"
+            echo "Available repos:"
+            echo "$REPOS"
+            exit 1
+          fi
 
           echo "---"
           echo "Summary: $TOTAL repos processed, $UPDATED updated, $CREATED created, $SKIPPED skipped"
