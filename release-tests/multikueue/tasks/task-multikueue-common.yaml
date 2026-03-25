@@ -39,14 +39,20 @@ spec:
         oc create ns cert-manager-operator --dry-run=client -o yaml | oc apply -f -
     - name: create-operator-group
       script: |
-        cat <<EOF | oc apply -f -
+        set -x
+        if ! oc get operatorgroup -n "$KUEUE_NAMESPACE" --no-headers | grep -q "$KUEUE_NAMESPACE"; then
+          echo "OperatorGroup not found. Creating..."
+          cat <<EOF | oc apply -f -
           apiVersion: operators.coreos.com/v1
           kind: OperatorGroup
           metadata:
-            name: $KUEUE_NAMESPACE
-            namespace: $KUEUE_NAMESPACE
+            name: "$KUEUE_NAMESPACE"
+            namespace: "$KUEUE_NAMESPACE"
           spec: {}
         EOF
+        else
+          echo "OperatorGroup already exists in $KUEUE_NAMESPACE. Skipping."
+        fi
     - name: install-cert-manager
       script: |
         cat << EOF | oc apply -f -
@@ -56,7 +62,11 @@ spec:
           name: openshift-cert-manager-operator
           namespace: cert-manager-operator
         spec:
-          channel: stable-v1.18
+          config:
+            env:
+            - name: ROLEARN
+              value: test
+          channel: stable-v1
           installPlanApproval: Automatic
           name: openshift-cert-manager-operator
           source: redhat-operators
@@ -87,7 +97,7 @@ spec:
           apiVersion: operators.coreos.com/v1alpha1
           kind: CatalogSource
           metadata:
-            name: "custom-redhat-opeator"
+            name: "custom-osp-operator"
             namespace: openshift-marketplace
           spec:
             sourceType: grpc
@@ -109,13 +119,15 @@ spec:
           namespace: openshift-operators
         spec:
           name: openshift-pipelines-operator-rh
-          source: "custom-redhat-opeato"
+          source: "custom-osp-operator"
           sourceNamespace: openshift-marketplace
           channel: latest
         EOF
-    - name: check-rhbok-pods
+    - name: wait-for-rhbok-pods
       script: |
-        oc -n $KUEUE_NAMESPACE get  po
+        #!/usr/bin/env bash
+        kubectl -n $KUEUE_NAMESPACE get  po
+        kubectl wait --for=condition=Available deployment --all -n $KUEUE_NAMESPACE --timeout=300s
 
     - name: create-kueue-cr
       script: |
@@ -144,7 +156,7 @@ spec:
           managementState: Managed
           operatorLogLevel: Normal
         EOF
-    - name: check-tekton-config
+    - name: wait-for-tekton-config
       script: |
         #!/usr/bin/env bash
         oc get tektonconfig config

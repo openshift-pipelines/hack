@@ -3,16 +3,13 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   generateName: multikueue-setup-
-  labels:
-    appstudio.openshift.io/application: openshift-pipelines-index-1-22
-    appstudio.openshift.io/component: operator-1-22-index-4-17
 spec:
   pipelineSpec:
     params:
       - name: HUB_SECRET
-        default: "hub-kuebeconfig"
+        default: "hub-secret"
       - name: SPOKE_SECRET_1
-        default: "spoke-kuebeconfig"
+        default: "spoke-1-secret"
     workspaces:
       - name: credentials
     tasks:
@@ -28,12 +25,12 @@ spec:
                   value: Spoke
                 - name: KUEBECONFIG_SECRET
                   value: $(params.SPOKE_SECRET_1)
-#            - name: hub
-#              params:
-#                - name: MULTI_CLUSTER_ROLE
-#                  value: Hub
-#                - name: KUEBECONFIG_SECRET
-#                  value: $(params.HUB_SECRET)
+            - name: hub
+              params:
+                - name: MULTI_CLUSTER_ROLE
+                  value: Hub
+                - name: KUEBECONFIG_SECRET
+                  value: $(params.HUB_SECRET)
       - name: configure-spoke
         matrix:
           include:
