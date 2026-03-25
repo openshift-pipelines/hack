@@ -27,10 +27,12 @@ branches:
   tektoncd-hub:
     upstream: release-v1.23.7
   tektoncd-pipeline:
-    upstream: release-v1.10.x
+    upstream: release-v1.3.x
   tektoncd-pruner:
     upstream: release-v0.3.x
   tektoncd-results:
     upstream: release-v0.18.x
   tektoncd-triggers:
     upstream: release-v0.35.x
+  operator:
+    upstream: release-v0.77.x
