@@ -61,7 +61,7 @@ spec:
         echo "Bind Role to ServiceAccount"
         kubectl create clusterrolebinding multikueue-sa-crb \
             --clusterrole=multikueue-sa-role \
-            --serviceaccount=default:multikueue-sa
+            --serviceaccount=default:multikueue-sa --dry-run=client -o yaml | kubectl apply -f -
     - name: generate-kube-config
       script: |
         cat <<EOF | kubectl apply -f -

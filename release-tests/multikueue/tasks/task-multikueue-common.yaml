@@ -16,6 +16,10 @@ spec:
       type: string
     - name: MULTI_CLUSTER_ROLE
       default: Spoke
+    - name: KUEUE_NAMESPACE
+      default: openshift-kueue-operator
+    - name: CERT_MANAGER_NAMESPACE
+      default: cert-manager-operator
   volumes:
     - name: kubeconfig
       secret:
@@ -27,7 +31,9 @@ spec:
         mountPath: /credentials
     env:
       - name: KUEUE_NAMESPACE
-        value: openshift-kueue-operator
+        value: $(params.KUEUE_NAMESPACE)
+      - name: CERT_MANAGER_NAMESPACE
+        value: $(params.CERT_MANAGER_NAMESPACE)
       - name: KUBECONFIG
         value: /credentials/kubeconfig
       - name: CATALOG_SOURCE
@@ -36,8 +42,8 @@ spec:
     - name: create-namespace
       script: |
         oc create ns $KUEUE_NAMESPACE --dry-run=client -o yaml | oc apply -f -
-        oc create ns cert-manager-operator --dry-run=client -o yaml | oc apply -f -
-    - name: create-operator-group
+        oc create ns $CERT_MANAGER_NAMESPACE --dry-run=client -o yaml | oc apply -f -
+    - name: create-kueue-operator-group
       script: |
         set -x
         if ! oc get operatorgroup -n "$KUEUE_NAMESPACE" --no-headers | grep -q "$KUEUE_NAMESPACE"; then
@@ -52,6 +58,22 @@ spec:
         EOF
         else
           echo "OperatorGroup already exists in $KUEUE_NAMESPACE. Skipping."
+        fi
+    - name: create-cert-operator-group
+      script: |
+        set -x
+        if ! oc get operatorgroup -n "$CERT_MANAGER_NAMESPACE" --no-headers | grep -q "$CERT_MANAGER_NAMESPACE"; then
+          echo "OperatorGroup not found. Creating..."
+          cat <<EOF | oc apply -f -
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: "$CERT_MANAGER_NAMESPACE"
+            namespace: "$CERT_MANAGER_NAMESPACE"
+          spec: {}
+        EOF
+        else
+          echo "OperatorGroup already exists in $CERT_MANAGER_NAMESPACE. Skipping."
         fi
     - name: install-cert-manager
       script: |
@@ -204,6 +226,27 @@ spec:
         echo "✅ TektonConfig is ready!"
         oc get tektonconfig config
 
+    - name: configure-network-policy-egress
+      script: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: kueue-allow-egress-external
+          namespace: $KUEUE_NAMESPACE
+        spec:
+          podSelector:
+            matchLabels:
+              app.openshift.io/name: kueue
+          policyTypes:
+            - Egress
+          egress:
+            - ports:
+                - port: 443
+                  protocol: TCP
+                - port: 80
+                  protocol: TCP
+        EOF
 
     - name: enable-multi-cluster
       script: |
