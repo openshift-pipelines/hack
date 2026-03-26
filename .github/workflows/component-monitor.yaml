@@ -70,6 +70,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r component-monitor/requirements.txt
 
+      - name: Install OpenShift CLI tools
+        if: inputs.enable_konflux != 'false'
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4"
+
       - name: Login to Konflux cluster
         if: inputs.enable_konflux != 'false'
         uses: redhat-actions/oc-login@v1
@@ -81,9 +87,10 @@ jobs:
       - name: Install opc CLI
         if: inputs.enable_konflux != 'false'
         run: |
-          curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/opc-linux-amd64.tar.gz
-          tar xzf opc-linux-amd64.tar.gz opc
-          sudo mv opc /usr/local/bin/
+          curl -sLO https://mirror.openshift.com/pub/cgw/pipelines/1.21.0/tkn-linux-amd64.tar.gz
+          tar xzf tkn-linux-amd64.tar.gz
+          sudo mv opc /usr/local/bin/ 2>/dev/null || true
+          sudo mv tkn /usr/local/bin/ 2>/dev/null || true
           opc version
 
       - name: Fetch existing dashboard data
