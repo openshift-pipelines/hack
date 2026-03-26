@@ -10,6 +10,8 @@ spec:
         default: "hub-secret"
       - name: SPOKE_SECRET_1
         default: "spoke-1-secret"
+      - name: KUEUE_NAMESPACE
+        default: "kueue-system"
     workspaces:
       - name: credentials
     tasks:
@@ -37,7 +39,7 @@ spec:
             - name: spoke-1
               params:
                 - name: SPOKE_NAME
-                  value: spoke-x
+                  value: spoke-1
                 - name: MULTI_CLUSTER_ROLE
                   value: Spoke
                 - name: KUEBECONFIG_SECRET
@@ -54,6 +56,8 @@ spec:
         taskRef:
           name: multikueue-hub-setup
         params:
+          - name: KUEUE_NAMESPACE
+            value: $(params.KUEUE_NAMESPACE)
           - name: KUEBECONFIG_SECRET
             value: $(params.HUB_SECRET)
           - name: SPOKES
