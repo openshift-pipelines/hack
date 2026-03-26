@@ -6,7 +6,7 @@ metadata:
     pac.test.appstudio.openshift.io/event-type: push
     pac.test.appstudio.openshift.io/url-org: openshift-pipelines
     release.appstudio.openshift.io/author: rh-ee-shverma
-  generateName: openshift-pipelines-core-1-21-1-stage-release-
+  name: openshift-pipelines-core-1-21-1-stage-release
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -20,6 +20,10 @@ spec:
       cves:
         - key: CVE-2025-66506
           component: tektoncd-cli-1-21-tkn
+        - key: CVE-2026-33211
+          component: tektoncd-pipeline-1-21-resolvers
+        - key:  CVE-2026-33022
+          component: tektoncd-pipeline-1-21-controller
         - key: CVE-2026-25639
           component: tektoncd-hub-1-21
       package-maintainer: pipelines-bots@redhat.com
@@ -38,4 +42,5 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-21-stage-release-as-op
-  snapshot: openshift-pipelines-core-1-21-20260323-141840-000
+  snapshot: openshift-pipelines-core-1-21-20260326-135334-000
+
