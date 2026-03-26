@@ -1,2 +1,4 @@
 /prowgen
 /repos
+component-monitor/data.json
+component-monitor/__pycache__/
