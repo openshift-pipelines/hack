@@ -1,0 +1,131 @@
+# Component Monitor - GitHub Actions Workflow
+#
+# Prerequisites:
+#   1. GitHub Pages: Settings > Pages > Source = "GitHub Actions"
+#   2. Repository secrets:
+#      - KONFLUX_TOKEN: OpenShift/Konflux authentication token
+#   3. Repository variables:
+#      - KONFLUX_API_URL: e.g. https://api.kflux-prd-rh02.0fk9.p1.openshiftapps.com:6443
+#      - RESULTS_HOST: e.g. tekton-results-tekton-results.apps.kflux-prd-rh02.0fk9.p1.openshiftapps.com
+#   4. GITHUB_TOKEN is automatically provided by GitHub Actions.
+#
+# Cron runs only on the default branch. Manual dispatch works from any branch
+# via the Actions tab "Use workflow from" dropdown.
+
+name: Component Monitor
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to update (blank = all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - '1.15'
+          - '1.20'
+          - '1.21'
+          - '1.22'
+          - 'next'
+      repos:
+        description: 'Comma-separated repo names to update (blank = all, e.g. tektoncd-pipeline,operator)'
+        required: false
+        type: string
+      enable_konflux:
+        description: 'Enable Konflux cluster queries for build/image data'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r component-monitor/requirements.txt
+
+      - name: Login to Konflux cluster
+        if: inputs.enable_konflux != 'false'
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ vars.KONFLUX_API_URL }}
+          openshift_token: ${{ secrets.KONFLUX_TOKEN }}
+          insecure_skip_tls_verify: true
+
+      - name: Install opc CLI
+        if: inputs.enable_konflux != 'false'
+        run: |
+          curl -sLO https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/opc-linux-amd64.tar.gz
+          tar xzf opc-linux-amd64.tar.gz opc
+          sudo mv opc /usr/local/bin/
+          opc version
+
+      - name: Fetch existing dashboard data
+        if: inputs.version != '' || inputs.repos != ''
+        run: |
+          PAGES_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          echo "Fetching existing data from ${PAGES_URL}data.json"
+          curl -sSf "${PAGES_URL}data.json" -o component-monitor/data.json || echo "No existing data found, starting fresh"
+
+      - name: Generate dashboard data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESULTS_HOST: ${{ vars.RESULTS_HOST }}
+          RESULTS_TOKEN: ${{ secrets.KONFLUX_TOKEN }}
+        run: |
+          ENABLE_KONFLUX="${{ inputs.enable_konflux }}"
+          VERSION="${{ inputs.version }}"
+          REPOS="${{ inputs.repos }}"
+
+          ARGS=""
+          if [[ "${ENABLE_KONFLUX:-true}" != "false" ]]; then
+            ARGS="--enable-konflux"
+          fi
+          if [[ -n "$VERSION" ]]; then
+            ARGS="$ARGS --version $VERSION"
+          fi
+          if [[ -n "$REPOS" ]]; then
+            ARGS="$ARGS --repos $REPOS"
+          fi
+          if [[ -n "$VERSION" || -n "$REPOS" ]]; then
+            ARGS="$ARGS --merge"
+          fi
+          python component-monitor/generate_data.py $ARGS
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: component-monitor
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

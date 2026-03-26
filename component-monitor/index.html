@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Monitor</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --card-border: #e0e4ea;
+      --header-bg: #ffffff;
+      --header-fg: #1a2233;
+      --accent: #1976d2;
+      --green: #2e7d32;
+      --red: #d32f2f;
+      --yellow: #f57c00;
+      --gray: #78909c;
+      --border: #e0e4ea;
+      --text: #1a2233;
+      --text-muted: #5f6d7e;
+      --row-alt: #f9fafb;
+      --row-hover: #eef2f7;
+      --thead-bg: #f0f2f5;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --badge-green-bg: rgba(46,125,50,0.12);
+      --badge-green-fg: #2e7d32;
+      --badge-red-bg: rgba(211,47,47,0.12);
+      --badge-red-fg: #d32f2f;
+      --badge-yellow-bg: rgba(245,124,0,0.12);
+      --badge-yellow-fg: #f57c00;
+      --badge-gray-bg: rgba(120,144,156,0.12);
+      --badge-gray-fg: #78909c;
+      --row-error-bg: rgba(211,47,47,0.06);
+      --row-error-hover: rgba(211,47,47,0.10);
+      --alert-bg: rgba(211,47,47,0.06);
+      --alert-border: rgba(211,47,47,0.25);
+      --detail-border: rgba(224,228,234,0.8);
+      --link-hover: #1565c0;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1923;
+        --card-bg: #1a2735;
+        --card-border: #243447;
+        --header-bg: #0b1219;
+        --header-fg: #e8edf2;
+        --accent: #4fc3f7;
+        --green: #4caf50;
+        --red: #ef5350;
+        --yellow: #ffb74d;
+        --gray: #607d8b;
+        --border: #243447;
+        --text: #e8edf2;
+        --text-muted: #7a8fa0;
+        --row-alt: #1f2f3f;
+        --row-hover: #243a4f;
+        --thead-bg: #152232;
+        --shadow: 0 2px 12px rgba(0,0,0,0.3);
+        --badge-green-bg: rgba(76,175,80,0.2);
+        --badge-green-fg: #4caf50;
+        --badge-red-bg: rgba(239,83,80,0.2);
+        --badge-red-fg: #ef5350;
+        --badge-yellow-bg: rgba(255,183,77,0.2);
+        --badge-yellow-fg: #ffb74d;
+        --badge-gray-bg: rgba(96,125,139,0.2);
+        --badge-gray-fg: #607d8b;
+        --row-error-bg: rgba(239,83,80,0.08);
+        --row-error-hover: rgba(239,83,80,0.14);
+        --alert-bg: rgba(239,83,80,0.08);
+        --alert-border: rgba(239,83,80,0.3);
+        --detail-border: rgba(36,52,71,0.6);
+        --link-hover: #81d4fa;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-fg);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    header h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: 0.3px; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .header-right label { font-size: 0.85rem; color: var(--text-muted); }
+    .header-right select {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+    }
+    .header-right select:focus { border-color: var(--accent); }
+    .timestamp { font-size: 0.75rem; color: var(--text-muted); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .summary {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      min-width: 130px;
+      text-align: center;
+      flex: 1;
+    }
+    .summary-card .number { font-size: 2rem; font-weight: 700; line-height: 1.2; }
+    .summary-card .label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 0.2rem;
+    }
+    .summary-card.total { border-left: 3px solid var(--accent); }
+    .summary-card.total .number { color: var(--accent); }
+    .summary-card.synced { border-left: 3px solid var(--green); }
+    .summary-card.synced .number { color: var(--green); }
+    .summary-card.out-of-sync { border-left: 3px solid var(--red); }
+    .summary-card.out-of-sync .number { color: var(--red); }
+    .summary-card.build-pass { border-left: 3px solid var(--green); }
+    .summary-card.build-pass .number { color: var(--green); }
+    .summary-card.build-fail { border-left: 3px solid var(--red); }
+    .summary-card.build-fail .number { color: var(--red); }
+
+    .version-info {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+    .version-info span { color: var(--text-muted); }
+    .version-info strong { color: var(--text); }
+    .code-freeze-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .code-freeze-badge.active { background: var(--badge-yellow-bg); color: var(--yellow); }
+    .code-freeze-badge.inactive { background: var(--badge-gray-bg); color: var(--gray); }
+
+    .table-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      background: var(--thead-bg);
+      color: var(--text-muted);
+      padding: 0.75rem 0.8rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+    thead th.center { text-align: center; }
+    tbody td {
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tbody tr { background: var(--card-bg); }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    tbody tr:hover { background: var(--row-hover); }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--link-hover); }
+
+    .sha {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      cursor: default;
+    }
+    .status-icon { font-size: 1.1rem; line-height: 1; }
+    .status-synced { color: var(--green); }
+    .status-out-of-sync { color: var(--red); }
+    .status-pending { color: var(--yellow); }
+    .status-unknown { color: var(--gray); }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.55rem;
+      border-radius: 12px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.4;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .status-badge.success { background: var(--badge-green-bg); color: var(--badge-green-fg); }
+    .status-badge.failure { background: var(--badge-red-bg); color: var(--badge-red-fg); }
+    .status-badge.pending { background: var(--badge-yellow-bg); color: var(--badge-yellow-fg); }
+    .status-badge.unknown { background: var(--badge-gray-bg); color: var(--badge-gray-fg); }
+
+    .expand-details {
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+    }
+    .expand-details summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 0.78rem;
+      list-style: none;
+    }
+    .expand-details summary:hover { color: var(--link-hover); }
+    .expand-details summary::-webkit-details-marker { display: none; }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--detail-border);
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row a { display: inline-flex; align-items: center; }
+    .detail-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+    .detail-name { font-weight: 500; min-width: 110px; }
+    .detail-icon {
+      font-size: 0.9rem;
+      width: 1.1rem;
+      text-align: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .detail-section {
+      padding: 0.35rem 0 0.35rem 0.6rem;
+      border-left: 2px solid var(--card-border);
+      margin: 0.3rem 0;
+    }
+    .detail-section > div:first-child {
+      font-size: 0.78rem;
+    }
+
+    .repo-cell { font-size: 0.8rem; line-height: 1.6; }
+    .repo-cell .repo-label {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .image-cell {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    tbody tr.row-error {
+      border-left: 3px solid var(--red);
+      background: var(--row-error-bg) !important;
+    }
+    tbody tr.row-error:hover {
+      background: var(--row-error-hover) !important;
+    }
+
+    .alert-banner {
+      background: var(--alert-bg);
+      border: 1px solid var(--alert-border);
+      border-left: 4px solid var(--red);
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .alert-banner .alert-title {
+      font-weight: 600;
+      color: var(--red);
+      margin-bottom: 0.4rem;
+    }
+    .alert-banner ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: var(--text);
+    }
+    .alert-banner li { margin-bottom: 0.2rem; }
+
+    .action-hint {
+      font-size: 0.72rem;
+      color: var(--yellow);
+      font-style: italic;
+      padding: 0.2rem 0;
+    }
+
+    .loading { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 1.1rem; }
+    .error-msg { text-align: center; padding: 2rem; color: var(--red); font-size: 1rem; }
+
+    @media (max-width: 768px) {
+      header { padding: 1rem; }
+      .container { padding: 1rem; }
+      .summary-card { min-width: 90px; padding: 0.6rem 0.8rem; }
+      .summary-card .number { font-size: 1.4rem; }
+      .summary { gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Component Monitor</h1>
+    <div class="header-right">
+      <label for="version-select">Version:</label>
+      <select id="version-select"></select>
+      <span class="timestamp" id="timestamp"></span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="section-label" id="version-info-label" style="display:none;">Release Info</div>
+    <div id="version-info" class="version-info" style="display:none;"></div>
+    <div class="section-label" id="summary-label" style="display:none;">Summary</div>
+    <div class="summary" id="summary"></div>
+    <div id="alert-banner"></div>
+    <div class="section-label" id="components-label" style="display:none;">Components</div>
+    <div class="table-wrapper">
+      <div id="loading" class="loading">Loading dashboard data...</div>
+      <div id="error" class="error-msg" style="display:none;"></div>
+      <table id="dashboard-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Repository</th>
+            <th class="center">Source Sync</th>
+            <th class="center">Build</th>
+            <th class="center">Image Updated</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const DATA_URL = "data.json";
+    let dashboardData = null;
+
+    function shortSha(sha) {
+      if (!sha) return "-";
+      if (sha.startsWith("sha256:")) return sha.substring(7, 19) + "...";
+      return sha.substring(0, 7);
+    }
+
+    function commitUrl(repo, sha) {
+      return sha ? `https://github.com/${repo}/commit/${sha}` : null;
+    }
+
+    function branchUrl(repo, branch) {
+      return `https://github.com/${repo}/tree/${branch}`;
+    }
+
+    function repoUrl(repo) {
+      return `https://github.com/${repo}`;
+    }
+
+    function shaLink(sha, repo) {
+      if (!sha) return `<span class="sha">-</span>`;
+      const url = commitUrl(repo, sha);
+      const display = shortSha(sha);
+      return url
+        ? `<a href="${url}" target="_blank" class="sha" title="${sha}">${display}</a>`
+        : `<span class="sha" title="${sha}">${display}</span>`;
+    }
+
+    // ---- Repository cell (repo@branch) ----
+    function repositoryCell(c) {
+      const upLink = c.upstream_repo && c.upstream_branch
+        ? `<a href="${branchUrl(c.upstream_repo, c.upstream_branch)}" target="_blank">${c.upstream_repo}@${c.upstream_branch}</a>`
+        : (c.upstream_repo ? c.upstream_repo : "-");
+      const downLink = `<a href="${branchUrl(c.downstream_repo, c.downstream_branch)}" target="_blank">${c.downstream_repo}@${c.downstream_branch}</a>`;
+      return `<div class="repo-cell">
+        <span class="repo-label">Upstream</span><br>${upLink}<br>
+        <span class="repo-label">Downstream</span><br>${downLink}
+      </div>`;
+    }
+
+    // ---- Source Sync cell ----
+    function sourceSyncCell(c, autoOpen) {
+      if (!c.upstream_repo) {
+        return `<span class="status-icon status-unknown" title="No upstream">N/A</span>`;
+      }
+      if (!c.upstream_sha && !c.head_sha) {
+        return `<span class="status-icon status-unknown" title="Data unavailable">&#x2014;</span>`;
+      }
+
+      let icon, label, badgeClass, isError = false;
+      if (!c.upstream_sha || !c.head_sha) {
+        icon = `<span class="status-icon status-unknown">&#x26A0;</span>`;
+        label = "Partial data";
+        badgeClass = "unknown";
+      } else if (c.in_sync) {
+        icon = `<span class="status-icon status-synced">&#x2714;</span>`;
+        label = "In sync";
+        badgeClass = "success";
+      } else {
+        icon = `<span class="status-icon status-out-of-sync">&#x2718;</span>`;
+        label = "Out of sync";
+        badgeClass = "failure";
+        isError = true;
+      }
+
+      const openAttr = autoOpen ? " open" : "";
+      const actionHint = isError
+        ? `<div class="action-hint">Action: Run upstream source fetch to sync</div>`
+        : "";
+
+      return `${icon}
+        <details class="expand-details"${openAttr}>
+          <summary>details</summary>
+          <div class="detail-row"><span class="detail-label">Upstream:</span> ${shaLink(c.upstream_sha, c.upstream_repo)}</div>
+          <div class="detail-row"><span class="detail-label">Downstream:</span> ${shaLink(c.head_sha, c.downstream_repo)}</div>
+          <div class="detail-row"><span class="detail-label">Status:</span> <span class="status-badge ${badgeClass}">${label}</span></div>
+          ${actionHint}
+        </details>`;
+    }
+
+    // ---- Build cell (on-push + EC combined) ----
+    function normalizeConclusion(status) {
+      if (!status) return "Pending";
+      switch (status.toLowerCase()) {
+        case "success": case "succeeded": return "Succeeded";
+        case "failure": case "failed": return "Failed";
+        case "pending": case "in_progress": case "running": return "Pending";
+        default: return status.charAt(0).toUpperCase() + status.slice(1);
+      }
+    }
+
+    function conclusionBadgeClass(status) {
+      const norm = normalizeConclusion(status);
+      switch (norm) {
+        case "Succeeded": return "success";
+        case "Failed": return "failure";
+        case "Pending": return "pending";
+        default: return "unknown";
+      }
+    }
+
+    function buildStatusIcon(status) {
+      const norm = normalizeConclusion(status);
+      switch (norm) {
+        case "Succeeded":
+          return `<span class="detail-icon status-synced">&#x2714;</span>`;
+        case "Failed":
+          return `<span class="detail-icon status-out-of-sync">&#x2718;</span>`;
+        case "Pending":
+          return `<span class="detail-icon status-pending">&#x25F7;</span>`;
+        default:
+          return `<span class="detail-icon status-unknown">&#x2014;</span>`;
+      }
+    }
+
+    function buildCell(c, autoOpen) {
+      const builds = c.component_builds || [];
+      if (!builds.length) return `<span class="status-icon status-unknown">&#x2014;</span>`;
+
+      const conclusions = builds.map(b => b.conclusion).filter(Boolean);
+      const ecStatuses = builds.map(b => b.ec_status).filter(Boolean);
+      const allBuildOk = conclusions.length > 0 && conclusions.every(x => normalizeConclusion(x) === "Succeeded");
+      const anyBuildFail = conclusions.some(x => normalizeConclusion(x) === "Failed");
+      const allEcOk = ecStatuses.length > 0 && ecStatuses.every(x => x === "Succeeded");
+      const anyEcFail = ecStatuses.some(x => x === "Failed");
+
+      let summaryIcon;
+      if (allBuildOk && allEcOk) {
+        summaryIcon = `<span class="status-icon status-synced">&#x2714;</span>`;
+      } else if (anyBuildFail || anyEcFail) {
+        summaryIcon = `<span class="status-icon status-out-of-sync">&#x2718;</span>`;
+      } else if (conclusions.length || ecStatuses.length) {
+        summaryIcon = `<span class="status-icon status-pending">&#x25F7;</span>`;
+      } else {
+        return `<span class="status-icon status-unknown">&#x2014;</span>`;
+      }
+
+      let rows = "";
+      for (const b of builds) {
+        const buildIcon = buildStatusIcon(b.conclusion);
+        const buildLabel = normalizeConclusion(b.conclusion);
+        const buildBadge = conclusionBadgeClass(b.conclusion);
+        const buildText = `<span class="status-badge ${buildBadge}">${buildLabel}</span>`;
+        const buildLink = b.konflux_pr_url
+          ? `<a href="${b.konflux_pr_url}" target="_blank">${buildText}</a>`
+          : (b.check_url
+            ? `<a href="${b.check_url}" target="_blank">${buildText}</a>`
+            : buildText);
+
+        const ecIcon = buildStatusIcon(b.ec_status);
+        const ecLabel = b.ec_status || "Pending";
+        const ecBadge = conclusionBadgeClass(b.ec_status);
+        const ecText = `<span class="status-badge ${ecBadge}">${ecLabel}</span>`;
+        const ecLink = b.ec_pr_url
+          ? `<a href="${b.ec_pr_url}" target="_blank">${ecText}</a>`
+          : ecText;
+
+        let actionHint = "";
+        if (normalizeConclusion(b.conclusion) === "Failed")
+          actionHint = `<div class="action-hint">Action: Check PipelineRun logs for errors</div>`;
+        else if (b.ec_status === "Failed")
+          actionHint = `<div class="action-hint">Action: Review EC policy violations</div>`;
+
+        rows += `<div class="detail-section">
+          <div style="font-weight:500; margin-bottom:0.2rem;">${b.component}</div>
+          <div class="detail-row">${buildIcon}<span class="detail-label">Build:</span> ${buildLink}</div>
+          <div class="detail-row">${ecIcon}<span class="detail-label">EC:</span> ${ecLink}</div>
+          ${actionHint}
+        </div>`;
+      }
+
+      const openAttr = autoOpen ? " open" : "";
+      return `${summaryIcon}
+        <details class="expand-details"${openAttr}>
+          <summary>${builds.length} component(s)</summary>
+          ${rows}
+        </details>`;
+    }
+
+    // ---- Image Updated cell ----
+    function imageUpdatedCell(c, autoOpen) {
+      const builds = c.component_builds || [];
+      if (!builds.length) return `<span class="status-icon status-unknown">&#x2014;</span>`;
+
+      const withBoth = builds.filter(b => b.konflux_image_digest && b.project_yaml_digest);
+      const withKonflux = builds.filter(b => b.konflux_image_digest);
+      const withProject = builds.filter(b => b.project_yaml_digest);
+
+      if (!withKonflux.length && !withProject.length) {
+        return `<span class="status-icon status-unknown">&#x2014;</span>`;
+      }
+
+      const allMatch = withBoth.length > 0 && withBoth.every(b => b.digest_match === true);
+      const anyMismatch = withBoth.some(b => b.digest_match === false);
+
+      let summaryIcon;
+      if (allMatch && withBoth.length === builds.length) {
+        summaryIcon = `<span class="status-icon status-synced">&#x2714;</span>`;
+      } else if (anyMismatch) {
+        summaryIcon = `<span class="status-icon status-out-of-sync">&#x2718;</span>`;
+      } else {
+        summaryIcon = `<span class="status-icon status-pending">&#x26A0;</span>`;
+      }
+
+      let rows = "";
+      for (const b of builds) {
+        const kDigest = b.konflux_image_digest ? shortSha(b.konflux_image_digest) : "Build not found";
+        const kHtml = b.konflux_pr_url && b.konflux_image_digest
+          ? `<a href="${b.konflux_pr_url}" target="_blank" class="image-cell" title="${b.konflux_image_digest}">${kDigest}</a>`
+          : `<span class="image-cell">${kDigest}</span>`;
+
+        const pDigest = b.project_yaml_digest ? shortSha(b.project_yaml_digest) : "n/a";
+        const pHtml = b.project_yaml_url && b.project_yaml_digest
+          ? `<a href="${b.project_yaml_url}" target="_blank" class="image-cell" title="${b.project_yaml_digest}">${pDigest}</a>`
+          : `<span class="image-cell">${pDigest}</span>`;
+
+        let matchIcon, matchLabel, matchBadge;
+        if (b.digest_match === true) {
+          matchIcon = `<span class="detail-icon status-synced">&#x2714;</span>`;
+          matchLabel = "Matched";
+          matchBadge = "success";
+        } else if (b.digest_match === false) {
+          matchIcon = `<span class="detail-icon status-out-of-sync">&#x2718;</span>`;
+          matchLabel = "Update Required";
+          matchBadge = "failure";
+        } else {
+          matchIcon = `<span class="detail-icon status-unknown">&#x2014;</span>`;
+          matchLabel = "Unknown";
+          matchBadge = "unknown";
+        }
+
+        const actionHint = b.digest_match === false
+          ? `<div class="action-hint">Action: Update image digest in project.yaml</div>`
+          : "";
+
+        rows += `<div class="detail-section">
+          <div style="font-weight:500; margin-bottom:0.2rem;">${b.component}</div>
+          <div class="detail-row"><span class="detail-label">Konflux:</span> ${kHtml}</div>
+          <div class="detail-row"><span class="detail-label">Operator:</span> ${pHtml}</div>
+          <div class="detail-row">${matchIcon} <span class="status-badge ${matchBadge}">${matchLabel}</span></div>
+          ${actionHint}
+        </div>`;
+      }
+
+      const openAttr = autoOpen ? " open" : "";
+      return `${summaryIcon}
+        <details class="expand-details"${openAttr}>
+          <summary>${builds.length} component(s)</summary>
+          ${rows}
+        </details>`;
+    }
+
+    // ---- Error detection helpers ----
+    function isSyncError(c) {
+      return !!(c.upstream_sha && c.head_sha && !c.in_sync);
+    }
+
+    function hasBuildError(c) {
+      return (c.component_builds || []).some(b =>
+        normalizeConclusion(b.conclusion) === "Failed" || b.ec_status === "Failed");
+    }
+
+    function hasImageError(c) {
+      return (c.component_builds || []).some(b => b.digest_match === false);
+    }
+
+    function hasComponentError(c) {
+      return isSyncError(c) || hasBuildError(c) || hasImageError(c);
+    }
+
+    function getComponentProblems(c) {
+      const problems = [];
+      if (isSyncError(c)) problems.push("Source out of sync — run upstream fetch");
+      for (const b of (c.component_builds || [])) {
+        if (normalizeConclusion(b.conclusion) === "Failed") problems.push(`Build failed (${b.component}) — check PipelineRun logs`);
+        if (b.ec_status === "Failed") problems.push(`EC failed (${b.component}) — review policy violations`);
+        if (b.digest_match === false) problems.push(`Image mismatch (${b.component}) — update project.yaml`);
+      }
+      return problems;
+    }
+
+    // ---- Render ----
+    function renderVersion(versionKey) {
+      const versionData = dashboardData.versions[versionKey];
+      if (!versionData) return;
+
+      const components = versionData.components || [];
+      const synced = components.filter(c => c.in_sync).length;
+      const outOfSync = components.filter(c => c.upstream_sha && c.head_sha && !c.in_sync).length;
+      const buildPass = components.filter(c => ["success","succeeded"].includes((c.build_status||"").toLowerCase())).length;
+      const buildFail = components.filter(c => ["failure","failed"].includes((c.build_status||"").toLowerCase())).length;
+
+      document.getElementById("version-info-label").style.display = "block";
+      document.getElementById("version-info").style.display = "flex";
+      document.getElementById("summary-label").style.display = "block";
+      document.getElementById("components-label").style.display = "block";
+      document.getElementById("version-info").innerHTML = `
+        <div><span>Version:</span> <strong>${versionData.version}</strong></div>
+        <div><span>Patch:</span> <strong>${versionData.patch_version || "-"}</strong></div>
+        <div><span>Code Freeze:</span>
+          <span class="code-freeze-badge ${versionData.code_freeze ? "active" : "inactive"}">
+            ${versionData.code_freeze ? "Active" : "Inactive"}
+          </span>
+        </div>
+      `;
+
+      document.getElementById("summary").innerHTML = `
+        <div class="summary-card total"><div class="number">${components.length}</div><div class="label">Total</div></div>
+        <div class="summary-card synced"><div class="number">${synced}</div><div class="label">In Sync</div></div>
+        <div class="summary-card out-of-sync"><div class="number">${outOfSync}</div><div class="label">Out of Sync</div></div>
+        <div class="summary-card build-pass"><div class="number">${buildPass}</div><div class="label">Builds Pass</div></div>
+        <div class="summary-card build-fail"><div class="number">${buildFail}</div><div class="label">Builds Fail</div></div>
+      `;
+
+      // Alert banner
+      const alertEl = document.getElementById("alert-banner");
+      const issues = [];
+      for (const c of components) {
+        const problems = getComponentProblems(c);
+        if (problems.length) issues.push({ name: c.name, problems });
+      }
+      if (issues.length) {
+        const items = issues.map(i =>
+          `<li><strong>${i.name}:</strong> ${i.problems.join("; ")}</li>`
+        ).join("");
+        alertEl.innerHTML = `<div class="alert-banner">
+          <div class="alert-title">Attention Required — ${issues.length} component(s) with issues</div>
+          <ul>${items}</ul>
+        </div>`;
+      } else {
+        alertEl.innerHTML = "";
+      }
+
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
+
+      for (const c of components) {
+        const row = document.createElement("tr");
+        if (hasComponentError(c)) row.classList.add("row-error");
+
+        const syncOpen = isSyncError(c);
+        const buildOpen = hasBuildError(c);
+        const imageOpen = hasImageError(c);
+
+        row.innerHTML = `
+          <td><strong>${c.name}</strong></td>
+          <td>${repositoryCell(c)}</td>
+          <td style="text-align:center;">${sourceSyncCell(c, syncOpen)}</td>
+          <td style="text-align:center;">${buildCell(c, buildOpen)}</td>
+          <td style="text-align:center;">${imageUpdatedCell(c, imageOpen)}</td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      document.getElementById("dashboard-table").style.display = "table";
+    }
+
+    function populateVersionSelector(versions) {
+      const select = document.getElementById("version-select");
+      select.innerHTML = "";
+
+      const sortedKeys = Object.keys(versions).sort((a, b) => {
+        if (a === "next") return -1;
+        if (b === "next") return 1;
+        const na = parseFloat(a), nb = parseFloat(b);
+        if (!isNaN(na) && !isNaN(nb)) return nb - na;
+        return a.localeCompare(b);
+      });
+
+      for (const key of sortedKeys) {
+        const opt = document.createElement("option");
+        opt.value = key;
+        const v = versions[key];
+        opt.textContent = v.version + (v.patch_version ? ` (${v.patch_version})` : "");
+        select.appendChild(opt);
+      }
+
+      select.addEventListener("change", () => renderVersion(select.value));
+      if (sortedKeys.length > 0) {
+        select.value = sortedKeys[0];
+        renderVersion(sortedKeys[0]);
+      }
+    }
+
+    async function loadData() {
+      try {
+        const resp = await fetch(DATA_URL);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        dashboardData = await resp.json();
+
+        document.getElementById("timestamp").textContent =
+          "Updated: " + new Date(dashboardData.generated_at).toLocaleString();
+
+        document.getElementById("loading").style.display = "none";
+        populateVersionSelector(dashboardData.versions);
+      } catch (err) {
+        document.getElementById("loading").style.display = "none";
+        const errorEl = document.getElementById("error");
+        errorEl.style.display = "block";
+        errorEl.textContent = "Failed to load data: " + err.message;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
