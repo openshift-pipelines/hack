@@ -32,7 +32,7 @@ spec:
       - name: KUBECONFIG
         value: /credentials/kubeconfig
   steps:
-    - name: create-spoke-secrets
+    - name: create-spoke-secrets-and-clusters
       args:
         - "$(params.SPOKES)"
       script: |
@@ -42,9 +42,20 @@ spec:
         for spoke in "$@"; do
           spoke=$(echo "$spoke" | tr -d '\n' | xargs)
           echo "Current spoke: $spoke"
+          echo "Current spoke secret-name: ${spoke/./-}"
           kubectl create secret generic "${spoke/./-}" --from-file=kubeconfig=$(workspaces.credentials.path)/${spoke} -n  $KUEUE_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+        cat <<EOF | kubectl apply -f -
+          apiVersion: kueue.x-k8s.io/v1beta2
+          kind: MultiKueueCluster
+          metadata:
+            name: ${spoke/./-}
+          spec:
+            clusterSource:
+              kubeConfig:
+                locationType: Secret
+                location: ${spoke/./-}
+        EOF
         done
-
     - name: configure-rbac-for-tekton
       script: |
         cat <<EOF | kubectl apply -f -
@@ -81,12 +92,7 @@ spec:
             namespace: $KUEUE_NAMESPACE
         EOF
 
-
     - name: apply-multikueue-hub-resources
-      when:
-        - input: $(params.MULTI_CLUSTER_ROLE)
-          operator: in
-          values: [ "Hub" ]
       script: |
         cat <<EOF | kubectl apply -f -
         apiVersion: kueue.x-k8s.io/v1beta2
@@ -138,8 +144,10 @@ spec:
         metadata:
           name: multikueue-test
         spec:
-          clusters:          
+          clusters:
+            - spoke-1-kubeconfig
         EOF
+
 
     - name: enable-multi-cluster
       script: |
