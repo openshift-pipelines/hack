@@ -11,7 +11,7 @@ spec:
       - name: SPOKE_SECRET_1
         default: "spoke-1-secret"
       - name: KUEUE_NAMESPACE
-        default: "kueue-system"
+        default: "openshift-kueue-operator"
     workspaces:
       - name: credentials
     tasks:
