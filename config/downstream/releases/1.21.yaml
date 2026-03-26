@@ -4,13 +4,13 @@ image-suffix: "-rhel9"
 code-freeze: false
 branches:
   git-init:
-    upstream: release-v1.2.x
+    upstream: main
   manual-approval-gate:
     upstream: release-v0.7.0
   pipelines-as-code:
     upstream: release-v0.39.x
   tekton-assist:
-    upstream: release-v0.1.x
+    upstream: main
   tekton-caches:
     upstream: release-v0.3.x
   tekton-kueue:
