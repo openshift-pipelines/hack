@@ -1,7 +1,7 @@
 version: 1.21
 patch-version: 1.21.1
 image-suffix: "-rhel9"
-code-freeze: false
+code-freeze: true
 branches:
   git-init:
     upstream: main
