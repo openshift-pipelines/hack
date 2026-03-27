@@ -651,9 +651,9 @@ def main():
             if config_key in UPSTREAM_BRANCH_OVERRIDES:
                 upstream_branch = UPSTREAM_BRANCH_OVERRIDES[config_key]
             elif branch_entry:
-                upstream_branch = branch_entry.get("upstream", ds_branch)
+                upstream_branch = branch_entry.get("upstream", "main" if version == "next" else ds_branch)
             else:
-                upstream_branch = ds_branch
+                upstream_branch = "main" if version == "next" else ds_branch
 
             if upstream_repo:
                 print(f"  {config_key}: {upstream_repo}@{upstream_branch} -> {downstream_org}/{downstream_repo}@{ds_branch}", file=sys.stderr)
