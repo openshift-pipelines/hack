@@ -728,9 +728,9 @@
         const row = document.createElement("tr");
         if (hasComponentError(c)) row.classList.add("row-error");
 
-        const syncOpen = isSyncError(c);
-        const buildOpen = hasBuildError(c);
-        const imageOpen = hasImageError(c);
+        const syncOpen = false;
+        const buildOpen = false;
+        const imageOpen = false;
 
         row.innerHTML = `
           <td><strong>${c.name}</strong></td>
