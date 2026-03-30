@@ -2,69 +2,110 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  generateName: multikueue-setup-
+  generateName: release-tests-multikueue-
 spec:
   pipelineSpec:
     params:
-      - name: HUB_SECRET
-        default: "hub-secret"
-      - name: SPOKE_SECRET_1
-        default: "spoke-1-secret"
+      - name: RELEASE_TEST_TASKS_REPO
+        default: https://github.com/openshift-pipelines/hack
+      - name: RELEASE_TEST_TASKS_BRANCH
+        default: multikueue
       - name: KUEUE_NAMESPACE
         default: "openshift-kueue-operator"
+      - name: IMAGE
+        default: quay.io/openshift-pipeline/ci:latest
+      - name: SNAPSHOT
+        default: ""
     workspaces:
       - name: credentials
     tasks:
-      - name: configure-clusters
+      - name: check-config
+        taskSpec:
+          workspaces:
+            - name: credentials
+          steps:
+            - name: print-config
+              image: $(params.IMAGE)
+              script:
+                echo "Hello World"
+                echo "Volume name" $(workspaces.credentials.volume)
+      - name: parse-metadata
         taskRef:
-          name:
-            multikueue-setup
-        matrix:
-          include:
-            - name: spoke-1
-              params:
-                - name: MULTI_CLUSTER_ROLE
-                  value: Spoke
-                - name: KUEBECONFIG_SECRET
-                  value: $(params.SPOKE_SECRET_1)
-            - name: hub
-              params:
-                - name: MULTI_CLUSTER_ROLE
-                  value: Hub
-                - name: KUEBECONFIG_SECRET
-                  value: $(params.HUB_SECRET)
-      - name: configure-spoke
-        matrix:
-          include:
-            - name: spoke-1
-              params:
-                - name: SPOKE_NAME
-                  value: spoke-1
-                - name: MULTI_CLUSTER_ROLE
-                  value: Spoke
-                - name: KUEBECONFIG_SECRET
-                  value: $(params.SPOKE_SECRET_1)
-        runAfter:
-          - configure-clusters
-        taskRef:
-          name: multikueue-spoke-setup
-        workspaces:
-          - name: credentials
-      - name: configure-hub
-        runAfter:
-          - configure-spoke
-        taskRef:
-          name: multikueue-hub-setup
+          resolver: git
+          params:
+            - name: url
+              value: https://github.com/konflux-ci/integration-examples
+            - name: revision
+              value: main
+            - name: pathInRepo
+              value: tasks/test_metadata.yaml
         params:
-          - name: KUEUE_NAMESPACE
-            value: $(params.KUEUE_NAMESPACE)
-          - name: KUEBECONFIG_SECRET
-            value: $(params.HUB_SECRET)
-          - name: SPOKES
-            value: "$(tasks.configure-spoke.results.kubeconfig[*])"
-        workspaces:
-          - name: credentials
-
+          - name: SNAPSHOT
+            value: $(params.SNAPSHOT)
+      - name: provision-eaas-space
+        runAfter:
+          - parse-metadata
+        taskRef:
+          resolver: git
+          params:
+            - name: url
+              value: https://github.com/konflux-ci/build-definitions.git
+            - name: revision
+              value: main
+            - name: pathInRepo
+              value: task/eaas-provision-space/0.1/eaas-provision-space.yaml
+        params:
+          - name: ownerName
+            value: $(context.pipelineRun.name)
+          - name: ownerUid
+            value: $(context.pipelineRun.uid)
+      - name: provision-clusters
+        runAfter:
+          - provision-eaas-space
+        #        matrix:
+        #          params:
+        #            - name: ROLE
+        #              value: $(params.ROLES)
+        taskRef:
+          resolver: git
+          params:
+            - name: url
+              value: $(params.RELEASE_TEST_TASKS_REPO)
+            - name: revision
+              value: $(params.RELEASE_TEST_TASKS_BRANCH)
+            - name: pathInRepo
+              value: release-tests/multikueue/tasks/task-provision-cluster.yaml
+        params:
+          - name: componentName
+            value: "$(tasks.parse-metadata.results.component-name)"
+          - name: EAAS_SPACE_SECRET_REF
+            value: "$(tasks.provision-eaas-space.results.secretRef)"
+          - name: INSTANCE_TYPE
+            value: "$(params.INSTANCE_TYPE)"
+      - name: get-kubeconfig
+        runAfter:
+          - provision-clusters
+        taskSpec:
+          workspaces:
+            - name: credentials
+          steps:
+            - name: get-kubeconfig
+              ref:
+                resolver: git
+                params:
+                  - name: url
+                    value: https://github.com/konflux-ci/build-definitions.git
+                  - name: revision
+                    value: main
+                  - name: pathInRepo
+                    value: stepactions/eaas-get-ephemeral-cluster-credentials/0.1/eaas-get-ephemeral-cluster-credentials.yaml
+              params:
+                - name: eaasSpaceSecretRef
+                  value: $(tasks.provision-eaas-space.results.secretRef)
+                - name: clusterName
+                  value: "$(tasks.provision-clusters.results.clusterName)"
+                - name: credentials
+                  value:  $(workspaces.credentials.volume)
   workspaces:
     - name: credentials
       volumeClaimTemplate:

@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: multikueue-setup
+  name: install-multikueue-operators
 spec:
   params:
     - name: CATALOG_SOURCE

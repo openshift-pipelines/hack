@@ -1,0 +1,84 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: provision-cluster
+spec:
+  params:
+    - name: EAAS_SPACE_SECRET_REF
+      type: string
+    - name: INSTANCE_TYPE
+      type: string
+    - name: componentName
+      type: string
+    - name: IMAGE
+      default: quay.io/openshift-pipeline/ci:latest
+    - name: ROLE
+      default: spoke
+  results:
+    - name: clusterName
+      value: "$(steps.create-cluster.results.clusterName)"
+    - name: ocpVersion
+      description: The OCP version extracted from application name
+      type: string
+  steps:
+    - name: extract-and-pick-version
+      image: $(params.IMAGE)
+      env:
+        - name: COMPONENT_NAME
+          value: "$(params.componentName)"
+      script: |
+        #!/usr/bin/env bash
+        set -e
+        
+        # Extract OCP version from COMPONENT_NAME
+        # Expected format: operator-1-22-index-4-20 -> 4.20
+        echo "Component Name: $COMPONENT_NAME"
+        
+        # Extract version pattern (e.g., "4-19" from "operator-1-22-index-4-20")
+        VERSION_PATTERN=$(echo "$COMPONENT_NAME" | grep -oE '[0-9]+-[0-9]+' | tail -1)
+        
+        if [ -z "$VERSION_PATTERN" ]; then
+          echo "Warning: Could not extract version from application name, will use default"
+          OCP_VERSION="4.20"
+        else
+          # Convert "4-20" to "4.20"
+          OCP_VERSION=$(echo "$VERSION_PATTERN" | tr '-' '.')
+          echo "Extracted OCP Version: $OCP_VERSION"
+        fi
+        
+        echo -n "$OCP_VERSION" | tee /tekton/results/ocpVersion
+        
+        # Fetch the latest patch version for this OCP version
+        echo "Fetching latest patch version for ${OCP_VERSION}..."
+        RELEASE_URL="https://multi.ocp.releases.ci.openshift.org/api/v1/releasestream/4-stable-multi/latest?prefix=${OCP_VERSION}."
+        echo "GET $RELEASE_URL"
+        
+        RELEASE_INFO=$(curl -s "$RELEASE_URL")
+        echo "$RELEASE_INFO"
+        
+        VERSION=$(echo "$RELEASE_INFO" | jq -r '.name')
+        echo "Selected version: $VERSION"
+        
+        # Write result for create-cluster step
+        mkdir -p /tekton/steps/step-extract-and-pick-version/results
+        echo -n "$VERSION" | tee /tekton/steps/step-extract-and-pick-version/results/version
+    - name: create-cluster
+      ref:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/konflux-ci/build-definitions.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stepactions/eaas-create-ephemeral-cluster-hypershift-aws/0.1/eaas-create-ephemeral-cluster-hypershift-aws.yaml
+      params:
+        - name: eaasSpaceSecretRef
+          value: "$(params.EAAS_SPACE_SECRET_REF)"
+        - name: version
+          value: "$(steps.extract-and-pick-version.results.version)"
+        - name: instanceType
+          value: "$(params.INSTANCE_TYPE)"
+        - name: fips
+          value: "true"
