@@ -39,4 +39,4 @@ spec:
       type: RHSA
   gracePeriodDays: 10
   releasePlan: openshift-pipelines-core-1-21-prod-release-as-op
-  snapshot: openshift-pipelines-core-1-21-20260326-203640-000
+  snapshot: openshift-pipelines-core-1-21-20260330-084202-000
