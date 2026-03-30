@@ -16,9 +16,9 @@ spec:
   resolverRef:
     params:
       - name: url
-        value: https://github.com/openshift-pipelines/operator
+        value: https://github.com/openshift-pipelines/hack
       - name: revision
-        value: main
+        value: multikueue
       - name: pathInRepo
-        value: .konflux/tekton/release-tests-multikueue.yaml
+        value: release-tests/multikueue/pipelinerun/konflux.yaml
     resolver: git
