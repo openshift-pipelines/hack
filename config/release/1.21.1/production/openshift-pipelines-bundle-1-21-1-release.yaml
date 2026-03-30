@@ -3,7 +3,7 @@ kind: Release
 metadata:
   labels:
     appstudio.openshift.io/application: openshift-pipelines-core-1-21
-  generateName: openshift-pipelines-core-1-21-1-cdn-prod-release-
+  generateName: openshift-pipelines-bundle-1-21-1-prod-release-
   namespace: tekton-ecosystem-tenant
 spec:
   data:
@@ -15,8 +15,14 @@ spec:
         automating deployments across multiple platforms such as Kubernetes, Serverless,
         and VMs by abstracting away the underlying details.
       cves:
-        - key: CVE-2025-66506
-          component: tektoncd-cli-1-21-tkn
+        - component: operator-1-21-bundle
+          key: CVE-2025-66506
+        - component: operator-1-21-bundle
+          key: CVE-2026-33211
+        - component: operator-1-21-bundle
+          key: CVE-2026-33022
+        - component: operator-1-21-bundle
+          key: CVE-2026-25639
       package-maintainer: pipelines-bots@redhat.com
       references:
         - https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
@@ -30,8 +36,7 @@ spec:
       topic: |
         The 1.21.1 release of Red Hat OpenShift Pipelines Operator.
         For more details see https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines
-      type: RHSA
+      type: RHBA
   gracePeriodDays: 10
-  releasePlan: openshift-pipelines-core-1-21-cdn-prod-release-as-op
-  snapshot: openshift-pipelines-core-1-21-20260330-084202-000
-
+  releasePlan: openshift-pipelines-1-21-bundle-prod-release-as-op
+  snapshot: openshift-pipelines-core-1-21-20260330-114753-000
