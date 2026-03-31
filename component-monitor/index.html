@@ -6,72 +6,38 @@
   <title>Component Monitor</title>
   <style>
     :root {
-      --bg: #f5f7fa;
-      --card-bg: #ffffff;
-      --card-border: #e0e4ea;
-      --header-bg: #ffffff;
-      --header-fg: #1a2233;
-      --accent: #1976d2;
-      --green: #2e7d32;
-      --red: #d32f2f;
-      --yellow: #f57c00;
-      --gray: #78909c;
-      --border: #e0e4ea;
-      --text: #1a2233;
-      --text-muted: #5f6d7e;
-      --row-alt: #f9fafb;
-      --row-hover: #eef2f7;
-      --thead-bg: #f0f2f5;
-      --shadow: 0 2px 12px rgba(0,0,0,0.08);
-      --badge-green-bg: rgba(46,125,50,0.12);
-      --badge-green-fg: #2e7d32;
-      --badge-red-bg: rgba(211,47,47,0.12);
-      --badge-red-fg: #d32f2f;
-      --badge-yellow-bg: rgba(245,124,0,0.12);
-      --badge-yellow-fg: #f57c00;
-      --badge-gray-bg: rgba(120,144,156,0.12);
-      --badge-gray-fg: #78909c;
-      --row-error-bg: rgba(211,47,47,0.06);
-      --row-error-hover: rgba(211,47,47,0.10);
-      --alert-bg: rgba(211,47,47,0.06);
-      --alert-border: rgba(211,47,47,0.25);
-      --detail-border: rgba(224,228,234,0.8);
-      --link-hover: #1565c0;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1923;
-        --card-bg: #1a2735;
-        --card-border: #243447;
-        --header-bg: #0b1219;
-        --header-fg: #e8edf2;
-        --accent: #4fc3f7;
-        --green: #4caf50;
-        --red: #ef5350;
-        --yellow: #ffb74d;
-        --gray: #607d8b;
-        --border: #243447;
-        --text: #e8edf2;
-        --text-muted: #7a8fa0;
-        --row-alt: #1f2f3f;
-        --row-hover: #243a4f;
-        --thead-bg: #152232;
-        --shadow: 0 2px 12px rgba(0,0,0,0.3);
-        --badge-green-bg: rgba(76,175,80,0.2);
-        --badge-green-fg: #4caf50;
-        --badge-red-bg: rgba(239,83,80,0.2);
-        --badge-red-fg: #ef5350;
-        --badge-yellow-bg: rgba(255,183,77,0.2);
-        --badge-yellow-fg: #ffb74d;
-        --badge-gray-bg: rgba(96,125,139,0.2);
-        --badge-gray-fg: #607d8b;
-        --row-error-bg: rgba(239,83,80,0.08);
-        --row-error-hover: rgba(239,83,80,0.14);
-        --alert-bg: rgba(239,83,80,0.08);
-        --alert-border: rgba(239,83,80,0.3);
-        --detail-border: rgba(36,52,71,0.6);
-        --link-hover: #81d4fa;
-      }
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --card-border: #30363d;
+      --header-bg: #010409;
+      --header-fg: #e6edf3;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --gray: #6e7681;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #7d8590;
+      --row-alt: #161b22;
+      --row-hover: #1c2128;
+      --thead-bg: #0d1117;
+      --shadow: 0 2px 12px rgba(0,0,0,0.4);
+      --badge-green-bg: rgba(63,185,80,0.15);
+      --badge-green-fg: #3fb950;
+      --badge-red-bg: rgba(248,81,73,0.15);
+      --badge-red-fg: #f85149;
+      --badge-yellow-bg: rgba(210,153,34,0.15);
+      --badge-yellow-fg: #d29922;
+      --badge-gray-bg: rgba(110,118,129,0.15);
+      --badge-gray-fg: #6e7681;
+      --row-error-bg: rgba(248,81,73,0.06);
+      --row-error-hover: rgba(248,81,73,0.12);
+      --alert-bg: rgba(248,81,73,0.06);
+      --alert-border: rgba(248,81,73,0.3);
+      --detail-border: rgba(48,54,61,0.8);
+      --link-hover: #79c0ff;
+      --orange: #e8734a;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -84,34 +50,94 @@
     header {
       background: var(--header-bg);
       color: var(--header-fg);
-      padding: 1.25rem 2rem;
+      padding: 0.9rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: 1rem;
       border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
     }
-    header h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: 0.3px; }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
     .header-right {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.7rem;
       flex-wrap: wrap;
     }
-    .header-right label { font-size: 0.85rem; color: var(--text-muted); }
-    .header-right select {
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      border: 1px solid var(--card-border);
-      font-size: 0.9rem;
-      background: var(--card-bg);
-      color: var(--text);
-      cursor: pointer;
-      outline: none;
+    .version-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
     }
-    .header-right select:focus { border-color: var(--accent); }
-    .timestamp { font-size: 0.75rem; color: var(--text-muted); }
+    .version-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 22px;
+      border: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .version-btn:hover {
+      border-color: #484f58;
+      color: var(--text);
+    }
+    .version-btn.active {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange);
+      box-shadow: 0 2px 10px rgba(232,115,74,0.4);
+    }
+    .version-btn .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .version-btn .dot.green { background: var(--green); }
+    .version-btn .dot.yellow { background: var(--yellow); }
+    .version-btn .dot.red { background: var(--red); }
+    .version-btn .dot.gray { background: var(--gray); }
+    .version-btn .warn { font-size: 0.7rem; flex-shrink: 0; }
+    .version-btn .pin { font-size: 0.7rem; flex-shrink: 0; }
+
+    .header-sep {
+      width: 1px;
+      height: 1.2rem;
+      background: var(--card-border);
+      flex-shrink: 0;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+    .header-meta .timestamp {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .header-meta .sep {
+      color: var(--text-muted);
+    }
+    .header-meta .refresh-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .header-meta .refresh-link:hover { text-decoration: underline; color: var(--link-hover); }
     .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 
     .section-label {
@@ -315,18 +341,29 @@
       border: 1px solid var(--alert-border);
       border-left: 4px solid var(--red);
       border-radius: 8px;
-      padding: 0.8rem 1.2rem;
       margin-bottom: 1rem;
       font-size: 0.85rem;
     }
-    .alert-banner .alert-title {
+    .alert-banner summary {
+      padding: 0.8rem 1.2rem;
       font-weight: 600;
       color: var(--red);
-      margin-bottom: 0.4rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+    .alert-banner summary::-webkit-details-marker { display: none; }
+    .alert-banner summary::before {
+      content: "\25B6";
+      font-size: 0.6rem;
+      transition: transform 0.15s ease;
+    }
+    .alert-banner[open] summary::before { transform: rotate(90deg); }
     .alert-banner ul {
       margin: 0;
-      padding-left: 1.2rem;
+      padding: 0 1.2rem 0.8rem 2.4rem;
       color: var(--text);
     }
     .alert-banner li { margin-bottom: 0.2rem; }
@@ -342,7 +379,8 @@
     .error-msg { text-align: center; padding: 2rem; color: var(--red); font-size: 1rem; }
 
     @media (max-width: 768px) {
-      header { padding: 1rem; }
+      header { padding: 0.8rem 1rem; flex-direction: column; align-items: flex-start; }
+      .header-sep { display: none; }
       .container { padding: 1rem; }
       .summary-card { min-width: 90px; padding: 0.6rem 0.8rem; }
       .summary-card .number { font-size: 1.4rem; }
@@ -354,9 +392,13 @@
   <header>
     <h1>Component Monitor</h1>
     <div class="header-right">
-      <label for="version-select">Version:</label>
-      <select id="version-select"></select>
-      <span class="timestamp" id="timestamp"></span>
+      <div class="version-tabs" id="version-tabs"></div>
+      <div class="header-sep"></div>
+      <div class="header-meta">
+        <span class="timestamp" id="timestamp"></span>
+        <span class="sep">·</span>
+        <a class="refresh-link" href="https://github.com/openshift-pipelines/hack/actions/workflows/component-monitor.yaml" target="_blank">Refresh ↗</a>
+      </div>
     </div>
   </header>
 
@@ -713,10 +755,10 @@
         const items = issues.map(i =>
           `<li><strong>${i.name}:</strong> ${i.problems.join("; ")}</li>`
         ).join("");
-        alertEl.innerHTML = `<div class="alert-banner">
-          <div class="alert-title">Attention Required — ${issues.length} component(s) with issues</div>
+        alertEl.innerHTML = `<details class="alert-banner">
+          <summary>Attention Required — ${issues.length} component(s) with issues</summary>
           <ul>${items}</ul>
-        </div>`;
+        </details>`;
       } else {
         alertEl.innerHTML = "";
       }
@@ -745,9 +787,20 @@
       document.getElementById("dashboard-table").style.display = "table";
     }
 
+    function getVersionHealth(versionData) {
+      const components = versionData.components || [];
+      if (!components.length) return "gray";
+      let hasWarn = false;
+      for (const c of components) {
+        if (hasBuildError(c) || hasImageError(c)) return "red";
+        if (isSyncError(c)) hasWarn = true;
+      }
+      return hasWarn ? "yellow" : "green";
+    }
+
     function populateVersionSelector(versions) {
-      const select = document.getElementById("version-select");
-      select.innerHTML = "";
+      const container = document.getElementById("version-tabs");
+      container.innerHTML = "";
 
       const sortedKeys = Object.keys(versions).sort((a, b) => {
         if (a === "next") return -1;
@@ -757,17 +810,43 @@
         return a.localeCompare(b);
       });
 
+      const allBtns = [];
+
       for (const key of sortedKeys) {
-        const opt = document.createElement("option");
-        opt.value = key;
         const v = versions[key];
-        opt.textContent = v.version + (v.patch_version ? ` (${v.patch_version})` : "");
-        select.appendChild(opt);
+        const btn = document.createElement("button");
+        btn.className = "version-btn";
+        btn.dataset.version = key;
+
+        const health = getVersionHealth(v);
+
+        const dot = document.createElement("span");
+        dot.className = "dot " + health;
+        btn.appendChild(dot);
+
+        const label = document.createElement("span");
+        const suffix = v.patch_version && v.patch_version !== v.version ? ` (${v.patch_version})` : "";
+        label.textContent = v.version + suffix;
+        btn.appendChild(label);
+
+        if (health === "yellow") {
+          const icon = document.createElement("span");
+          icon.className = "warn";
+          icon.textContent = "\u26A0\uFE0F";
+          btn.appendChild(icon);
+        }
+
+        btn.addEventListener("click", () => {
+          allBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          renderVersion(key);
+        });
+        allBtns.push(btn);
+        container.appendChild(btn);
       }
 
-      select.addEventListener("change", () => renderVersion(select.value));
       if (sortedKeys.length > 0) {
-        select.value = sortedKeys[0];
+        allBtns[0].classList.add("active");
         renderVersion(sortedKeys[0]);
       }
     }
@@ -778,8 +857,8 @@
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         dashboardData = await resp.json();
 
-        document.getElementById("timestamp").textContent =
-          "Updated: " + new Date(dashboardData.generated_at).toLocaleString();
+        const ts = new Date(dashboardData.generated_at).toLocaleString();
+        document.getElementById("timestamp").textContent = "Last updated: " + ts;
 
         document.getElementById("loading").style.display = "none";
         populateVersionSelector(dashboardData.versions);
