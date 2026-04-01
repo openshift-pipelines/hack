@@ -417,6 +417,7 @@
           <tr>
             <th>Component</th>
             <th>Repository</th>
+            <th class="center">Version in Operator</th>
             <th class="center">Source Sync</th>
             <th class="center">Build</th>
             <th class="center">Image Updated</th>
@@ -468,6 +469,50 @@
         <span class="repo-label">Upstream</span><br>${upLink}<br>
         <span class="repo-label">Downstream</span><br>${downLink}
       </div>`;
+    }
+
+    // ---- Version Match cell ----
+    function versionMatchCell(c, compYamlUrl) {
+      if (c.comp_yaml_match === null || c.comp_yaml_match === undefined) {
+        return `<span class="status-icon status-unknown" title="Not in components.yaml">&#x2014;</span>`;
+      }
+
+      const rawVersion = c.comp_yaml_version || "";
+      const isExact = !!c.comp_yaml_exact;
+      const normalizedYaml = rawVersion.replace(/\.\d+$/, ".x");
+      const branchVersion = c.upstream_branch
+        ? (c.upstream_branch.startsWith("release-") ? c.upstream_branch.slice(8) : c.upstream_branch)
+        : "";
+      const yamlDisplay = isExact
+        ? `<code>${rawVersion}</code>`
+        : `<code>${rawVersion}</code> (${normalizedYaml})`;
+      const yamlLink = compYamlUrl
+        ? `<a href="${compYamlUrl}" target="_blank">components.yaml</a>`
+        : `components.yaml`;
+
+      let icon, label, badgeClass;
+      if (c.comp_yaml_match) {
+        icon = `<span class="status-icon status-synced">&#x2714;</span>`;
+        label = "Matched";
+        badgeClass = "success";
+      } else {
+        icon = `<span class="status-icon status-out-of-sync">&#x2718;</span>`;
+        label = "Mismatch";
+        badgeClass = "failure";
+      }
+
+      const actionHint = !c.comp_yaml_match
+        ? `<div class="action-hint">Action: Update components.yaml or upstream branch</div>`
+        : "";
+
+      return `${icon}
+        <details class="expand-details">
+          <summary>details</summary>
+          <div class="detail-row"><span class="detail-label">Upstream:</span> <code>${branchVersion}</code></div>
+          <div class="detail-row"><span class="detail-label">${yamlLink}:</span> ${yamlDisplay}</div>
+          <div class="detail-row"><span class="detail-label">Status:</span> <span class="status-badge ${badgeClass}">${label}</span></div>
+          ${actionHint}
+        </details>`;
     }
 
     // ---- Source Sync cell ----
@@ -696,12 +741,17 @@
       return (c.component_builds || []).some(b => b.digest_match === false);
     }
 
+    function hasVersionMismatch(c) {
+      return c.comp_yaml_match === false;
+    }
+
     function hasComponentError(c) {
-      return isSyncError(c) || hasBuildError(c) || hasImageError(c);
+      return isSyncError(c) || hasBuildError(c) || hasImageError(c) || hasVersionMismatch(c);
     }
 
     function getComponentProblems(c) {
       const problems = [];
+      if (hasVersionMismatch(c)) problems.push("Version mismatch — update components.yaml or upstream branch");
       if (isSyncError(c)) problems.push("Source out of sync — run upstream fetch");
       for (const b of (c.component_builds || [])) {
         if (normalizeConclusion(b.conclusion) === "Failed") problems.push(`Build failed (${b.component}) — check PipelineRun logs`);
@@ -774,9 +824,11 @@
         const buildOpen = false;
         const imageOpen = false;
 
+        const compYamlUrl = versionData.comp_yaml_url || "";
         row.innerHTML = `
           <td><strong>${c.name}</strong></td>
           <td>${repositoryCell(c)}</td>
+          <td style="text-align:center;">${versionMatchCell(c, compYamlUrl)}</td>
           <td style="text-align:center;">${sourceSyncCell(c, syncOpen)}</td>
           <td style="text-align:center;">${buildCell(c, buildOpen)}</td>
           <td style="text-align:center;">${imageUpdatedCell(c, imageOpen)}</td>
@@ -792,7 +844,7 @@
       if (!components.length) return "gray";
       let hasWarn = false;
       for (const c of components) {
-        if (hasBuildError(c) || hasImageError(c)) return "red";
+        if (hasBuildError(c) || hasImageError(c) || hasVersionMismatch(c)) return "red";
         if (isSyncError(c)) hasWarn = true;
       }
       return hasWarn ? "yellow" : "green";

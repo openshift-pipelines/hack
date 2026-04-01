@@ -41,6 +41,22 @@ UPSTREAM_BRANCH_OVERRIDES = {
     "git-init": "main",
 }
 
+COMP_YAML_KEY_MAP = {
+    "tektoncd-pipeline": "pipeline",
+    "tektoncd-chains": "chains",
+    "tektoncd-triggers": "triggers",
+    "tektoncd-results": "results",
+    "tektoncd-pruner": "pruner",
+    "tektoncd-hub": "hub",
+    "tekton-kueue": "scheduler",
+    "manual-approval-gate": "manual-approval-gate",
+    "pipelines-as-code": "pipelines-as-code",
+    "syncer-service": "syncer-service",
+    "multicluster-proxy-aae": "multicluster-proxy-aae",
+}
+
+COMP_YAML_EXACT_MATCH = {"tektoncd-hub", "manual-approval-gate"}
+
 OPC_CMD = os.environ.get("OPC_PATH", "opc")
 DESCRIBE_TIMEOUT = 480
 DESCRIBE_WORKERS = 10
@@ -147,9 +163,47 @@ def downstream_branch_name(version):
         return version
 
 
+def normalize_version(version_str):
+    """Replace patch segment with x: v0.26.2 -> v0.26.x"""
+    return re.sub(r"\.\d+$", ".x", version_str)
+
+
+def extract_version_from_branch(branch):
+    """Strip release- prefix: release-v0.26.x -> v0.26.x"""
+    if branch.startswith("release-"):
+        return branch[len("release-"):]
+    return branch
+
+
 # ---------------------------------------------------------------------------
 # GitHub API helpers
 # ---------------------------------------------------------------------------
+
+def get_components_yaml(operator_branch, session):
+    """Fetch components.yaml from tektoncd/operator at the given branch."""
+    url = f"{GITHUB_API}/repos/tektoncd/operator/contents/components.yaml"
+    params = {"ref": operator_branch}
+    try:
+        resp = session.get(url, headers=github_headers(), params=params)
+        if resp.status_code == 200:
+            content = resp.json().get("content", "")
+            encoding = resp.json().get("encoding", "")
+            if encoding == "base64":
+                raw = base64.b64decode(content).decode("utf-8")
+            else:
+                raw = content
+            data = yaml.safe_load(raw)
+            if isinstance(data, dict):
+                return data
+            print(f"  [WARN] components.yaml unexpected format on {operator_branch}", file=sys.stderr)
+        else:
+            print(f"  [WARN] components.yaml tektoncd/operator@{operator_branch}: HTTP {resp.status_code}", file=sys.stderr)
+    except requests.RequestException as e:
+        print(f"  [ERROR] components.yaml: {e}", file=sys.stderr)
+    except yaml.YAMLError as e:
+        print(f"  [ERROR] parsing components.yaml: {e}", file=sys.stderr)
+    return {}
+
 
 def get_upstream_latest_sha(upstream_repo, branch, session):
     url = f"{GITHUB_API}/repos/{upstream_repo}/commits/{branch}"
@@ -626,8 +680,18 @@ def main():
         )
         print(f"  Found {len(project_yaml_entries)} entries in project.yaml", file=sys.stderr)
 
-        components_data = []
         branches = release.get("branches", {})
+        operator_entry = branches.get("operator", {})
+        operator_branch = operator_entry.get("upstream", "") if isinstance(operator_entry, dict) else ""
+        comp_yaml_data = {}
+        if operator_branch:
+            print(f"  Fetching components.yaml from tektoncd/operator@{operator_branch}", file=sys.stderr)
+            comp_yaml_data = get_components_yaml(operator_branch, session)
+            print(f"  Found {len(comp_yaml_data)} entries in components.yaml", file=sys.stderr)
+        else:
+            print(f"  No operator branch defined, skipping components.yaml", file=sys.stderr)
+
+        components_data = []
 
         # Phase 1: Collect GitHub data + list PLRs
         describe_tasks = {}  # comp_key -> pr_name
@@ -745,6 +809,18 @@ def main():
             else:
                 build_status = "unknown"
 
+            comp_yaml_key = COMP_YAML_KEY_MAP.get(config_key, "")
+            comp_yaml_entry = comp_yaml_data.get(comp_yaml_key, {}) if comp_yaml_key else {}
+            comp_yaml_version = comp_yaml_entry.get("version", "") if comp_yaml_entry else ""
+            comp_yaml_match = None
+            comp_yaml_exact = config_key in COMP_YAML_EXACT_MATCH
+            if comp_yaml_version and upstream_branch and upstream_branch != "main":
+                branch_version = extract_version_from_branch(upstream_branch)
+                if comp_yaml_exact:
+                    comp_yaml_match = (comp_yaml_version == branch_version)
+                else:
+                    comp_yaml_match = (normalize_version(comp_yaml_version) == branch_version)
+
             components_data.append({
                 "name": config_key,
                 "upstream_repo": upstream_repo,
@@ -756,6 +832,9 @@ def main():
                 "in_sync": in_sync,
                 "build_status": build_status,
                 "component_builds": component_builds,
+                "comp_yaml_version": comp_yaml_version,
+                "comp_yaml_match": comp_yaml_match,
+                "comp_yaml_exact": comp_yaml_exact,
             })
 
         # Phase 2: Parallel describe for all PLRs found
@@ -798,10 +877,15 @@ def main():
                         if py_digest and k_digest:
                             build_entry["digest_match"] = (py_digest == k_digest)
 
+        comp_yaml_url = ""
+        if operator_branch:
+            comp_yaml_url = f"https://github.com/tektoncd/operator/blob/{operator_branch}/components.yaml"
+
         result["versions"][version_key] = {
             "version": version,
             "patch_version": release["patch_version"],
             "code_freeze": release["code_freeze"],
+            "comp_yaml_url": comp_yaml_url,
             "components": components_data,
         }
 
