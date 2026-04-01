@@ -1,0 +1,9 @@
+name: operator
+components:
+  - name: bundle
+    image-prefix: operator-
+    no-image-suffix: true
+    nudges:
+      - operator-{{hyphenize .Version.Version}}-index-4-20
+    tekton:
+      watched-sources: (".konflux/olm-catalog/bundle/***".pathChanged())

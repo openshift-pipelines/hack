@@ -1,0 +1,3 @@
+- name: openshift-pipelines-bundle
+  repos:
+    - operator-bundle

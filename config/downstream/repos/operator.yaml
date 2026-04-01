@@ -7,12 +7,6 @@ components:
     no-image-suffix: true
   - name: webhook
   - name: proxy
-  - name: bundle
-    no-image-suffix: true
-    nudges:
-      - operator-{{hyphenize .Version.Version}}-index-4-20
-    tekton:
-      watched-sources: (".konflux/olm-catalog/bundle/***".pathChanged())
 github:
   update-sources: |
     - name: fetch-payload
