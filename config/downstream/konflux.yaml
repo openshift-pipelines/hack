@@ -4,10 +4,5 @@ image-prefix: pipelines-
 product: openshift-pipelines
 applications:
   - core
+  - bundle
   - index
-versions:
-  - "1.22"
-  - "next"
-  - "1.18"
-  - "1.20"
-  - "1.15"
