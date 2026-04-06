@@ -1,0 +1,47 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: configure-cluster
+spec:
+  results:
+    - name: cluster-info
+    - name: kubeconfig
+      value: "$(steps.get-kubeconfig.results.kubeconfig)"
+  params:
+    - name: CLUSTER_NAME
+      type: string
+    - name: IMAGE
+      default: $(params.IMAGE)
+  volumes:
+    - name: credentials
+      secret:
+        secretName: $(params.CLUSTER_NAME)  # The name of your K8s Secret
+  workspaces:
+    - name: credentials
+  stepTemplate:
+    image: $(params.IMAGE)
+    env:
+      - name: CLUSTER_NAME
+        value: $(params.CLUSTER_NAME)
+    volumeMounts:
+      - name: credentials
+        mountPath: /credentials  # Where the files will appear
+  steps:
+    - name: get-kubeconfig
+      results:
+        - name: kubeconfig
+      script: |
+        set -x
+        echo "$(params.CLUSTER_NAME)"
+        ls -al /credentials
+        cp -vf /credentials/kubeconfig $(workspaces.credentials.path)/$(params.CLUSTER_NAME).kubeconfig
+        echo  -n $(params.CLUSTER_NAME).kubeconfig | tee $(step.results.kubeconfig.path)
+
+    - name: set-cluster-info
+      env:
+        - name: KUBECONFIG
+          value: "$(steps.get-kubeconfig.results.kubeconfig)"
+      script: |
+        set -ex
+        echo -n "{\"name\":\"$CLUSTER_NAME\",\"kubeconfig\":\"$KUBECONFIG\"}" > $(results.cluster-info.path)

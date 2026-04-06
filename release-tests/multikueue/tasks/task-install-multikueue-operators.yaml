@@ -4,6 +4,8 @@ kind: Task
 metadata:
   name: install-multikueue-operators
 spec:
+  workspaces:
+    - name: credentials
   params:
     - name: CATALOG_SOURCE
       description: Provide catalog-source name through which user have to subscribe operator
@@ -12,33 +14,32 @@ spec:
       default: quay.io/openshift-pipeline/ci
     - name: OSP_INDEX_IMAGE
       default: "quay.io/openshift-pipeline/pipelines-index-4.20:v1.22.0"
-    - name: KUEBECONFIG_SECRET
-      type: string
     - name: MULTI_CLUSTER_ROLE
       default: Spoke
     - name: KUEUE_NAMESPACE
       default: openshift-kueue-operator
     - name: CERT_MANAGER_NAMESPACE
       default: cert-manager-operator
-  volumes:
-    - name: kubeconfig
-      secret:
-        secretName: $(params.KUEBECONFIG_SECRET)
+    - name: KUBECONFIG
   stepTemplate:
     image: $(params.IMAGE)
-    volumeMounts:
-      - name: kubeconfig
-        mountPath: /credentials
     env:
       - name: KUEUE_NAMESPACE
         value: $(params.KUEUE_NAMESPACE)
       - name: CERT_MANAGER_NAMESPACE
         value: $(params.CERT_MANAGER_NAMESPACE)
       - name: KUBECONFIG
-        value: /credentials/kubeconfig
+        value: $(workspaces.credentials.path)/$(params.KUBECONFIG)
       - name: CATALOG_SOURCE
         value: $(params.CATALOG_SOURCE)
   steps:
+    - name: check-config
+      script: |
+        set -x
+        oc config get-contexts
+        echo "--|$KUBECONFIG|--"
+        ls -la $(workspaces.credentials.path)
+
     - name: create-namespace
       script: |
         oc create ns $KUEUE_NAMESPACE --dry-run=client -o yaml | oc apply -f -
@@ -148,9 +149,34 @@ spec:
     - name: wait-for-rhbok-pods
       script: |
         #!/usr/bin/env bash
-        kubectl -n $KUEUE_NAMESPACE get  po
-        kubectl wait --for=condition=Available deployment --all -n $KUEUE_NAMESPACE --timeout=300s
-
+        CREATE_TIMEOUT="${CREATE_TIMEOUT:-1800}"
+        READY_TIMEOUT="${READY_TIMEOUT:-300}"
+        INTERVAL=2
+        
+        # Wait until at least one deployment exists
+        end=$((SECONDS + CREATE_TIMEOUT))
+        while [ $SECONDS -lt $end ]; do
+          if kubectl get deploy -n "$KUEUE_NAMESPACE" --no-headers 2>/dev/null | grep -q .; then
+            echo "✅ Deployment detected"
+            break
+          fi
+        sleep $INTERVAL
+        done
+        
+        # Timeout check
+        if [ $SECONDS -ge $end ]; then
+        echo "❌ Timeout: No deployment detected in namespace $KUEUE_NAMESPACE"
+          #exit 1
+        fi
+        echo "⏳ Waiting for deployments to become ready (timeout: $READY_TIMEOUT)"
+        
+        # Wait for readiness
+        kubectl wait \
+          --for=condition=available \
+          --timeout="$READY_TIMEOUT"s \
+          deployment --all -n $KUEUE_NAMESPACE
+        
+        echo "🎉 All deployments are ready!" 
     - name: create-kueue-cr
       script: |
         cat << EOF | kubectl apply -f -
@@ -166,9 +192,7 @@ spec:
                 resource: pipelineruns
                 version: v1
               frameworks:
-              - BatchJob
               - Pod
-              - Deployment
             multiKueue:
               externalFrameworks:
               - group: tekton.dev

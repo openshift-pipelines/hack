@@ -7,36 +7,39 @@ spec:
   workspaces:
     - name: credentials
   results:
-    - name: kubeconfig
+    - name: sa-kubeconfig
   params:
     - name: IMAGE
       default: quay.io/openshift-pipeline/ci
-    - name: SPOKE_NAME
-      default: "spoke-1"
-    - name: KUEBECONFIG_SECRET
-      type: string
-  volumes:
-    - name: kubeconfig
-      secret:
-        secretName: $(params.KUEBECONFIG_SECRET)
+    - name: CLUSTER_INFO
+      default: "{}"
   stepTemplate:
     image: $(params.IMAGE)
-    volumeMounts:
-      - name: kubeconfig
-        mountPath: /credentials
     env:
       - name: KUEUE_NAMESPACE
         value: openshift-kueue-operator
-      - name: KUBECONFIG
-        value: /credentials/kubeconfig
-      - name: SPOKE_NAME
-        value: $(params.SPOKE_NAME)
+      - name: CLUSTER_INFO
+        value: $(params.CLUSTER_INFO)
+      - name: SA_NAMESPACE
+        value: default
   steps:
-    - name: create-service-account
-      onError: continue
+    - name: parse-cluster-info
+      results:
+        - name: cluster-name
+        - name: kubeconfig
       script: |
-        echo "Create ServiceAccount"
-        kubectl create sa multikueue-sa -n default --dry-run=client -o yaml | kubectl apply -f -
+        set -x 
+        echo $CLUSTER_INFO
+        echo -n "$CLUSTER_INFO" | jq -r .name | tr -d '\n'| tee $(step.results.cluster-name.path)
+        echo -n "$CLUSTER_INFO" | jq -r .kubeconfig | tr -d '\n'| tee $(step.results.kubeconfig.path)
+
+    - name: create-service-account
+      env:
+        - name: KUBECONFIG
+          value: $(workspaces.credentials.path)/$(steps.parse-cluster-info.results.kubeconfig)
+      script: |
+        echo "Create ServiceAccount |$KUBECONFIG|"
+        kubectl create sa multikueue-sa -n $SA_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
         echo "Create ClusterRole"
         cat <<EOF | kubectl apply -f -
           apiVersion: rbac.authorization.k8s.io/v1
@@ -61,16 +64,22 @@ spec:
         echo "Bind Role to ServiceAccount"
         kubectl create clusterrolebinding multikueue-sa-crb \
             --clusterrole=multikueue-sa-role \
-            --serviceaccount=default:multikueue-sa --dry-run=client -o yaml | kubectl apply -f -
+            --serviceaccount=$SA_NAMESPACE:multikueue-sa --dry-run=client -o yaml | kubectl apply -f -
     - name: generate-kube-config
+      env:
+        - name: KUBECONFIG
+          value: $(workspaces.credentials.path)/$(steps.parse-cluster-info.results.kubeconfig)
+        - name: CLUSTER_NAME
+          value: $(steps.parse-cluster-info.results.cluster-name)
       script: |
+        set -x
         cat <<EOF | kubectl apply -f -
           apiVersion: v1
           kind: Secret
           type: kubernetes.io/service-account-token
           metadata:
             name: multikueue-sa-token
-            namespace: default
+            namespace: $SA_NAMESPACE
             annotations:
               kubernetes.io/service-account.name: "multikueue-sa"
         EOF
@@ -79,24 +88,25 @@ spec:
         sleep 10
         
         echo "Extract Token and CA Certificate"
-        SA_TOKEN=$(kubectl get secret multikueue-sa-token -n default -o jsonpath='{.data.token}' | base64 -d)
-        CA_CERT=$(kubectl get secret multikueue-sa-token -n default -o jsonpath='{.data.ca\.crt}')
-        SERVER_URL=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+        SA_TOKEN=$(kubectl -n $SA_NAMESPACE get secret multikueue-sa-token  -o jsonpath='{.data.token}' | base64 -d)
+        CA_CERT=$(kubectl -n $SA_NAMESPACE get secret multikueue-sa-token  -o jsonpath='{.data.ca\.crt}')
+        SERVER_URL=$(kubectl -n $SA_NAMESPACE config view --minify -o jsonpath='{.clusters[0].cluster.server}')
         
         echo "Create Kubeconfig file"
-        cat <<EOF >  $(workspaces.credentials.path)/${SPOKE_NAME}.kubeconfig
+        SA_KUBECONFIG_FILE=sa-${CLUSTER_NAME}.kubeconfig
+        cat <<EOF >  $(workspaces.credentials.path)/$SA_KUBECONFIG_FILE
           apiVersion: v1
           clusters:
             - cluster:
                 server: ${SERVER_URL}
                 certificate-authority-data: ${CA_CERT}
-              name: ${SPOKE_NAME}-cluster
+              name: ${CLUSTER_NAME}-cluster
           contexts:
             - context:
-                cluster: ${SPOKE_NAME}-cluster
+                cluster: ${CLUSTER_NAME}-cluster
                 user: multikueue-sa
-              name: ${SPOKE_NAME}-context
-          current-context: ${SPOKE_NAME}-context
+              name: ${CLUSTER_NAME}-context
+          current-context: ${CLUSTER_NAME}-context
           kind: Config
           preferences: {}
           users:
@@ -104,5 +114,5 @@ spec:
               user:
                 token: ${SA_TOKEN}
         EOF
-        echo ${SPOKE_NAME}.kubeconfig | tee $(results.kubeconfig.path)  
+        echo -n $SA_KUBECONFIG_FILE | tee $(results.sa-kubeconfig.path)  
 

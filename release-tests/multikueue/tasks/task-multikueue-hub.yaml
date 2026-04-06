@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: multikueue-hub-setup
+  name: multikueue-hub-setup1
 spec:
   workspaces:
     - name: credentials
@@ -13,30 +13,26 @@ spec:
       default: "Hub"
     - name: KUEUE_NAMESPACE
       default: "openshift-kueue-operator"
-    - name: KUEBECONFIG_SECRET
-      type: string
+    - name: KUBECONFIG
+      default: kubeconfig
     - name: SPOKES
       type: array
-  volumes:
-    - name: kubeconfig
-      secret:
-        secretName: $(params.KUEBECONFIG_SECRET)
   stepTemplate:
     image: $(params.IMAGE)
-    volumeMounts:
-      - name: kubeconfig
-        mountPath: /credentials
     env:
       - name: KUEUE_NAMESPACE
         value: $(params.KUEUE_NAMESPACE)
       - name: KUBECONFIG
-        value: /credentials/kubeconfig
+        value: $(workspaces.credentials.path)/$(params.KUBECONFIG)
   steps:
     - name: create-spoke-secrets-and-clusters
+      results:
+        - name: spoke
       args:
         - "$(params.SPOKES)"
       script: |
         #!/usr/bin/env bash
+        set -x
         
         # Loop through the array passed in via args
         for spoke in "$@"; do
@@ -55,6 +51,7 @@ spec:
                 locationType: Secret
                 location: ${spoke/./-}
         EOF
+        echo -n ${spoke/./-} | tee $(step.results.spoke.path)
         done
     - name: configure-rbac-for-tekton
       script: |
@@ -93,6 +90,9 @@ spec:
         EOF
 
     - name: apply-multikueue-hub-resources
+      env:
+        - name: SPOKE_CLUSTER
+          value: $(steps.create-spoke-secrets-and-clusters.results.spoke)
       script: |
         cat <<EOF | kubectl apply -f -
         apiVersion: kueue.x-k8s.io/v1beta2
@@ -145,7 +145,7 @@ spec:
           name: multikueue-test
         spec:
           clusters:
-            - spoke-1-kubeconfig
+            - $SPOKE_CLUSTER
         EOF
 
 
@@ -163,6 +163,12 @@ spec:
           }
         }'
     - name: verification
+      env:
+        - name: SPOKE_CLUSTER
+          value: $(steps.create-spoke-secrets-and-clusters.results.spoke)
       script: |
-        echo "Step: verification"
-
+        echo "Step: verification: $SPOKE_CLUSTER"
+        spoke=$(echo "$SPOKE_CLUSTER" | tr -d '\n' | xargs)
+        echo "Current spoke: $spoke"
+        kubectl get multikueuecluster ${spoke} \
+        -o jsonpath="{range .status.conditions[?( @.type == \"Active\")]}MC - Active: { @.status} Reason: { @.reason} Message: { @.message}{'\n'}{end}"

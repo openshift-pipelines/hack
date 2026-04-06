@@ -3,32 +3,37 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   generateName: release-tests-multikueue-
+  labels:
+    appstudio.openshift.io/component: operator-next-index-4-20
 spec:
+  taskRunTemplate:
+    serviceAccountName: konflux-integration-runner
   pipelineSpec:
     params:
       - name: RELEASE_TEST_TASKS_REPO
         default: https://github.com/openshift-pipelines/hack
       - name: RELEASE_TEST_TASKS_BRANCH
         default: multikueue
-      - name: KUEUE_NAMESPACE
-        default: "openshift-kueue-operator"
       - name: IMAGE
         default: quay.io/openshift-pipeline/ci:latest
       - name: SNAPSHOT
-        default: ""
+        default: '{"application":"openshift-pipelines-index-next","components":[{"name":"operator-next-index-4-14","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.14@sha256:b85876f0d7cc21729195fca72de9e4debf98ef78338c4a83c74cd1744b1a8b88","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.14.Dockerfile"}}},{"name":"operator-next-index-4-17","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.17@sha256:6eb810b0f79f17fb117c8d60a5592d764400d09ef219e0ec7fab9ddc924b0430","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.17.Dockerfile"}}},{"name":"operator-next-index-4-21","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.21@sha256:e649ce9460e5a13b4a6be76d92d4802b51b7e53d49284022ff683a581e9e8dc9","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.21.Dockerfile"}}},{"name":"operator-next-index-4-16","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.16@sha256:ce96ee8c198361a74f2cf71e5ec64160dd715f43020a4efbd72351a0d4d2f702","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.16.Dockerfile"}}},{"name":"operator-next-index-4-18","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.18@sha256:91e0d0f02bc417d6b559382806c056ba085892a8213db4c96675a9611428743f","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.18.Dockerfile"}}},{"name":"operator-next-index-4-19","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.19@sha256:23f39608f640e3ba3830a49957076a1c36d7ce46a8d79c82ce6628c93ba0a360","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.19.Dockerfile"}}},{"name":"operator-next-index-4-20","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.20@sha256:eee6d3d3f0bd3279eaecbdd2560abf14faf8b7e5878e1b06d8a8437fe56e8fbe","source":{"git":{"url":"https://github.com/openshift-pipelines/operator","revision":"5927179984627b1449fbec34c628e4bb6227bfc2"}}},{"name":"operator-next-index-4-22","containerImage":"quay.io/redhat-user-workloads/tekton-ecosystem-tenant/pipelines-index-4.22@sha256:0b7203739003bb1f9bf7da916e8ec70e259cd9afbbf3dc58b9225897a4e703be","source":{"git":{"url":"https://github.com/openshift-pipelines/operator.git","revision":"7a5dfc9bcfdfcd5b1630ab0cb2922e2d73e15de2","dockerfileUrl":".konflux/dockerfiles/index-4.22.Dockerfile"}}}],"artifacts":{}}'
+      - name: KUEUE_NAMESPACE
+        default: openshift-kueue-operator
+      - name: CERT_MANAGER_NAMESPACE
+        default: cert-manager-operator
+      - name: INSTANCE_TYPE
+        default: m5.large
+      - name: CATALOG_SOURCE
+        default: redhat-operators
+      - name: CLUSTER_NAMES
+        default:
+          - Hub
+          - Spoke-1
+          - Spoke-2
     workspaces:
       - name: credentials
     tasks:
-      - name: check-config
-        taskSpec:
-          workspaces:
-            - name: credentials
-          steps:
-            - name: print-config
-              image: $(params.IMAGE)
-              script:
-                echo "Hello World"
-                echo "Volume name" $(workspaces.credentials.volume)
       - name: parse-metadata
         taskRef:
           resolver: git
@@ -43,8 +48,6 @@ spec:
           - name: SNAPSHOT
             value: $(params.SNAPSHOT)
       - name: provision-eaas-space
-        runAfter:
-          - parse-metadata
         taskRef:
           resolver: git
           params:
@@ -59,13 +62,16 @@ spec:
             value: $(context.pipelineRun.name)
           - name: ownerUid
             value: $(context.pipelineRun.uid)
-      - name: provision-clusters
+      - name: provision-cluster
         runAfter:
           - provision-eaas-space
-        #        matrix:
-        #          params:
-        #            - name: ROLE
-        #              value: $(params.ROLES)
+          - parse-metadata
+        matrix:
+          params:
+            - name: CLUSTER_NAME
+              value: $(params.CLUSTER_NAMES)
+        workspaces:
+          - name: credentials
         taskRef:
           resolver: git
           params:
@@ -76,36 +82,71 @@ spec:
             - name: pathInRepo
               value: release-tests/multikueue/tasks/task-provision-cluster.yaml
         params:
-          - name: componentName
+          - name: COMPONENT_NAME
             value: "$(tasks.parse-metadata.results.component-name)"
           - name: EAAS_SPACE_SECRET_REF
             value: "$(tasks.provision-eaas-space.results.secretRef)"
           - name: INSTANCE_TYPE
             value: "$(params.INSTANCE_TYPE)"
-      - name: get-kubeconfig
+
+      - name: install-operator
         runAfter:
-          - provision-clusters
-        taskSpec:
-          workspaces:
-            - name: credentials
-          steps:
-            - name: get-kubeconfig
-              ref:
-                resolver: git
-                params:
-                  - name: url
-                    value: https://github.com/konflux-ci/build-definitions.git
-                  - name: revision
-                    value: main
-                  - name: pathInRepo
-                    value: stepactions/eaas-get-ephemeral-cluster-credentials/0.1/eaas-get-ephemeral-cluster-credentials.yaml
-              params:
-                - name: eaasSpaceSecretRef
-                  value: $(tasks.provision-eaas-space.results.secretRef)
-                - name: clusterName
-                  value: "$(tasks.provision-clusters.results.clusterName)"
-                - name: credentials
-                  value:  $(workspaces.credentials.volume)
+          - provision-cluster
+        matrix:
+          params:
+            - name: KUBECONFIG
+              value:
+                - $(tasks.provision-cluster.results.kubeconfig[*])
+        workspaces:
+          - name: credentials
+        taskRef:
+          resolver: git
+          params:
+            - name: url
+              value: $(params.RELEASE_TEST_TASKS_REPO)
+            - name: revision
+              value: $(params.RELEASE_TEST_TASKS_BRANCH)
+            - name: pathInRepo
+              value: release-tests/multikueue/tasks/task-install-multikueue-operators.yaml
+#      - name: configure-spoke
+#        runAfter:
+#          - install-operator
+#        matrix:
+#          params:
+#            - name: CLUSTER_INFO
+#              value: $(tasks.provision-cluster.results.cluster-info)
+#        workspaces:
+#          - name: credentials
+#        taskRef:
+#          resolver: git
+#          params:
+#            - name: url
+#              value: $(params.RELEASE_TEST_TASKS_REPO)
+#            - name: revision
+#              value: $(params.RELEASE_TEST_TASKS_BRANCH)
+#            - name: pathInRepo
+#              value: release-tests/multikueue/tasks/task-multikueue-spoke.yaml
+#      - name: configure-hub
+#        runAfter:
+#          - configure-spoke
+#        params:
+#          - name: KUBECONFIG
+#            value: $(tasks.provision-cluster.results.kubeconfig)
+#          - name: SPOKES
+#            value: $(tasks.configure-spoke.results.kubeconfig[*])
+#        workspaces:
+#          - name: credentials
+#        taskRef:
+#          resolver: git
+#          params:
+#            - name: url
+#              value: $(params.RELEASE_TEST_TASKS_REPO)
+#            - name: revision
+#              value: $(params.RELEASE_TEST_TASKS_BRANCH)
+#            - name: pathInRepo
+#              value: release-tests/multikueue/tasks/task-multikueue-hub.yaml
+
+
   workspaces:
     - name: credentials
       volumeClaimTemplate:

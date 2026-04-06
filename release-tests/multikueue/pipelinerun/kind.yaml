@@ -1,0 +1,104 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: release-tests-kind-
+  labels:
+    appstudio.openshift.io/component: operator-next-index-4-20
+spec:
+  pipelineSpec:
+    params:
+      - name: RELEASE_TEST_TASKS_REPO
+        default: https://github.com/openshift-pipelines/hack
+      - name: RELEASE_TEST_TASKS_BRANCH
+        default: multikueue
+      - name: IMAGE
+        default: quay.io/openshift-pipeline/ci:latest
+      - name: KUEUE_NAMESPACE
+        default: openshift-kueue-operator
+      - name: CERT_MANAGER_NAMESPACE
+        default: cert-manager-operator
+      - name: CATALOG_SOURCE
+        default: redhat-operators
+      - name: CLUSTER_NAMES
+        default:
+          - spoke-1
+      - name: HUB_NAME
+        default: hub
+    workspaces:
+      - name: credentials
+    tasks:
+      - name: configure-spoke-cluster
+        matrix:
+          params:
+            - name: CLUSTER_NAME
+              value:
+                - $(params.CLUSTER_NAMES)
+        params:
+          - name: IMAGE
+            value: $(params.IMAGE)
+        workspaces:
+          - name: credentials
+        taskRef:
+          name: configure-cluster
+
+      - name: configure-hub-cluster
+        params:
+          - name: IMAGE
+            value: $(params.IMAGE)
+          - name: CLUSTER_NAME
+            value: $(params.HUB_NAME)
+        workspaces:
+          - name: credentials
+        taskRef:
+          name: configure-cluster
+
+      - name: install-operator
+        runAfter:
+          - configure-hub-cluster
+          - configure-spoke-cluster
+        matrix:
+          params:
+            - name: KUBECONFIG
+              value:
+                - "$(tasks.configure-hub-cluster.results.kubeconfig)"
+                - "$(tasks.configure-spoke-cluster.results.kubeconfig[*])"
+        workspaces:
+          - name: credentials
+        taskRef:
+          name: install-multikueue-operators
+
+      - name: configure-spoke
+        runAfter:
+          - configure-spoke-cluster
+        matrix:
+          params:
+            - name: CLUSTER_INFO
+              value: $(tasks.configure-spoke-cluster.results.cluster-info)
+        workspaces:
+          - name: credentials
+        taskRef:
+          name: multikueue-spoke-setup
+
+      - name: configure-hub
+        runAfter:
+          - install-operator
+          - configure-spoke
+        taskRef:
+          name: multikueue-hub-setup1
+        params:
+          - name: KUBECONFIG
+            value: $(tasks.configure-hub-cluster.results.kubeconfig)
+          - name: SPOKES
+            value: $(tasks.configure-spoke.results.sa-kubeconfig[*])
+        workspaces:
+          - name: credentials
+  workspaces:
+    - name: credentials
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce # Standard mode for a single node reading/writing
+          resources:
+            requests:
+              storage: 100Mi  # Specify the size of the PVC here

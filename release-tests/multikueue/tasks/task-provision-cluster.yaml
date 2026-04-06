@@ -4,29 +4,37 @@ kind: Task
 metadata:
   name: provision-cluster
 spec:
+  workspaces:
+    - name: credentials
   params:
     - name: EAAS_SPACE_SECRET_REF
       type: string
     - name: INSTANCE_TYPE
       type: string
-    - name: componentName
+      default: "m5.large"
+    - name: COMPONENT_NAME
       type: string
     - name: IMAGE
       default: quay.io/openshift-pipeline/ci:latest
-    - name: ROLE
-      default: spoke
+    - name: CLUSTER_NAME
+      default: ""
   results:
-    - name: clusterName
-      value: "$(steps.create-cluster.results.clusterName)"
-    - name: ocpVersion
-      description: The OCP version extracted from application name
-      type: string
+    - name: kubeconfig
+      value: "$(steps.get-kubeconfig.results.kubeconfig)"
+    - name: cluster-info
+  stepTemplate:
+    image: $(params.IMAGE)
+    env:
+      - name: COMPONENT_NAME
+        value: "$(params.COMPONENT_NAME)"
+      - name: CLUSTER_NAME
+        value: "$(params.CLUSTER_NAME)"
+
   steps:
     - name: extract-and-pick-version
-      image: $(params.IMAGE)
-      env:
-        - name: COMPONENT_NAME
-          value: "$(params.componentName)"
+      results:
+        - name: version
+          type: string
       script: |
         #!/usr/bin/env bash
         set -e
@@ -82,3 +90,27 @@ spec:
           value: "$(params.INSTANCE_TYPE)"
         - name: fips
           value: "true"
+    - name: get-kubeconfig
+      ref:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/konflux-ci/build-definitions.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stepactions/eaas-get-ephemeral-cluster-credentials/0.1/eaas-get-ephemeral-cluster-credentials.yaml
+      params:
+        - name: eaasSpaceSecretRef
+          value: "$(params.EAAS_SPACE_SECRET_REF)"
+        - name: clusterName
+          value: "$(steps.create-cluster.results.clusterName)"
+        - name: credentials
+          value: $(workspaces.credentials.volume)
+    - name: set-cluster-info
+      env:
+        - name: KUBECONFIG
+          value: "$(steps.get-kubeconfig.results.kubeconfig)"
+      script: |
+        set -ex
+        echo -n "{\"name\":\"$CLUSTER_NAME\",\"kubeconfig\":\"$KUBECONFIG\"}" > $(results.cluster-info.path)
