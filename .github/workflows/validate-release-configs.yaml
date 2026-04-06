@@ -1,0 +1,37 @@
+---
+name: Validate release configs
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+      - 'release-v*'
+    paths:
+      - 'config/downstream/releases/*.yaml'
+      - '.github/workflows/validate-release-configs.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.25.x
+      - name: Validate changed release configs against operator components.yaml
+        run: |
+          # Iterate over all modified downstream release config files and validate each
+          git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }}...HEAD \
+            -- 'config/downstream/releases/*.yaml' \
+          | sed 's|config/downstream/releases/||; s|\.yaml$||' \
+          | while read -r version; do
+              echo "--- Validating $version ---"
+              go run ./cmd/konflux/ --version "$version" --validate
+            done
