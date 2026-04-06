@@ -4,12 +4,14 @@ kind: PipelineRun
 metadata:
   generateName: multikueue-setup-
 spec:
+  workspace:
+    - name: credentials
   pipelineSpec:
     params:
-      - name: HUB_SECRET
-        default: "hub-secret"
-      - name: SPOKE_SECRET_1
-        default: "spoke-1-secret"
+      - name: HUB_CLUSTER_NAME
+        default: ""
+      - name: SPOKE_CLUSTER_NAME
+        default: ""
       - name: KUEUE_NAMESPACE
         default: "openshift-kueue-operator"
     workspaces:

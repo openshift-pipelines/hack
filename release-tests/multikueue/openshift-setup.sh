@@ -1,12 +1,12 @@
 HUB_KUBECONFIG=$1
 SPOKE_KUBECONFIG=$2
-TEKTON_VERSION=v1.10.2
+#TEKTON_VERSION=v1.10.2
 
 export HUB=hub
 export SPOKE=spoke-1
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT="$(dirname "$SCRIPT_DIR")"
+#ROOT="$(dirname "$SCRIPT_DIR")"
 
 
 echo "Create Hub Secret"

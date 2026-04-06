@@ -7,10 +7,13 @@ spec:
   params:
     - name: EAAS_SPACE_SECRET_REF
       type: string
+      default: ""
     - name: INSTANCE_TYPE
       type: string
+      default: ""
     - name: componentName
       type: string
+      default: ""
     - name: IMAGE
       default: quay.io/openshift-pipeline/ci:latest
     - name: ROLE
@@ -19,11 +22,13 @@ spec:
     - name: clusterName
       value: "$(steps.create-cluster.results.clusterName)"
     - name: ocpVersion
-      description: The OCP version extracted from application name
-      type: string
+      value: "$(steps.extract-and-pick-version.results.version)"
   steps:
     - name: extract-and-pick-version
       image: $(params.IMAGE)
+      results:
+        - name: version
+          type: string
       env:
         - name: COMPONENT_NAME
           value: "$(params.componentName)"
@@ -82,3 +87,5 @@ spec:
           value: "$(params.INSTANCE_TYPE)"
         - name: fips
           value: "true"
+        - name: timeout
+          value: "1m"
