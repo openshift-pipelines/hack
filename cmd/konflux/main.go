@@ -1,13 +1,18 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	k "github.com/openshift-pipelines/hack/internal/konflux"
 	"gopkg.in/yaml.v2"
@@ -22,8 +27,16 @@ func main() {
 	var configFile = flag.String("config", "config/downstream/konflux.yaml", "path to config file")
 	var version = flag.String("version", "next", "Release version to generate config")
 	var dryRun = flag.Bool("dry-run", false, "do not commit or push any changes")
+	var validate = flag.Bool("validate", false, "validate release config component versions against tektoncd/operator and exit")
 	flag.Parse()
 	configDir := filepath.Dir(*configFile)
+
+	if *validate {
+		if err := validateReleaseConfig(configDir, *version); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
 
 	log.Printf("configDir: %s", configDir)
 	log.Printf("version: %s", *version)
@@ -70,6 +83,148 @@ func main() {
 	}
 
 	log.Printf("Done:")
+}
+
+// Upstream Operator components.yaml entry
+type operatorComponent struct {
+	GitHub  string `yaml:"github"`
+	Version string `yaml:"version"`
+}
+
+var patchVersionRe = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+
+func stripV(s string) string {
+	return strings.TrimPrefix(s, "v")
+}
+
+// extractVersionFromBranch strips the "release-" and optional "v" prefix from a branch name.
+// e.g. "release-v1.2.x" -> "1.2.x", "release-1.2.3" -> "1.2.3"
+func extractVersionFromBranch(branch string) string {
+	ver := strings.TrimPrefix(branch, "release-")
+	return stripV(ver)
+}
+
+// normalizePatchVersion replaces the patch segment with "x": "1.2.3" -> "1.2.x"
+func normalizePatchVersion(version string) string {
+	ver := stripV(version)
+	parts := strings.Split(ver, ".")
+	if len(parts) != 3 {
+		return ver
+	}
+	return parts[0] + "." + parts[1] + ".x"
+}
+
+func versionsMatch(branch, upstreamVersion string) bool {
+	branchVer := extractVersionFromBranch(branch)
+	if patchVersionRe.MatchString(branchVer) {
+		return branchVer == stripV(upstreamVersion)
+	}
+	return normalizePatchVersion(branchVer) == normalizePatchVersion(upstreamVersion)
+}
+
+func fetchComponentsYAML(operatorBranch string) (map[string]operatorComponent, error) {
+	url := fmt.Sprintf("https://raw.githubusercontent.com/tektoncd/operator/%s/components.yaml", operatorBranch)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("creating request for tektoncd/operator@%s: %w", operatorBranch, err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("fetching components.yaml from tektoncd/operator@%s: %w", operatorBranch, err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("fetching components.yaml from tektoncd/operator@%s: HTTP %d", operatorBranch, resp.StatusCode)
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("reading components.yaml: %w", err)
+	}
+	var data map[string]operatorComponent
+	if err := yaml.Unmarshal(body, &data); err != nil {
+		return nil, fmt.Errorf("parsing components.yaml: %w", err)
+	}
+	return data, nil
+}
+
+func validateReleaseConfig(configDir, version string) error {
+	releaseConfig, err := readResource[k.ReleaseConfig](configDir, "releases", version)
+	if err != nil {
+		return err
+	}
+
+	operatorBranch := releaseConfig.Branches["operator"].UpstreamBranch
+	if operatorBranch == "" {
+		operatorBranch = "main"
+	}
+
+	log.Printf("Validating %s release config against tektoncd/operator@%s...", version, operatorBranch)
+
+	componentsData, err := fetchComponentsYAML(operatorBranch)
+	if err != nil {
+		return err
+	}
+
+	// Build a map from upstream repo (e.g. "tektoncd/pipeline") to the components.yaml key
+	// by reading each component's repo file and matching the upstream field against the
+	// github field in the operator's components.yaml.
+	upstreamToOperatorKey := map[string]string{}
+	for key, entry := range componentsData {
+		if entry.GitHub != "" {
+			upstreamToOperatorKey[entry.GitHub] = key
+		}
+	}
+
+	var mismatches []string
+	for component, branch := range releaseConfig.Branches {
+		if component == "operator" {
+			continue
+		}
+		upstreamBranch := branch.UpstreamBranch
+		if upstreamBranch == "main" {
+			log.Printf("warning: Operator upstream is targetting the main branch for component %s, should tracking a tag", component)
+		}
+		repository, err := readResource[k.Repository](configDir, "repos", component)
+		if err != nil {
+			log.Printf("skipping %s: no repo config found (%s)", component, err)
+			continue
+		}
+		operatorKey, ok := upstreamToOperatorKey[repository.Upstream]
+		if !ok {
+			// Not all components in the downstream config are included in the operator's components.yaml
+			continue
+		}
+		entry, ok := componentsData[operatorKey]
+		if !ok || entry.Version == "" {
+			log.Printf("warning: component %s expected to be in Operator components.yaml but missing or missing version", component)
+			continue
+		}
+		if upstreamBranch == "" {
+			mismatches = append(mismatches, fmt.Sprintf("  %s: upstream branch not configured. Operator configured to track %s", component, entry.Version))
+			continue
+		}
+
+		if !versionsMatch(upstreamBranch, entry.Version) {
+			mismatches = append(mismatches, fmt.Sprintf(
+				"  %s: branch %q (%s) does not match operator version %q (%s)",
+				component, upstreamBranch, extractVersionFromBranch(upstreamBranch),
+				entry.Version, stripV(entry.Version),
+			))
+			log.Printf("X - %s\t!= %s\t- %s", upstreamBranch, entry.Version, component)
+		} else {
+			log.Printf("✔ - %s\t== %s\t- %s", upstreamBranch, entry.Version, component)
+		}
+	}
+
+	if len(mismatches) > 0 {
+		return fmt.Errorf("%d version mismatch(es) against tektoncd/operator@%s:\n%s\nCompare with: https://github.com/tektoncd/operator/blob/%s/components.yaml",
+			len(mismatches), operatorBranch, strings.Join(mismatches, "\n"), operatorBranch)
+	}
+
+	log.Printf("OK: %s release config is in sync with tektoncd/operator@%s", version, operatorBranch)
+	return nil
 }
 
 // readResource reads any type of resource from YAML files
