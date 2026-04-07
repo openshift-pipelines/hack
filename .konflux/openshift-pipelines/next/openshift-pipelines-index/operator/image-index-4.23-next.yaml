@@ -1,18 +1,18 @@
-# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+# Generated for Konflux Application openshift-pipelines-index by openshift-pipelines/hack. DO NOT EDIT
 ---
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: operator-next-bundle
+  name: operator-next-index-4-23
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: operator-next-bundle
-    appstudio.redhat.com/application: openshift-pipelines-core-next
+    appstudio.redhat.com/component: operator-next-index-4-23
+    appstudio.redhat.com/application: openshift-pipelines-index-next
 spec:
   image:
-    name: pipelines-operator-bundle
+    name: pipelines-index-4.23
     visibility: public
   notifications:
     - config:
