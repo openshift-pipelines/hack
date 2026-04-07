@@ -1,4 +1,4 @@
-# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+# Generated for Konflux Application openshift-pipelines-bundle by openshift-pipelines/hack. DO NOT EDIT
 ---
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
@@ -9,7 +9,7 @@ metadata:
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
     appstudio.redhat.com/component: operator-1-20-bundle
-    appstudio.redhat.com/application: openshift-pipelines-core-1-20
+    appstudio.redhat.com/application: openshift-pipelines-bundle-1-20
 spec:
   image:
     name: pipelines-operator-bundle
