@@ -13,6 +13,8 @@ on:
         options:
           - new-release
           - new-patch
+          - new-rc
+          - finalize-rc
           - update-upstream-versions
       version:
         description: |
