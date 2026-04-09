@@ -49,6 +49,8 @@ jobs:
         with:
           go-version: 1.25.x
       - name: login
+        env:
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
         if: github.event_name != 'pull_request'
         run: |
           git config user.name openshift-pipelines-bot
