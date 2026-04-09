@@ -6,7 +6,7 @@ branches:
   opc:
     upstream: release-v1.22.x
   pipelines-as-code:
-    upstream: release-v0.44.x
+    upstream: release-v0.45.x
   tekton-assist:
     upstream: release-v0.1.x
   tekton-caches:
