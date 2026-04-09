@@ -48,13 +48,17 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.25.x
-      - name: Generate  ${{matrix.version}} configurations and pull-requests
+      - name: login
+        if: github.event_name != 'pull_request'
         run: |
-          echo "Let's go"
           git config user.name openshift-pipelines-bot
           git config user.email pipelines-extcomm@redhat.com
           gh auth status
           gh auth setup-git
+
+      - name: Generate  ${{matrix.version}} configurations and pull-requests
+        run: |
+          echo "Let's go"
           go run ./cmd/konflux/ --version ${{ matrix.version }} --dry-run=${{ github.event_name == 'pull_request'}}
 
         env:
