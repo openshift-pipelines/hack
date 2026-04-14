@@ -35,8 +35,8 @@ Optional Flags:
 Examples:
   $0 --action new-release --version 1.23.0
   $0 -a new-patch -v 1.23.0
-  $0 -a new-rc -v 1.24.0
-  $0 -a finalize-rc -v 1.24.0
+  $0 -a new-rc -v 1.24
+  $0 -a finalize-rc -v 1.24
   $0 -a update-upstream-versions -v 1.24.0
 
 Description:
@@ -100,9 +100,11 @@ case "$ACTION" in
     create-new-patch $VERSION
     ;;
   "new-rc")
+    [[ "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]] && VERSION="${VERSION}.0"
     create-new-rc $VERSION
     ;;
   "finalize-rc")
+    [[ "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]] && VERSION="${VERSION}.0"
     finalize-rc-release $VERSION
     ;;
   "update-upstream-versions")

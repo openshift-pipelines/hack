@@ -47,8 +47,6 @@ function create-new-release() {
     exit 0
   fi
 
-  yq -i e ".versions += \"$RELEASE_VERSION\"" $KONFLUX_YAML
-
   yq -i e ".version = \"$RELEASE_VERSION\"" $RELEASE_YAML
   yq -i e ".image-suffix = \"-rhel9\"" $RELEASE_YAML
   create-new-patch $RELEASE_VERSION
