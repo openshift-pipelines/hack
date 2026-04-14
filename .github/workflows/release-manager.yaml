@@ -1,9 +1,21 @@
 name: Automated Release Actions
-run-name: Execute ${{ github.event.inputs.action || 'update-upstream-versions' }} for version ${{ github.event.inputs.version || 'next' }}
+run-name: Execute ${{ inputs.action || 'update-upstream-versions' }} for version ${{ inputs.version || 'next' }}
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # At every day at 00
+  workflow_call:
+    inputs:
+      action:
+        description: 'Select Action (see README for details)'
+        required: true
+        type: string
+      version:
+        description: |
+          Downstream Release Version. Eg: "1.22", "1.23", "next"
+        required: true
+        type: string
+    secrets:
+      OPENSHIFT_PIPELINES_ROBOT:
+        required: true
   workflow_dispatch:
     inputs:
       action:
@@ -21,16 +33,18 @@ on:
           Downstream Release Version. Eg: "1.22", "1.23", "next"
         required: true
         type: string
+
 permissions:
   contents: write
   pull-requests: write
+
 jobs:
   run-release:
     runs-on: ubuntu-latest
     env:
       # NOTE: in case of update, the defaults here are also specified in the run-name
-      ACTION: ${{ github.event.inputs.action || 'update-upstream-versions' }}
-      VERSION: ${{ github.event.inputs.version || 'next' }}
+      ACTION: ${{ inputs.action || 'update-upstream-versions' }}
+      VERSION: ${{ inputs.version || 'next' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
