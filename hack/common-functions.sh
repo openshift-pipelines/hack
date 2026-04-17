@@ -18,7 +18,7 @@ function create-new-release() {
   fi
 
   # Add New version in konflux.yaml
-  yq -i e ".versions += \"$RELEASE_VERSION\"" $KONFLUX_YAML
+#  yq -i e ".versions += \"$RELEASE_VERSION\"" $KONFLUX_YAML
 
   #Add Release name in $RELEASE_YAML
   yq -i e ".version = \"$RELEASE_VERSION\"" $RELEASE_YAML
