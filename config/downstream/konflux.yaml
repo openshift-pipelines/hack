@@ -6,4 +6,3 @@ applications:
   - core
   - bundle
   - index
-versions: "1.24"
