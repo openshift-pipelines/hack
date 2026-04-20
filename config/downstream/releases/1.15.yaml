@@ -13,7 +13,7 @@ branches:
   tektoncd-chains:
     upstream: release-v0.20.x
   tektoncd-cli:
-    upstream: release-v0.37.4
+    upstream: release-v0.37.6
   tektoncd-hub:
     upstream: release-v1.17.5
   tektoncd-pipeline:
