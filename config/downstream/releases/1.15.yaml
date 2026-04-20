@@ -7,7 +7,7 @@ branches:
   manual-approval-gate:
     upstream: release-v0.2.2
   opc:
-    upstream: release-v1.22.x
+    upstream: release-v1.15.x
   pipelines-as-code:
     upstream: release-v0.27.x
   tektoncd-chains:
