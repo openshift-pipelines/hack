@@ -29,8 +29,8 @@ spec:
       - name: CLUSTER_NAMES
         default:
           - Hub
-          - Spoke-1
-          - Spoke-2
+#          - Spoke-1
+#          - Spoke-2
     workspaces:
       - name: credentials
     tasks:
