@@ -83,6 +83,8 @@ type Release struct {
 	ImagePrefix  string `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix  string `json:"image-suffix" yaml:"image-suffix"`
 	CodeFreeze   bool   `json:"code-freeze" yaml:"code-freeze"`
+	IsRC         bool   `json:"is-rc" yaml:"is-rc"`
+	RCNumber     int    `json:"rc-number" yaml:"rc-number"`
 }
 
 type ApplicationConfig struct {

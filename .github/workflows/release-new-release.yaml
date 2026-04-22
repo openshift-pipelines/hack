@@ -1,0 +1,24 @@
+name: Release Action - New Release
+run-name: New Release for version ${{ github.event.inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: |
+          Downstream Release Version. Eg: "1.22", "1.23"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  new-release:
+    uses: ./.github/workflows/release-manager.yaml
+    with:
+      action: new-release
+      version: ${{ github.event.inputs.version }}
+    secrets:
+      OPENSHIFT_PIPELINES_ROBOT: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}

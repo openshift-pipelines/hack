@@ -35,6 +35,36 @@ When planning a new patch release for a specific  minor verson then it is essent
 After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
 
 ---
+## Release Candidate (RC) Builds
+RC builds follow the format `x.y.z-RC-α` where α starts at 1 and increments.
+
+### RC Workflow
+1. **Start RC**: Use `new-rc` action to create first RC build (e.g., `1.24.0-RC-1`)
+2. **Increment RC**: Continue using `new-rc` to increment the RC number
+3. **Auto-finalize**: After RC-2, `new-rc` automatically switches to full build
+4. **Manual finalize**: Use `finalize-rc` to manually drop RC suffix when ready
+
+### RC Options in GitHub Actions
+- From Action Menu on github select action "Automated Release Actions"
+- Run Workflow
+- Select appropriate Branch
+- Action : `new-rc` or `finalize-rc`
+- Version: Provide the downstream minor version e.g "1.24"
+- Run Workflow
+
+### RC Configuration (in release yaml)
+```yaml
+version: 1.24
+patch-version: 1.24.0-RC-1
+is-rc: true
+rc-number: 1
+```
+
+### Important Notes
+- **During RC mode**: Upstream component versions automatically update when higher versions are released upstream
+- **After x.y.0 release**: Minor versions of upstream components do NOT auto-update
+
+---
 ## Refreshing Upstream Branches
 Upstream branches for next release are syned daily. if there is any update in upstream branch name the  you will see a 
     PR in hack repo with updated upstream branches in next.yaml.
@@ -55,7 +85,7 @@ versions for unreleased versions which you can do by this workflow.
 After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
 
 ---
-
+ 
 
 TODO for automation:
 (waveywaves)

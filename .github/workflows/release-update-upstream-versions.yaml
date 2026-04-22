@@ -1,0 +1,27 @@
+name: Release Action - Update Upstream Versions
+run-name: Update Upstream Versions for ${{ github.event.inputs.version || 'next' }}
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # At every day at 00
+  workflow_dispatch:
+    inputs:
+      version:
+        description: |
+          Downstream Release Version. Eg: "1.22", "1.23", "next"
+        required: false
+        type: string
+        default: next
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-upstream-versions:
+    uses: ./.github/workflows/release-manager.yaml
+    with:
+      action: update-upstream-versions
+      version: ${{ github.event.inputs.version || 'next' }}
+    secrets:
+      OPENSHIFT_PIPELINES_ROBOT: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
