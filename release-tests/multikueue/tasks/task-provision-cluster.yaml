@@ -90,6 +90,14 @@ spec:
           value: "$(params.INSTANCE_TYPE)"
         - name: fips
           value: "true"
+        - name: imageContentSources
+          value: |
+            - mirrors:
+                - quay.io/openshift-pipeline
+              source: registry.redhat.io/openshift-pipelines
+            - mirrors:
+                - quay.io/openshift-pipeline
+              source: registry-proxy.engineering.redhat.com/rh-osbs
     - name: get-kubeconfig
       ref:
         resolver: git
