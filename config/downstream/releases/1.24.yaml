@@ -34,3 +34,5 @@ branches:
     upstream: release-v0.18.x
   tektoncd-triggers:
     upstream: release-v0.35.x
+  operator:
+    upstream: main
