@@ -23,6 +23,6 @@ spec:
           value: pipelines/release-pipeline.yaml
     params:
       - name: release_version
-        value: "v1.20.4"
+        value: "v1.20.5"
       - name: release_to_github
         value: "false"
