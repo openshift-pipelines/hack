@@ -1,7 +1,7 @@
 version: "1.20"
 image-suffix: -rhel9
 patch-version: 1.20.5
-code-freeze: true
+code-freeze: false
 branches:
   git-init:
     upstream: release-v1.2.x
