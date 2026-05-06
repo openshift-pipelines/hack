@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-1-15
 spec:
   image:
-    name: pipelines-pruner-webhook-rhel9
+    name: pipelines-pruner-webhook-rhel8
     visibility: public
   notifications:
     - config:

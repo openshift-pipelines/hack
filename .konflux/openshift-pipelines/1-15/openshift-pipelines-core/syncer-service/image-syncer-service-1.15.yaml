@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-1-15
 spec:
   image:
-    name: pipelines-syncer-service-rhel9
+    name: pipelines-syncer-service-rhel8
     visibility: public
   notifications:
     - config:

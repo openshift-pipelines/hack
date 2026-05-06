@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-1-15
 spec:
   image:
-    name: pipelines-pipelines-as-code-cli-rhel9
+    name: pipelines-pipelines-as-code-cli-rhel8
     visibility: public
   notifications:
     - config:
