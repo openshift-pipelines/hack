@@ -1,5 +1,5 @@
 version: "1.15"
-image-suffix: -rhel9
+image-suffix: -rhel8
 patch-version: 1.15.5
 branches:
   git-init:
