@@ -78,11 +78,12 @@ type Patch struct {
 	Script string
 }
 type Release struct {
-	Version      string
-	PatchVersion string `json:"patch-version" yaml:"patch-version"`
-	ImagePrefix  string `json:"image-prefix" yaml:"image-prefix"`
-	ImageSuffix  string `json:"image-suffix" yaml:"image-suffix"`
-	CodeFreeze   bool   `json:"code-freeze" yaml:"code-freeze"`
+	Version           string
+	PatchVersion      string            `json:"patch-version" yaml:"patch-version"`
+	ImagePrefix       string            `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix       string            `json:"image-suffix" yaml:"image-suffix"`
+	CodeFreeze        bool              `json:"code-freeze" yaml:"code-freeze"`
+	DockerFileOptions DockerFileOptions `json:"docker-file-options" yaml:"docker-file-options"`
 }
 
 type ApplicationConfig struct {
@@ -111,3 +112,8 @@ var (
 		"amd64": "m5.2xlarge",
 	}
 )
+
+type DockerFileOptions struct {
+	Args   map[string]string `yaml:"args"`
+	Labels any               `yaml:"labels"`
+}

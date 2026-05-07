@@ -165,10 +165,21 @@ func MutateDockerFile(component Component, repoDir string) error {
 	return os.WriteFile(dockerfile, []byte(strings.Join(result, "\n")), 0644)
 }
 func getArgs(component Component) map[string]string {
-	return map[string]string{
+	// Define Default Args
+	args := map[string]string{
 		"GO_BUILDER": "registry.access.redhat.com/ubi9/go-toolset:1.25",
 		"VERSION":    component.Version.Version,
 	}
+	// Get Release Args
+	releaseArgs := component.Application.Release.DockerFileOptions.Args
+
+	// Override default args with release args
+	for name, value := range releaseArgs {
+		args[name] = value
+	}
+
+	// Return final args map
+	return args
 }
 
 func getDockerFileLabels(component Component) map[string]string {

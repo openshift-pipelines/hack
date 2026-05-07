@@ -2,6 +2,9 @@ version: "1.15"
 image-suffix: -rhel8
 patch-version: 1.15.5
 code-freeze: false
+docker-file-options:
+  args:
+    GO_BUILDER: "registry.access.redhat.com/ubi8/go-toolset:latest"
 branches:
   git-init:
     upstream: release-v1.0.x
