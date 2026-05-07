@@ -83,7 +83,7 @@ jobs:
           fi
           
           git commit -F- <<EOF
-            [bot:${BASE_BRANCH}] Update Generated Konflux Config
+            [bot:${{matrix.version}}] Update Generated Konflux Config
           EOF
           
           git push -f origin ${SOURCE_BRANCH}
