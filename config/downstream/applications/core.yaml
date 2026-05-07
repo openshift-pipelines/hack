@@ -15,6 +15,7 @@
     - syncer-service
     - multicluster-proxy-aae
     - console-plugin-pf5
+    - console-plugin
     - tektoncd-cli
     - opc
     - serve-tkn-cli
