@@ -1,0 +1,114 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: stage-release-pipeline-
+  annotations:
+    tekton.dev/tags: release
+spec:
+  taskRunTemplate:
+    serviceAccountName: release-registry-openshift-pipelines-core
+  pipelineSpec:
+    params:
+      - name: APPLICATION
+        type: string
+        default: "openshift-pipelines-core-1-21"
+      - name: RELEASE_PLAN
+        type: string
+        default: "openshift-pipelines-core-1-21-stage-release-as-op"
+    tasks:
+      - name: release-snapshot
+        taskSpec:
+          results:
+            - name: snapshot
+            - name: release
+          stepTemplate:
+            image: quay.io/openshift-pipeline/ci
+            env:
+              - name: APPLICATION
+                value: $(params.APPLICATION)
+              - name: RELEASE_PLAN
+                value: $(params.RELEASE_PLAN)
+          steps:
+            - name: get-latest-snapshot
+              results:
+                - name: snapshot
+              script: |
+                LATEST_SNAPSHOT=$(kubectl get snapshots \
+                  -l "pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=${APPLICATION}" \
+                  --sort-by=.metadata.creationTimestamp \
+                  -o jsonpath='{.items[*].metadata.name}' | awk '{print $NF}')
+                
+                  echo -n $LATEST_SNAPSHOT | tee $(step.results.snapshot.path)
+            - name: create-release
+              env:
+                - name: SNAPSHOT
+                  value: $(steps.get-latest-snapshot.results.snapshot)
+              results:
+                - name: release
+              script: |
+                RELEASE_NAME=$(kubectl get releases \
+                  -l "release.appstudio.openshift.io/releasePlan=$RELEASE_PLAN,release.appstudio.openshift.io/snapshot=$SNAPSHOT" \
+                  -o json | jq -r '.items[]  
+                  | . as $item
+                  | ($item.status.conditions[]? | select(.type=="Released")) as $cond
+                  | select( ($cond.status == "True") or ($cond.status == "False" and ($cond.reason // "") != "Failed"))
+                  | $item.metadata.name '| head -n1 )
+                if [ -z "$RELEASE_NAME" ]; then
+                  echo "No existing release present. Creating New Release"
+                  RELEASE_YAML=/tmp/release.yaml
+                cat <<EOF > $RELEASE_YAML
+                ---
+                apiVersion: appstudio.redhat.com/v1alpha1
+                kind: Release
+                metadata:
+                  labels:
+                    appstudio.openshift.io/application: $APPLICATION
+                  generateName: $RELEASE_PLAN-
+                spec:
+                  gracePeriodDays: 10
+                  releasePlan: $RELEASE_PLAN
+                  snapshot: $SNAPSHOT
+                EOF
+                RELEASE_NAME=$(kubectl create -f $RELEASE_YAML -o jsonpath='{.metadata.name}')
+                fi
+                echo -n $RELEASE_NAME | tee $(step.results.release.path)
+
+
+            - name: wait-for-release
+              env:
+                - name: SNAPSHOT
+                  value: $(steps.get-latest-snapshot.results.snapshot)
+                - name: RELEASE_NAME
+                  value: $(steps.create-release.results.release)
+              results:
+                - name: pipelinerun
+              script: |
+                echo "Waiting for PipelineRun to be assigned to Release: $RELEASE_NAME..."
+
+                while true; do
+                  # Attempt to extract the PipelineRun name from the Release status
+                  export PIPELINERUN=$(kubectl get release "$RELEASE_NAME" -o jsonpath='{.status.managedProcessing.pipelineRun}' 2>/dev/null)
+
+                  # Check if the extracted string is not empty
+                  if [ -n "$PIPELINERUN" ]; then
+                    echo "Success! PipelineRun found: $PIPELINERUN"
+                    break
+                  fi
+                  echo "PipelineRun Not yet Added"
+                  kubectl get release "$RELEASE_NAME" -o jsonpath='{.status.conditions[?(@.status=="False")]}' | jq
+                  sleep 5
+
+
+                done
+                tkn -n ${PIPELINERUN%%/*} pr logs -f ${PIPELINERUN##*/}
+                
+                echo "Check Pipeline Run Status"
+                PIPELINERUN_STATUS=$(oc -n ${PIPELINERUN%%/*} get pr ${PIPELINERUN##*/} -o jsonpath="{.status.conditions[?(@.type=='Succeeded')]}")
+                SUCCESS=$($PIPELINERUN_STATUS | jq .staus)
+                MESSAGE=$($PIPELINERUN_STATUS | jq .message)
+                if [[$SUCCESS==False]]; then
+                  echo "PipelineRun $PIPELINERUN Failed: $MESSAGE"
+                else
+                  echo "PipelineRun $PIPELINERUN Succeeded"
+                fi

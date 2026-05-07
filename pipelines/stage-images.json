@@ -1,0 +1,36 @@
+{
+  "index_image": {
+    "v4.14": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133176",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:2e3d6a9f8c3b7655d75f42e607ab24776cc8e48f42877de5a6e3705aac101159"
+    },
+    "v4.16": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133178",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:b8630e7c4ff2fde8f2a161e0a9dd656c99dfb6daeb0d93581f81c95d14d6bd56"
+    },
+    "v4.17": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133199",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:29c46f62879f24b6d0505fbc1658c495eca69fa1e7dc73d01a9ca3d44a018217"
+    },
+    "v4.18": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133200",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:7f18ed6d09a063e6ba351d13f589e4b37b73dbea46c6533e55183475cc6ccec0"
+    },
+    "v4.19": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133201",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:86fa82b9dbf8cde32e84c2d1d782e0f9c1d0cad0aa5db330dfe1acd82a30ac44"
+    },
+    "v4.20": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133202",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:cfd1ec819a513298d402337315a73414fb2c66004a351bef9c1d7971caa9facd"
+    },
+    "v4.21": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133203",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:7bab25f6331c2ff15524554b228de9a9cb1600ef38f794d7b66a473bcee52887"
+    },
+    "v4.22": {
+      "index_image": "registry-proxy.engineering.redhat.com/rh-osbs/iib:1133204",
+      "index_image_resolved": "registry-proxy.engineering.redhat.com/rh-osbs/iib@sha256:558ee2884e89b77f766862302d095832f1fd8963a74c7f3b323423b78c3f4bd7"
+    }
+  }
+}

@@ -71,6 +71,7 @@ spec:
       - name: configure-spoke
         runAfter:
           - configure-spoke-cluster
+          - install-operator
         matrix:
           params:
             - name: CLUSTER_INFO

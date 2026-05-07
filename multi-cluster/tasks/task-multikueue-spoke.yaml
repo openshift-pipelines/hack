@@ -48,7 +48,7 @@ spec:
             name: multikueue-sa-role
           rules:
             - apiGroups: [""]
-              resources: ["pods"]
+              resources: ["pods", ""pods/log"]
               verbs: ["get", "list", "watch", "create", "delete"]
             - apiGroups: ["batch"]
               resources: ["jobs"]
@@ -57,7 +57,7 @@ spec:
               resources: ["workloads", "workloads/status"]
               verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
             - apiGroups: ["tekton.dev"]
-              resources: ["pipelineruns", "pipelineruns/status"]
+              resources: ["pipelineruns", "pipelineruns/status", "taskruns"]
               verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
         EOF
         

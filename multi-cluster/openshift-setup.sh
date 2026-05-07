@@ -21,8 +21,8 @@ kubectl create secret generic ${SPOKE} \
   --from-file=kubeconfig=${SPOKE_KUBECONFIG} --dry-run=client -o yaml  | kubectl apply -f -
 
 #echo "Install Tekton Pipelines"
-#	kubectl apply --server-side -f https://infra.tekton.dev/tekton-releases/pipeline/previous/${TEKTON_VERSION}/release.yaml
-#	kubectl wait --for=condition=Available deployment --all -n tekton-pipelines --timeout=300s
+	kubectl apply --server-side -f https://infra.tekton.dev/tekton-releases/pipeline/previous/${TEKTON_VERSION}/release.yaml
+	kubectl wait --for=condition=Available deployment --all -n tekton-pipelines --timeout=300s
 
 oc delete pr --all
 kubectl apply -f "${SCRIPT_DIR}/tasks/"

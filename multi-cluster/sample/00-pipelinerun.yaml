@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: pipeline-
+  labels:
+    app: test
+spec:
+  pipelineSpec:
+    tasks:
+      - name: echo
+        taskSpec:
+          steps:
+            - name: echo
+              image: registry.access.redhat.com/ubi9/ubi-minimal
+              script: |
+                #!/bin/bash
+                SECONDS=0              
+                # Check if current time is less than the end time
+                while [[ $SECONDS -lt 30 ]]; do
+                echo "Logging data : $SECONDS"
+                sleep 1
+                done
+                echo "Finished logging."
+                  
