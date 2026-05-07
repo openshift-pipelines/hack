@@ -380,7 +380,7 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
 	}
 	if version.ImageSuffix != "None" && !c.NoImageSuffix {
-		c.ImageSuffix = version.ImageSuffix
+		c.ImageSuffix += version.ImageSuffix
 		if c.ImageSuffix == "" {
 			c.ImageSuffix = DefaultImageSuffix
 		}
