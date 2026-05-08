@@ -108,7 +108,6 @@ const (
 
 var (
 	instanceTypes = map[string]string{
-		"arm64": "m6g.2xlarge",
 		"amd64": "m5.2xlarge",
 	}
 )
