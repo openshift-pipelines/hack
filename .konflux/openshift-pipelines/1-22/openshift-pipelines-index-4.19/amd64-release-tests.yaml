@@ -12,6 +12,8 @@ spec:
   params:
     - name: INSTANCE_TYPE
       value: m5.2xlarge
+    - name: GIT_RELEASE_TESTS_BRANCH
+      value: release-v1.22
   resolverRef:
     params:
       - name: url
