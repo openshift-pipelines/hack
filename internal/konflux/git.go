@@ -145,7 +145,7 @@ func commitAndPullRequest(ctx context.Context, repo Repository, dir string) erro
 		if err != nil {
 			return fmt.Errorf("failed to create the pr: %s, %s", err, out)
 		}
-		// Printing directly allows
+		// Printing directly since the log prefix blocks the notice from registering with the workflow
 		fmt.Printf("::notice::Created Pull Request for %s: %s\n", repo.Name, out)
 	} else {
 		log.Printf("[%s] PR already exists", prNumber)
@@ -157,7 +157,7 @@ func commitAndPullRequest(ctx context.Context, repo Repository, dir string) erro
 		}
 		prUrl := strings.TrimSpace(string(out))
 
-		// Printing directly allows
+		// Printing directly since the log prefix blocks the notice from registering with the workflow
 		fmt.Printf("::notice::Updated Pull Request for %s: %s\n", repo.Name, prUrl)
 	}
 	return nil
