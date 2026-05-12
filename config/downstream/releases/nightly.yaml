@@ -1,0 +1,4 @@
+version: nightly
+patch-version: latest
+image-suffix: "-rhel9"
+code-freeze: false
