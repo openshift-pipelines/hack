@@ -55,7 +55,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "{{- range .Owners }} {{ . }}{{ end }} please check and fix."
+                    "text": "{{- range .Owners }} {{ . }}{{ end }} please investigate and fix this failure.\nReach out to the release captain if you need assistance."
                   }
                 },
                 {

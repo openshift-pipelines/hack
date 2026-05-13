@@ -4,5 +4,45 @@
 #   repo-name:
 #     - "<@SLACK_MEMBER_ID>"            # individual user (Profile > "..." > Copy member ID)
 #     - "<!subteam^SLACK_GROUP_ID>"     # user group (e.g. @team-name)
+
+# core
+git-init:
+  - "<!subteam^S04UX12MX8B>"
+manual-approval-gate:
+  - "<!subteam^S0B3NG4RH2Q>"
+pipelines-as-code:
+  - "<!subteam^S04FWV1N021>"
+tekton-caches:
+  - "<!subteam^S0B3JT5KR34>"
+tekton-kueue:
+  - "<!subteam^S0AS9T1JWHM>"
+tektoncd-chains:
+  - "<!subteam^S050DUERQ4X>"
+tektoncd-hub:
+  - "<!subteam^S050UAR1K8B>"
+tektoncd-pipeline:
+  - "<!subteam^S050DU2F7FH>"
+tektoncd-pruner:
+  - "<!subteam^S0B4D5U154G>"
+tektoncd-results:
+  - "<!subteam^S053P13TLDP>"
+tektoncd-triggers:
+  - "<!subteam^S051731DAM7>"
+syncer-service:
+  - "<!subteam^S0AS9T1JWHM>"
+multicluster-proxy-aae:
+  - "<!subteam^S0AS9T1JWHM>"
+console-plugin-pf5:
+  - "<!subteam^S075RLXAELT>"
+console-plugin:
+  - "<!subteam^S075RLXAELT>"
 tektoncd-cli:
   - "<!subteam^S050DUBQXST>"
+opc:
+  - "<!subteam^S050DUBQXST>"
+serve-tkn-cli:
+  - "<!subteam^S050DUBQXST>"
+operator:
+  - "<!subteam^S050WTYHHGU>"
+
+
