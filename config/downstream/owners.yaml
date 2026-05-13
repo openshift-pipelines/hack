@@ -1,0 +1,8 @@
+# Slack owners for repos (cc'd on workflow failure notifications).
+# Supports individual users and user groups.
+# Format:
+#   repo-name:
+#     - "<@SLACK_MEMBER_ID>"            # individual user (Profile > "..." > Copy member ID)
+#     - "<!subteam^SLACK_GROUP_ID>"     # user group (e.g. @team-name)
+tektoncd-cli:
+  - "<!subteam^S050DUBQXST>"

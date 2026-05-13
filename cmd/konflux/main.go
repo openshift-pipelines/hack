@@ -47,6 +47,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	config.Owners, err = readOwners(configDir)
+	if err != nil {
+		log.Printf("warning: could not read owners.yaml: %v", err)
+		config.Owners = map[string][]string{}
+	}
+
 	// Add main  version by default to add some main specific config.
 	versionConfig := k.ReleaseConfig{
 		Version: k.Release{
@@ -281,6 +287,9 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			if err != nil {
 				return []k.Application{}, err
 			}
+			if o, ok := config.Owners[repoName]; ok {
+				repo.Owners = o
+			}
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)
 
@@ -406,4 +415,17 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 // readConfig reads the main konflux config file
 func readConfig(dir, configFile string) (k.Config, error) {
 	return readResource[k.Config](dir, "", configFile)
+}
+
+func readOwners(dir string) (map[string][]string, error) {
+	filePath := filepath.Join(dir, "owners.yaml")
+	in, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	var owners map[string][]string
+	if err := yaml.Unmarshal(in, &owners); err != nil {
+		return nil, fmt.Errorf("error while parsing owners %s: %w", filePath, err)
+	}
+	return owners, nil
 }
