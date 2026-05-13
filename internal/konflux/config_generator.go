@@ -94,6 +94,12 @@ func generateGitHubConfig(repo Repository, targetDir string) error {
 		}
 		updateSourcesTemplateFile = "update-sources-all.yaml"
 		autoMergeTemplateFile = "auto-merge-upstream-all.yaml"
+
+		if len(repo.Owners) > 0 {
+			if err := generateFileFromTemplate("slack-notify-on-failure.yaml", repo, filepath.Join(target, "workflows", "slack-notify-on-failure.yaml"), repo.Application); err != nil {
+				return err
+			}
+		}
 	}
 
 	if repo.Upstream != "" {

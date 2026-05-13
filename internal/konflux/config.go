@@ -5,10 +5,11 @@ type Config struct {
 	Namespace    string `yaml:"namespace"`
 	Applications []string
 	Versions     []string
-	Repositories []Repository `json:"repos" yaml:"repos"`
-	ImagePrefix  string       `json:"image-prefix" yaml:"image-prefix"`
-	ImageSuffix  string       `json:"image-suffix" yaml:"image-suffix"`
-	Product      string       `json:"product" yaml:"product"`
+	Repositories []Repository        `json:"repos" yaml:"repos"`
+	ImagePrefix  string              `json:"image-prefix" yaml:"image-prefix"`
+	ImageSuffix  string              `json:"image-suffix" yaml:"image-suffix"`
+	Product      string              `json:"product" yaml:"product"`
+	Owners       map[string][]string `json:"-" yaml:"-"`
 }
 
 type Application struct {
@@ -37,8 +38,9 @@ type Repository struct {
 	Tekton           Tekton
 	GitHub           GitHub
 	Patches          []Patch
-	NoPrefixUpstream bool `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
-	UsePatchBranch   bool `json:"use-patch-branch" yaml:"use-patch-branch"`
+	NoPrefixUpstream bool     `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
+	UsePatchBranch   bool     `json:"use-patch-branch" yaml:"use-patch-branch"`
+	Owners           []string `json:"owners" yaml:"owners"`
 }
 type Branch struct {
 	Name           string
