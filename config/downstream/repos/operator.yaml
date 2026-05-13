@@ -7,6 +7,12 @@ components:
     no-image-suffix: true
   - name: webhook
   - name: proxy
+# TODO : Please remove this patch once we have 1.25.10 base image available here
+# registry.access.redhat.com/ubi8/go-toolset
+patches:
+  - name: patch-golang-1.25.9
+    script: |
+      sed -i "s/go 1.25.10/go 1.25.9/g" go.mod
 github:
   update-sources: |
     - name: fetch-payload

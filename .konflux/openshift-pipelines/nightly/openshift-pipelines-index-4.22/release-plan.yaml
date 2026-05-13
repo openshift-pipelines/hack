@@ -23,6 +23,6 @@ spec:
           value: pipelines/release-pipeline.yaml
     params:
       - name: release_version
-        value: "vlatest"
+        value: "nightly"
       - name: release_to_github
         value: "false"

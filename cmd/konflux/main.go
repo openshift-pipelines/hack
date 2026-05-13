@@ -60,8 +60,8 @@ func main() {
 		}
 		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
 		versionConfig.Version.Version = *version
-		if versionConfig.Version.Version == "next" {
-			versionConfig.Version.PatchVersion = *version
+		if versionConfig.Version.Version == "next" || versionConfig.Version.Version == "nightly" {
+			versionConfig.Version.PatchVersion = versionConfig.Version.PatchVersion
 		} else if !strings.HasPrefix(versionConfig.Version.PatchVersion, "v") {
 			versionConfig.Version.PatchVersion = "v" + versionConfig.Version.PatchVersion
 		}
