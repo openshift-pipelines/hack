@@ -16,7 +16,7 @@ branches:
   tektoncd-chains:
     upstream: release-v0.26.x
   tektoncd-cli:
-    upstream: release-v0.44.1
+    upstream: release-v0.45.0
   tektoncd-hub:
     upstream: release-v1.24.0
   operator:
