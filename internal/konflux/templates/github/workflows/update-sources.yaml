@@ -27,16 +27,16 @@ jobs:
           pushd upstream
           git checkout -B {{.Branch.UpstreamBranch}} origin/{{.Branch.UpstreamBranch}}
           popd
-      {{- if .GitHub.UpdateSources }}
-      {{  .GitHub.UpdateSources | indent 4}}
-      {{- end}}
-      {{- if .Patches}}
+{{- if .GitHub.UpdateSources }}
+{{  .GitHub.UpdateSources | indent 6}}
+{{- end}}
+{{- if .Patches}}
       - name: Generate patches
         run: |
           pushd upstream
             {{- range .Patches}}
-            {{ .Script | indent 8}}
-            {{- end}}
+            {{ .Script }}
+            {{- end }}
           popd
         {{- end}}
       - name: update-rpms
