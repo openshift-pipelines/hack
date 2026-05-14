@@ -41,7 +41,6 @@ github:
         # Update operator's payload and stuff
         make update-payload-and-reference
         pushd upstream
-        rm -fR cmd/openshift/operator/kodata operatorhub
-        git checkout HEAD .
+          rm -fR cmd/openshift/operator/kodata operatorhub
+          git checkout HEAD .
         popd
-
