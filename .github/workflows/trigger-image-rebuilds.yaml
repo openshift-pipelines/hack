@@ -45,13 +45,13 @@ jobs:
           set -euo pipefail
 
           # Validate version format
-          if [[ ! "$VERSION" =~ ^(next|[0-9]+\.[0-9]+)$ ]]; then
-            echo "ERROR: Invalid version format '$VERSION'. Expected 'next' or 'X.Y' (e.g., '1.22')"
+          if [[ ! "$VERSION" =~ ^(next|nightly|[0-9]+\.[0-9]+)$ ]]; then
+            echo "ERROR: Invalid version format '$VERSION'. Expected 'next', or 'nightly' or 'X.Y' (e.g., '1.22')"
             exit 1
           fi
 
-          if [[ "$VERSION" == "next" ]]; then
-            BRANCH="next"
+          if [[ "$VERSION" == "next" ||  "$VERSION" == "nightly"  ]]; then
+            BRANCH=$VERSION
           else
             BRANCH="release-v${VERSION}.x"
           fi
