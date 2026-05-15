@@ -51,10 +51,10 @@ spec:
   - name: build-image-index
     value: false
   {{- end }}
-  {{- if  not (contains "index" .Name) }}
+  {{- if .PrefetchInput }}
   - name: prefetch-input
     value: |
-      {{.PrefetchInput}}
+      {{- .PrefetchInput -}}
   {{- end }}
   pipelineRef:
     name: {{- if  not (contains "index" .Name ) }} docker-build-ta {{- else}} fbc-build {{- end }}
