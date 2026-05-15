@@ -41,6 +41,7 @@ type Repository struct {
 	NoPrefixUpstream bool     `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
 	UsePatchBranch   bool     `json:"use-patch-branch" yaml:"use-patch-branch"`
 	Owners           []string `json:"owners" yaml:"owners"`
+	PrefetchInput    string   `json:"prefetch-input" yaml:"prefetch-input"`
 }
 type Branch struct {
 	Name           string
@@ -55,14 +56,14 @@ type Component struct {
 	Image            string
 	ImagePrefix      string `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix      string `json:"image-suffix" yaml:"image-suffix"`
-	PrefetchInput    string `json:"prefetch-input" yaml:"prefetch-input"`
 	Version          Release
 	Repository       Repository
 	Application      Application
 	Tekton           Tekton
-	NoImagePrefix    bool `json:"no-image-prefix" yaml:"no-image-prefix"`
-	NoImageSuffix    bool `json:"no-image-suffix" yaml:"no-image-suffix"`
-	NoPrefixUpstream bool `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
+	PrefetchInput    string `json:"prefetch-input" yaml:"prefetch-input"`
+	NoImagePrefix    bool   `json:"no-image-prefix" yaml:"no-image-prefix"`
+	NoImageSuffix    bool   `json:"no-image-suffix" yaml:"no-image-suffix"`
+	NoPrefixUpstream bool   `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
 }
 
 type Tekton struct {

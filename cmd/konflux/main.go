@@ -385,8 +385,11 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		}
 		c.Dockerfile = Dockerfile
 	}
-	if c.PrefetchInput == "" {
+	if repo.PrefetchInput == "" && c.PrefetchInput == "" {
 		c.PrefetchInput = "{\"type\": \"rpm\", \"path\": \".konflux/rpms\"}"
+	} else if c.PrefetchInput == "NONE" || repo.PrefetchInput == "NONE" {
+		//Hack to handle scenario where we explicitely want to set the PrefetchInput to blank
+		c.PrefetchInput = ""
 	}
 	if version.ImageSuffix != "None" && !c.NoImageSuffix {
 		c.ImageSuffix += version.ImageSuffix
