@@ -2,6 +2,8 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
+  labels:
+    test.appstudio.openshift.io/optional: "true"
   name: {{hyphenize .Name}}-{{hyphenize .Release.Version}}-release-tests-{{hyphenize .InstanceArch}}
 spec:
   application: {{hyphenize .Name}}-{{hyphenize .Release.Version}}
