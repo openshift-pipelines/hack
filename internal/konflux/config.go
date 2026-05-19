@@ -1,5 +1,10 @@
 package konflux
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Config struct {
 	Organization   string `yaml:"organization"`
 	Namespace      string `yaml:"namespace"`
@@ -89,7 +94,27 @@ type Release struct {
 	ImagePrefix       string            `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix       string            `json:"image-suffix" yaml:"image-suffix"`
 	CodeFreeze        bool              `json:"code-freeze" yaml:"code-freeze"`
+	IsRC              bool              `json:"is-rc" yaml:"is-rc"`
+	RCNumber          int               `json:"rc-number" yaml:"rc-number"`
 	DockerFileOptions DockerFileOptions `json:"docker-file-options" yaml:"docker-file-options"`
+}
+
+func (r Release) FullVersion() string {
+	if r.Version == "main" || r.Version == "next" {
+		return r.Version
+	}
+
+	version := r.PatchVersion
+
+	if !strings.HasPrefix(version, "v") {
+		version = "v" + version
+	}
+
+	if r.IsRC {
+		version += fmt.Sprintf("-RC-%d", r.RCNumber)
+	}
+
+	return version
 }
 
 type ApplicationConfig struct {

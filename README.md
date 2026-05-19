@@ -5,19 +5,27 @@ Contains a bunch of hack used for `openshift-pipelines` repositories.
 - Generate prow configuration (and sync in `openshift/release`)
   - For `task*` repositories.
 - Generate github workflows "matrix" for `task*` repositories.
+- Generate and store the configuration for Konflux resources and automation (build PipelineRuns, ReleasePlans, etc)
+
 ---
 ## Adding New Release
-Now release can be added just a click of button. 
-- From Action Menu on github select action "Automated Release Actions"
-- Run Workflow
-- Select appropriate Branch
-- Action : new-release
-- Version: Provide the version you want to add e.g 1.23
-- Run Workflow
-- This workflow will add new PR to hack repo with updated version configuration.
+Now release can be added just a click of button.
+- From Action Menu on github select action "Release Action - New Release"
+- Run Workflow with the following inputs:
+  - Select `main` branch
+  - Version: Provide the version you want to add e.g `1.23` (will create the tag `1.23.0-RC-1`)
+- This workflow will add new PR to hack repo with updated version configuration for the Release Candidate.
+- Verify the PR and merge
+- Repeat the above for subsequent Release Candidate builds
+- When ready to create the final pre-stage release, from the Action Menu on Github run select the action "Release Action - Finalize RC"
+- Run the workflow with the following inputs:
+  - Select `main` branch
+  - Version: Provide the version you want to finalize (e.g. `1.23`)
+- This workflow will add new PR to the hack repo that removes the RC suffix from the release's version.
 - Verify the PR and merge
 
-After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
+After the initial PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
+The initial release will be configured as a Release Candidate with a version like 1.23.0-RC-1.
 
 ---
 ## Adding New Patch
@@ -55,7 +63,7 @@ versions for unreleased versions which you can do by this workflow.
 After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
 
 ---
-
+ 
 
 TODO for automation:
 (waveywaves)
