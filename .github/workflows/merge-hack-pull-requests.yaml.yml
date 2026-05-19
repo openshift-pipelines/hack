@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "Getting repository list..."
 
-          REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml; echo "$ORG_NAME/hack | sort -u)
+          REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml; echo "$ORG_NAME/hack" | sort -u)
 
           for REPO in $REPOS; do
             echo "Searching $REPO for PRs with label: $TARGET_LABEL"
