@@ -90,7 +90,7 @@ jobs:
           
           if [ "$(gh pr list --base ${BASE_BRANCH} --head ${SOURCE_BRANCH} --json url --jq 'length')" = "0" ]; then
             echo "creating PR..."
-            gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated   --fill
+            gh pr create -B ${BASE_BRANCH} -H ${SOURCE_BRANCH} --label=automated --label=hack   --fill
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

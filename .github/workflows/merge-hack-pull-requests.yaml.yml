@@ -1,4 +1,4 @@
-name: Global Hack PR Merger
+name: merge-hack-pull-requests
 
 on:
   schedule:
@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "Getting repository list..."
 
-          REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml | sort -u)
+          REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml; echo "$ORG_NAME/hack | sort -u)
 
           for REPO in $REPOS; do
             echo "Searching $REPO for PRs with label: $TARGET_LABEL"
@@ -42,8 +42,9 @@ jobs:
               continue
             fi
 
-            for PR in $PR_NUMS; do
-              echo "Attempting to merge PR #$PR in $REPO..."
-              gh pr merge "$PR" -R "$REPO" --rebase --auto || true
+            for p in $PR_NUMS; do
+              echo "Attempting to merge PR #$p in $REPO..."
+              gh pr edit $p --add-label "lgtm" --add-label "approved" || true
+              gh pr merge "$p" -R "$REPO" --rebase --auto || true
             done
           done
