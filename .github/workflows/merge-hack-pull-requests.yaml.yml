@@ -44,7 +44,6 @@ jobs:
 
             for p in $PR_NUMS; do
               echo "Attempting to merge PR #$p in $REPO..."
-              gh pr edit $p --add-label "lgtm" --add-label "approved" || true
               gh pr merge "$p" -R "$REPO" --rebase --auto || true
             done
           done
