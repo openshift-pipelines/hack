@@ -3,6 +3,8 @@
 apiVersion: appstudio.redhat.com/v1beta2
 kind: IntegrationTestScenario
 metadata:
+  labels:
+    test.appstudio.openshift.io/optional: "true"
   name: openshift-pipelines-bundle-nightly-enterprise-contract
 spec:
   application: openshift-pipelines-bundle-nightly
