@@ -282,13 +282,10 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			Config:          config,
 		}
 		for _, repoName := range applicationConfig.Repositories {
-			repo, err := readRepository(dir, repoName, &application, versionConfig.Branches[repoName])
+			repo, err := readRepository(dir, repoName, &application, versionConfig.Branches[repoName], config.Owners[repoName])
 
 			if err != nil {
 				return []k.Application{}, err
-			}
-			if o, ok := config.Owners[repoName]; ok {
-				repo.Owners = o
 			}
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)
@@ -348,13 +345,14 @@ func updateRepository(name string, repo *k.Repository, a k.Application) error {
 }
 
 // readRepository reads a repository resource from the repos directory
-func readRepository(dir, repoName string, app *k.Application, branch k.Branch) (k.Repository, error) {
+func readRepository(dir, repoName string, app *k.Application, branch k.Branch, owners []string) (k.Repository, error) {
 	repository, err := readResource[k.Repository](dir, "repos", repoName)
 	if err != nil {
 		return k.Repository{}, err
 	}
 
 	repository.Branch = branch
+	repository.Owners = owners
 	if err := updateRepository(repoName, &repository, *app); err != nil {
 		return k.Repository{}, err
 	}

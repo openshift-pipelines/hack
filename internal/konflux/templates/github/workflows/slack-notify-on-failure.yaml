@@ -44,10 +44,6 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*Branch:*\n{{ "${{ github.event.workflow_run.head_branch }}" }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Triggered by:*\n{{ "${{ github.event.workflow_run.actor.login }}" }}"
                     }
                   ]
                 },
@@ -55,7 +51,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "{{- range .Owners }} {{ . }}{{ end }} please investigate and fix this failure.\nReach out to the release captain if you need assistance."
+                    "text": "{{- range .Owners }} <!subteam^{{ . }}>{{ end }} please investigate and fix this failure.\nReach out to the release captain if you need assistance."
                   }
                 },
                 {
