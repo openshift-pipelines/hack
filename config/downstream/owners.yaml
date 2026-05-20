@@ -1,48 +1,52 @@
-# Slack owners for repos (cc'd on workflow failure notifications).
-# Supports individual users and user groups.
+# Slack owners for repos (tagged on pipeline/workflow failure notifications).
+# Supports subteams (groups) and individual members.
 # Format:
 #   repo-name:
-#     - "<@SLACK_MEMBER_ID>"            # individual user (Profile > "..." > Copy member ID)
-#     - "<!subteam^SLACK_GROUP_ID>"     # user group (e.g. @team-name)
+#     - "SLACK_SUBTEAM_ID"   # subteam / user group (e.g. S050DUBQXST)
+#     - "SLACK_MEMBER_ID"    # individual user  (e.g. U024BE7LH)
+# Find subteam IDs: Slack > team profile > copy ID (starts with S)
+# Find member IDs:  Slack > user profile > "..." > Copy member ID (starts with U)
+
+# release
+release-captain:
+  - "S04NUBJ20RG"    # subteam
 
 # core
 git-init:
-  - "<!subteam^S04UX12MX8B>"
+  - "S04UX12MX8B"    # subteam
 manual-approval-gate:
-  - "<!subteam^S0B3NG4RH2Q>"
+  - "S0B3NG4RH2Q"    # subteam
 pipelines-as-code:
-  - "<!subteam^S04FWV1N021>"
+  - "S04FWV1N021"    # subteam
 tekton-caches:
-  - "<!subteam^S0B3JT5KR34>"
+  - "S0B3JT5KR34"    # subteam
 tekton-kueue:
-  - "<!subteam^S0AS9T1JWHM>"
+  - "S0AS9T1JWHM"    # subteam
 tektoncd-chains:
-  - "<!subteam^S050DUERQ4X>"
+  - "S050DUERQ4X"    # subteam
 tektoncd-hub:
-  - "<!subteam^S050UAR1K8B>"
+  - "S050UAR1K8B"    # subteam
 tektoncd-pipeline:
-  - "<!subteam^S050DU2F7FH>"
+  - "S050DU2F7FH"    # subteam
 tektoncd-pruner:
-  - "<!subteam^S0B4D5U154G>"
+  - "S0B4D5U154G"    # subteam
 tektoncd-results:
-  - "<!subteam^S053P13TLDP>"
+  - "S053P13TLDP"    # subteam
 tektoncd-triggers:
-  - "<!subteam^S051731DAM7>"
+  - "S051731DAM7"    # subteam
 syncer-service:
-  - "<!subteam^S0AS9T1JWHM>"
+  - "S0AS9T1JWHM"    # subteam
 multicluster-proxy-aae:
-  - "<!subteam^S0AS9T1JWHM>"
+  - "S0AS9T1JWHM"    # subteam
 console-plugin-pf5:
-  - "<!subteam^S075RLXAELT>"
+  - "S075RLXAELT"    # subteam
 console-plugin:
-  - "<!subteam^S075RLXAELT>"
+  - "S075RLXAELT"    # subteam
 tektoncd-cli:
-  - "<!subteam^S050DUBQXST>"
+  - "S050DUBQXST"    # subteam
 opc:
-  - "<!subteam^S050DUBQXST>"
+  - "S050DUBQXST"    # subteam
 serve-tkn-cli:
-  - "<!subteam^S050DUBQXST>"
+  - "S050DUBQXST"    # subteam
 operator:
-  - "<!subteam^S050WTYHHGU>"
-
-
+  - "S050WTYHHGU"    # subteam

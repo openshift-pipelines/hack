@@ -56,6 +56,15 @@ spec:
     value: |
       {{ .PrefetchInput }}
   {{- end }}
+  - name: repo-name
+    value: "{{basename .Repository.Name}}"
+  {{- if .Repository.Owners }}
+  - name: slack-group-ids
+    value:
+    {{- range .Repository.Owners }}
+      - "{{ . }}"
+    {{- end }}
+  {{- end }}
   pipelineRef:
     name: {{- if  not (contains "index" .Name ) }} docker-build-ta {{- else}} fbc-build {{- end }}
   taskRunTemplate:
