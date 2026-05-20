@@ -12,7 +12,7 @@ branches:
   tekton-caches:
     upstream: release-v0.3.x
   tekton-kueue:
-    upstream: release-0.3.x
+    upstream: release-v0.3.x
   tektoncd-chains:
     upstream: release-v0.26.x
   tektoncd-cli:
@@ -24,7 +24,7 @@ branches:
   tektoncd-pipeline:
     upstream: release-v1.12.x
   tektoncd-pruner:
-    upstream: release-v0.3.x
+    upstream: release-v0.4.x
   tektoncd-results:
     upstream: release-v0.18.x
   tektoncd-triggers:
