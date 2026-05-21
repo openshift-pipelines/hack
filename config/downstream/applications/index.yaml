@@ -25,3 +25,9 @@
 - name: openshift-pipelines-index-4.22
   repos:
     - operator-index-4.22
+- name: openshift-pipelines-index-4.23
+  repos:
+    - operator-index-4.23
+- name: openshift-pipelines-index-5.0
+  repos:
+    - operator-index-5.0

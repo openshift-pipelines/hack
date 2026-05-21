@@ -2,3 +2,6 @@ version: nightly
 patch-version: latest
 image-suffix: "-rhel9"
 code-freeze: false
+docker-file-options:
+  args:
+    GO_BUILDER: "registry.access.redhat.com/ubi10/go-toolset:latest"
