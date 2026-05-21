@@ -1,0 +1,8 @@
+name: operator
+prefetch-input: "NONE"
+components:
+  - name: index-5.0
+    nudges: [ "" ]
+    no-image-suffix: true
+tekton:
+  watched-sources: ( ".konflux/olm-catalog/index/***".pathChanged())
