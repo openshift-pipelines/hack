@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -273,6 +274,7 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 		}
 		application := k.Application{
 			Name:            applicationConfig.Name,
+			ShortName:       applicationName,
 			Components:      []k.Component{},
 			Release:         &versionConfig.Version,
 			Org:             applicationConfig.Org,
@@ -292,6 +294,13 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 
 			//log.Printf("Loaded repository: %s", repo.Name)
 		}
+		sort.Slice(application.Components, func(i, j int) bool {
+			c1 := strings.Compare(application.Components[i].Repository.Name, application.Components[j].Repository.Name)
+			if c1 != 0 {
+				return c1 < 0
+			}
+			return strings.Compare(application.Components[i].Name, application.Components[j].Name) < 0
+		})
 		applications = append(applications, application)
 
 	}

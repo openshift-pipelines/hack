@@ -1,0 +1,62 @@
+{{- $dot := .}}
+{{- $intention := "staging"}}
+{{- $fromIndex := "registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending"}}
+{{- $targetIndex := ""}}
+{{- $policy := printf "fbc-tekton-ecosystem-%s" .Env -}}
+{{- $registry := "registry.redhat.io/openshift-pipelines" -}}
+{{- $serviceAccountName := "release-index-image-staging" -}}
+{{- $publishingCredentials  := "staged-index-fbc-publishing-credentials" -}}
+{{- if eq .Env "prod" -}}
+  {{- $registry = "registry.stage.redhat.io/openshift-pipelines" -}}
+  {{- $intention = "production"}}
+  {{- $serviceAccountName = "release-index-image-prod"}}
+  {{- $targetIndex = "quay.io/redhat-prod/redhat----redhat-operator-index:{{ OCP_VERSION }}" -}}
+  {{- $publishingCredentials = "fbc-production-publishing-credentials-redhat-prod" -}}
+  {{- $fromIndex = "registry-proxy.engineering.redhat.com/rh-osbs/iib-pub"}}
+
+{{- end -}}
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: hybrid-platforms
+  name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-fbc-{{.Env}}
+  namespace: rhtap-releng-tenant
+spec:
+  applications:
+    - {{hyphenize .Name }}-{{hyphenize .Release.Version }}
+  origin: tekton-ecosystem-tenant
+  policy: fbc-tekton-ecosystem-{{.Env}}
+  data:
+    releaseNotes:
+      product_id: [604]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: fbc
+      references:
+        - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/"
+      type: "RHEA"
+    fbc:
+      stagedIndex: {{ ne .Env "prod" }}
+      fromIndex: "{{$fromIndex}}:{{"{{ OCP_VERSION }}"}}"
+      targetIndex: "{{$targetIndex}}"
+      publishingCredentials: "{{$publishingCredentials}}" # cred to publish built index
+      requestTimeoutSeconds: 1500
+      buildTimeoutSeconds: 1500
+      allowedPackages: [openshift-pipelines-operator-rh]
+    intention: {{$intention}}
+  pipeline:
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/fbc-release/fbc-release.yaml"
+    serviceAccountName: {{$serviceAccountName}}
+    timeouts:
+      pipeline: "10h0m0s"
+      tasks: 10h0m0s
