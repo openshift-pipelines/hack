@@ -2,7 +2,8 @@ organization: openshift-pipelines
 namespace: tekton-ecosystem-tenant
 image-prefix: pipelines-
 product: openshift-pipelines
+rpa-dir: config/kflux-prd-rh02.0fk9.p1/product/ReleasePlanAdmission/tekton-ecosystem
 applications:
   - core
   - bundle
-  - index
+  - fbc

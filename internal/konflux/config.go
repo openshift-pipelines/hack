@@ -5,15 +5,17 @@ type Config struct {
 	Namespace    string `yaml:"namespace"`
 	Applications []string
 	Versions     []string
-	Repositories []Repository        `json:"repos" yaml:"repos"`
-	ImagePrefix  string              `json:"image-prefix" yaml:"image-prefix"`
-	ImageSuffix  string              `json:"image-suffix" yaml:"image-suffix"`
-	Product      string              `json:"product" yaml:"product"`
-	Owners       map[string][]string `json:"-" yaml:"-"`
+	Repositories []Repository        `yaml:"repos"`
+	ImagePrefix  string              `yaml:"image-prefix"`
+	ImageSuffix  string              `yaml:"image-suffix"`
+	Product      string              `yaml:"product"`
+	RPADir       string              `yaml:"rpa-dir"`
+	Owners       map[string][]string `yaml:"-"`
 }
 
 type Application struct {
 	Name            string
+	ShortName       string `yaml:"short-name"`
 	Org             string
 	Components      []Component
 	Release         *Release
@@ -112,6 +114,11 @@ const (
 var (
 	instanceTypes = map[string]string{
 		"amd64": "m5.2xlarge",
+	}
+
+	releaseEnvironments = map[string]string{
+		"stage": "",
+		"prod":  "",
 	}
 )
 
