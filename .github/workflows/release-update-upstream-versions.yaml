@@ -1,0 +1,73 @@
+name: Release Action - Update Upstream Versions
+run-name: Update Upstream Versions for ${{ github.event.inputs.version || 'next and RC versions' }}
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # At every day at 00
+  workflow_dispatch:
+    inputs:
+      version:
+        description: |
+          Downstream Release Version. Eg: "1.22", "1.23", "next"
+        required: false
+        type: string
+        default: next
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gather-versions-for-auto-upgrade:
+    runs-on: ubuntu-latest
+    outputs:
+      auto-upgrade-versions: ${{steps.gather-versions.outputs.auto-upgrade-versions}}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Generate upgrade matrix
+        id: gather-versions
+        run: |
+          #!/bin/bash
+          VERSION="${{ github.event.inputs.version }}"
+
+          # If workflow_dispatch, use the input version
+          if [[ -n "${VERSION}" ]]; then
+            echo "auto-upgrade-versions=[\"$VERSION\"]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # If scheduled, gather versions from release files
+          VERSIONS=()
+
+          for file in config/downstream/releases/*.yaml; do
+            # Get patch-version from the file
+            PATCH_VERSION=$(yq eval '.patch-version' "$file")
+
+            # Check if patch-version is "next" or ends with -RC-\d+
+            if [[ "$PATCH_VERSION" == "next" ]] || [[ "$PATCH_VERSION" =~ -RC-[0-9]+$ ]]; then
+              # Get the version field, or derive from filename
+              VERSION=$(yq eval '.version' "$file")
+
+              if [[ "$VERSION" == "null" ]]; then
+                VERSION=$(basename --suffix .yaml "$file")
+              fi
+
+              VERSIONS+=("\"$VERSION\"")
+            fi
+          done
+
+          JSON_ARRAY=$(IFS=,; echo "[${VERSIONS[*]}]")
+          echo "auto-upgrade-versions=${JSON_ARRAY}" >> $GITHUB_OUTPUT
+
+
+  update-upstream-versions:
+    needs: gather-versions-for-auto-upgrade
+    strategy:
+      matrix:
+        version: ${{ fromJSON(needs.gather-versions-for-auto-upgrade.outputs.auto-upgrade-versions) }}
+    uses: ./.github/workflows/release-manager.yaml
+    with:
+      action: update-upstream-versions
+      version: ${{ matrix.version }}
+    secrets:
+      OPENSHIFT_PIPELINES_ROBOT: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}

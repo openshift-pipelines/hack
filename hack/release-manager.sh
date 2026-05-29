@@ -8,7 +8,6 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 
 source $SCRIPT_DIR/common-functions.sh
 
-# Default values
 DEFAULT_ACTION="update-upstream-versions"
 DEFAULT_VERSION="next"
 ACTION=""
@@ -21,8 +20,9 @@ Usage: $0 [OPTIONS]
 
 Required Flags:
   --action, -a        Action to perform. Supported values:
-                        * new-release              Create a new release version
-                        * new-patch                Create a new patch version
+                        * new-release              Create a new release candidate
+                        * new-patch                Create or increment a patch version
+                        * finalize-rc              Finalize a release candidate by dropping -RC suffix
                         * update-upstream-versions Update upstream related versions
 
   --version, -v       Version to operate on (e.g., 1.23.0)
@@ -33,7 +33,9 @@ Optional Flags:
 
 Examples:
   $0 --action new-release --version 1.23.0
+  $0 -a new-release -v 1.24
   $0 -a new-patch -v 1.23.0
+  $0 -a finalize-rc -v 1.24
   $0 -a update-upstream-versions -v 1.24.0
 
 Description:
@@ -41,12 +43,22 @@ Description:
   internal functions based on the selected action:
     - create-new-release
     - create-new-patch
+    - finalize-rc-release
     - update-upstream-versions
+
+RC Workflow:
+  1. Use 'new-release' to create initial x.y.0-RC-1 release
+  2. Continue using 'new-release' to increment RC number
+  3. Use 'finalize-rc' to manually drop RC suffix when ready
+
+Note:
+  During RC mode (before x.y.0), upstream component versions are automatically
+  updated when higher versions are released upstream. After x.y.0 release,
+  minor versions of upstream components do not auto-update.
 EOF
   exit 1
 }
 
-# Parse named args
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --action | -a)
@@ -67,7 +79,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Use Default Values for required params
 if [[ -z "$ACTION"  ]]; then
   echo "Using default action $DEFAULT_ACTION!"
   ACTION=$DEFAULT_ACTION
@@ -77,16 +88,18 @@ if [[ -z "$VERSION"  ]]; then
   VERSION=$DEFAULT_VERSION
 fi
 
-# Call specific function based on ACTION
 case "$ACTION" in
   "new-release")
-    create-new-release $VERSION
+    create-new-release "${VERSION}"
     ;;
   "new-patch")
-    create-new-patch $VERSION
+    create-new-patch "${VERSION}"
+    ;;
+  "finalize-rc")
+    finalize-rc-release "${VERSION}"
     ;;
   "update-upstream-versions")
-    update-upstream-versions $VERSION
+    update-upstream-versions "${VERSION}"
     ;;
   *)
     echo "Invalid action: $ACTION"

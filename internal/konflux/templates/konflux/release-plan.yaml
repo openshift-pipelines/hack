@@ -22,6 +22,6 @@ spec:
           value: pipelines/release-pipeline.yaml
     params:
       - name: release_version
-        value: "{{.Release.PatchVersion}}"
+        value: "{{.Release.FullVersion}}"
       - name: release_to_github
         value: "{{.ReleaseToGitHub}}"
