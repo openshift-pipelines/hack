@@ -1,0 +1,54 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-1-20-cdn-prod-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      type: "RHSA"
+    mapping:
+      components:
+        - name: serve-tkn-cli-1-20-serve-tkn-cli
+          files:
+            - filename: tkn-linux-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-linux-amd64.tar.gz
+              arch: amd64
+              os: linux
+            - filename: tkn-linux-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-linux-arm64.tar.gz
+              arch: arm64
+              os: linux
+            - filename: tkn-linux-ppc64le.tar.gz
+              source: /var/www/html/tkn/tkn-linux-ppc64le.tar.gz
+              arch: ppc64le
+              os: linux
+            - filename: tkn-linux-s390x.tar.gz
+              source: /var/www/html/tkn/tkn-linux-s390x.tar.gz
+              arch: s390x
+              os: linux
+            - filename: tkn-macos-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-macos-amd64.tar.gz
+              arch: amd64
+              os: darwin
+            - filename: tkn-macos-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-macos-arm64.tar.gz
+              arch: arm64
+              os: darwin
+            - filename: tkn-windows-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-windows-amd64.tar.gz
+              arch: amd64
+              os: windows
+            - filename: tkn-windows-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-windows-arm64.tar.gz
+              arch: arm64
+              os: windows
+          contentGateway:
+            productName: "Cloud: OpenShift Pipelines"
+            productCode: "pipelines"
+            productVersionName: "1.20.5"
+            mirrorOpenshiftPush: true
+            contentType: "binary"
+  gracePeriodDays: 10
+  snapshot: openshift-pipelines-core-1-20-20260527-200726-000-yo
+  releasePlan: openshift-pipelines-core-1-20-cdn-prod-release-as-op
