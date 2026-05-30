@@ -22,13 +22,13 @@ branches:
   operator:
     upstream: main
   tektoncd-pipeline:
-    upstream: release-v1.12.x
+    upstream: release-v1.13.x
   tektoncd-pruner:
     upstream: release-v0.4.x
   tektoncd-results:
     upstream: release-v0.18.x
   tektoncd-triggers:
-    upstream: release-v0.35.x
+    upstream: release-v0.36.x
   syncer-service:
     upstream: release-v0.1.x
   multicluster-proxy-aae:
