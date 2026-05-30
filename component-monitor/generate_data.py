@@ -3,7 +3,7 @@
 Generates release health dashboard data by comparing upstream commit SHAs
 against downstream head files, fetching build status from GitHub check runs,
 looking up image SHAs from project.yaml, and querying Konflux PipelineRun
-image SHAs via opc results CLI.
+image SHAs via tkn-results CLI.
 """
 
 import argparse
@@ -57,7 +57,7 @@ COMP_YAML_KEY_MAP = {
 
 COMP_YAML_EXACT_MATCH = {"tektoncd-hub", "manual-approval-gate"}
 
-OPC_CMD = os.environ.get("OPC_PATH", "opc")
+TKN_RESULTS_CMD = os.environ.get("TKN_RESULTS_PATH", "tkn-results")
 DESCRIBE_TIMEOUT = 480
 DESCRIBE_WORKERS = 10
 
@@ -326,7 +326,7 @@ def find_image_in_project_yaml(image_name, project_yaml_entries, raw_text, blob_
 
 
 # ---------------------------------------------------------------------------
-# Konflux PipelineRun helpers (opc results + oc)
+# Konflux PipelineRun helpers (tkn-results + oc)
 # ---------------------------------------------------------------------------
 
 def load_app_repo_mapping():
@@ -372,23 +372,23 @@ def pipelinerun_url(konflux_ui_url, pr_name, app_name, version,
 
 
 def setup_results_config():
-    """Configure opc results CLI using env vars."""
+    """Configure tkn-results CLI using env vars."""
     host = os.environ.get("RESULTS_HOST", "")
     token = os.environ.get("RESULTS_TOKEN", "")
     if not host:
-        print("  [WARN] RESULTS_HOST not set, skipping opc results config", file=sys.stderr)
+        print("  [WARN] RESULTS_HOST not set, skipping tkn-results config", file=sys.stderr)
         return False
-    cmd = [OPC_CMD, "results", "config", "set",
+    cmd = [TKN_RESULTS_CMD, "config", "set",
            f"--host={host}", f"--token={token}", "--insecure-skip-tls-verify"]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
         if result.returncode != 0:
-            print(f"  [WARN] opc results config set failed: {result.stderr.strip()}", file=sys.stderr)
+            print(f"  [WARN] tkn-results config set failed: {result.stderr.strip()}", file=sys.stderr)
             return False
-        print("  opc results configured", file=sys.stderr)
+        print("  tkn-results configured", file=sys.stderr)
         return True
     except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-        print(f"  [WARN] opc results config: {e}", file=sys.stderr)
+        print(f"  [WARN] tkn-results config: {e}", file=sys.stderr)
         return False
 
 
@@ -436,11 +436,11 @@ def _parse_relative_time(text):
 
 
 def list_pipelineruns_from_results(component_label, namespace=KONFLUX_NAMESPACE):
-    """List PipelineRuns from Tekton Results via opc. Returns list of dicts with
+    """List PipelineRuns from Tekton Results via tkn-results. Returns list of dicts with
     name, status, source, commit_sha, and creation_ts parsed from STARTED column."""
     try:
         result = subprocess.run(
-            [OPC_CMD, "results", "pipelinerun", "list",
+            [TKN_RESULTS_CMD, "pipelinerun", "list",
              "-n", namespace,
              "-L", f"appstudio.openshift.io/component={component_label}",
              "--limit", "10"],
@@ -535,7 +535,7 @@ def list_and_find_pr(component_label):
 
 
 def describe_pipelinerun(pr_name, namespace=KONFLUX_NAMESPACE):
-    """Get image SHA from a PipelineRun. Tries cluster first (fast), then opc results (slow)."""
+    """Get image SHA from a PipelineRun. Tries cluster first (fast), then tkn-results (slow)."""
     image_url, image_digest = "", ""
 
     # Try cluster first (fast, ~1-2s)
@@ -557,11 +557,11 @@ def describe_pipelinerun(pr_name, namespace=KONFLUX_NAMESPACE):
     except Exception:
         pass
 
-    # Fall back to opc results describe (slow, ~3-5min)
+    # Fall back to tkn-results describe (slow, ~3-5min)
     try:
-        print(f"    [INFO] Fetching from Results API: {pr_name} (this may take a few minutes)", file=sys.stderr)
+        print(f"    [INFO] Fetching from Results API: {pr_name}", file=sys.stderr)
         result = subprocess.run(
-            [OPC_CMD, "results", "pipelinerun", "describe", pr_name,
+            [TKN_RESULTS_CMD, "pipelinerun", "describe", pr_name,
              "-n", namespace, "-o", "json"],
             capture_output=True, text=True, timeout=DESCRIBE_TIMEOUT,
         )
@@ -576,9 +576,9 @@ def describe_pipelinerun(pr_name, namespace=KONFLUX_NAMESPACE):
                 return {"image_url": image_url, "image_digest": image_digest,
                         "pipelinerun_name": pr_name, "source": "results"}
     except subprocess.TimeoutExpired:
-        print(f"    [WARN] opc results describe timed out for {pr_name}", file=sys.stderr)
+        print(f"    [WARN] tkn-results describe timed out for {pr_name}", file=sys.stderr)
     except Exception as e:
-        print(f"    [WARN] opc results describe failed for {pr_name}: {e}", file=sys.stderr)
+        print(f"    [WARN] tkn-results describe failed for {pr_name}: {e}", file=sys.stderr)
 
     return {}
 
@@ -622,7 +622,7 @@ def main():
     parser.add_argument("--merge", action="store_true",
                         help="Merge results into existing data.json instead of overwriting")
     parser.add_argument("--enable-konflux", action="store_true",
-                        help="Query Konflux for PipelineRun image SHAs (requires oc login + opc results config)")
+                        help="Query Konflux for PipelineRun image SHAs (requires oc login + tkn-results config)")
     args = parser.parse_args()
 
     repo_configs = load_repo_configs()

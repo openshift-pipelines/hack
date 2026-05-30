@@ -84,14 +84,17 @@ jobs:
           openshift_token: ${{ secrets.KONFLUX_TOKEN }}
           insecure_skip_tls_verify: true
 
-      - name: Install opc CLI
+      - name: Set up Go
+        if: inputs.enable_konflux != 'false'
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Install tkn-results CLI
         if: inputs.enable_konflux != 'false'
         run: |
-          curl -sLO https://mirror.openshift.com/pub/cgw/pipelines/1.21.0/tkn-linux-amd64.tar.gz
-          tar xzf tkn-linux-amd64.tar.gz
-          sudo mv opc /usr/local/bin/ 2>/dev/null || true
-          sudo mv tkn /usr/local/bin/ 2>/dev/null || true
-          opc version
+          go install github.com/tektoncd/results/cmd/tkn-results@main
+          tkn-results --help
 
       - name: Fetch existing dashboard data
         if: inputs.version != '' || inputs.repos != ''
