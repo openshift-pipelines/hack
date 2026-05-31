@@ -1,3 +1,15 @@
+{{- $dot := .}}
+{{- $policy := "registry-standard" -}}
+{{- $intention := "production"}}
+{{- $serviceAccountName := "release-registry-prod" }}
+{{- $registry := "registry.redhat.io/openshift-pipelines" -}}
+{{- if ne .Env "prod" -}}
+  {{- $policy = printf "%s-%s" $policy .Env -}}
+  {{- $registry = "registry.stage.redhat.io/openshift-pipelines" -}}
+  {{- $intention = "staging"}}
+  {{- $serviceAccountName = "release-registry-staging"}}
+{{- end -}}
+
 ---
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlanAdmission
@@ -5,24 +17,50 @@ metadata:
   labels:
     release.appstudio.openshift.io/block-releases: "false"
     pp.engineering.redhat.com/business-unit: application-developer
-  name: {{basename .Name| hyphenize}}-{{hyphenize .Release.Version}}-rpa
+  name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-{{.ShortName}}-{{.Env}}
+  namespace: rhtap-releng-tenant
   annotations:
     rhel_target: el9
 spec:
   applications:
-    - {{basename .Name| hyphenize}}-{{hyphenize .Release.Version}}
-  origin: {{.Namespace}}
+    - {{.Name }}-{{.Release.Version | hyphenize}}
+  origin: {{.Config.Namespace}}
+  policy: {{$policy}}
   data:
+    releaseNotes:
+      product_id: [ 604 ]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: "{{.Release.Version}}"
+  {{- if .Components }}
     mapping:
       components:
-        {{- $dot := .}}
-        {{- range $c := .Components }}
-        - name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Name}}-{{hyphenize .Version.Version}}
+  {{- range $component := .Components }}
+        - name: {{basename .Repository.Name | hyphenize}}-{{hyphenize .Version.Version}}-{{hyphenize .Name}}
           repositories:
-            - url: quay.io/rh-ee-prbindal/{{ printf "%s%s%s" .ImagePrefix .Name .ImageSuffix }}
-        {{- end }}
+            - url: "{{printf "%s/%s" $registry .Image}}"
+          pushSourceContainer: true
+  {{- end }}
+  {{- end }}
       defaults:
         tags:
-          - v{{.Release.Version}}
-          - v{{.Release.PatchVersion}}
-
+          - "{{ "{{ git_sha }}" }}"
+          - "{{ "{{ git_short_sha }}" }}"
+          - "{{.Release.PatchVersion  }}"
+          - "{{.Release.PatchVersion  }}{{ "-{{ timestamp }}" }}"
+        pushSourceContainer: true
+    intention: {{ $intention }}
+    enforceContainerFirstSecurityLabels: true
+  pipeline:
+    serviceAccountName: {{$serviceAccountName}}
+    timeouts:
+      pipeline: "10h0m0s"
+      tasks: 10h0m0s
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/rh-advisories/rh-advisories.yaml"

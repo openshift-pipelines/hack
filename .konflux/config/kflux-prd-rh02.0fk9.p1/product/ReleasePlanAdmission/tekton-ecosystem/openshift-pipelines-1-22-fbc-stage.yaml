@@ -1,0 +1,46 @@
+# Generated for Konflux Application openshift-pipelines-index-5.0 by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: hybrid-platforms
+  name: openshift-pipelines-1-22-fbc-stage
+  namespace: rhtap-releng-tenant
+spec:
+  applications:
+    - openshift-pipelines-index-5-0-1-22
+  origin: tekton-ecosystem-tenant
+  policy: fbc-tekton-ecosystem-stage
+  data:
+    releaseNotes:
+      product_id: [604]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: fbc
+      references:
+        - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/"
+      type: "RHEA"
+    fbc:
+      stagedIndex: true
+      fromIndex: "registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:{{ OCP_VERSION }}"
+      targetIndex: ""
+      publishingCredentials: "staged-index-fbc-publishing-credentials" # cred to publish built index
+      requestTimeoutSeconds: 1500
+      buildTimeoutSeconds: 1500
+      allowedPackages: [openshift-pipelines-operator-rh]
+    intention: staging
+  pipeline:
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/fbc-release/fbc-release.yaml"
+    serviceAccountName: release-index-image-staging
+    timeouts:
+      pipeline: "10h0m0s"
+      tasks: 10h0m0s

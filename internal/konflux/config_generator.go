@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -156,6 +157,36 @@ func generateKonfluxApplication(application Application, targetDir string) error
 	}
 	if err := generateFileFromTemplate("release-plan.yaml", application, filepath.Join(targetDir, "release-plan.yaml"), application); err != nil {
 		return err
+	}
+	_, err := strconv.ParseFloat(application.Release.Version, 64)
+	if err == nil {
+		rpaTargetDir := filepath.Join(konfluxDir, application.Config.RPADir)
+		var templateFile string
+		if application.ShortName == "fbc" {
+			templateFile = "release-plan-admission-fbc.yaml"
+		} else {
+			templateFile = "release-plan-admission.yaml"
+		}
+
+		for env, _ := range releaseEnvironments {
+			rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
+			releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
+			templateData := struct {
+				Application // Embedded (no field name)
+				Env         string
+			}{
+				Application: application,
+				Env:         env,
+			}
+			if err := generateFileFromTemplate(templateFile, templateData, filepath.Join(rpaTargetDir, rpaFile), application); err != nil {
+				return err
+			}
+			if err := generateFileFromTemplate("release-plan-managed.yaml", templateData, filepath.Join(targetDir, releasePlanFile), application); err != nil {
+				return err
+			}
+
+		}
+
 	}
 	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(targetDir, "service-account.yaml"), application); err != nil {
 		return err
