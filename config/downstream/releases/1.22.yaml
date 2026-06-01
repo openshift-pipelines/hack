@@ -1,5 +1,5 @@
 version: 1.22
-patch-version: 1.22.2
+release-tag: 1.22.2
 image-suffix: "-rhel9"
 code-freeze: false
 branches:

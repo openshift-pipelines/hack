@@ -1,7 +1,7 @@
 package konflux
 
 import (
-	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -88,30 +88,27 @@ type Patch struct {
 	Name   string
 	Script string
 }
+
+var NON_RELEASE_VERSIONS = []string{"main", "next", "nightly"}
+
 type Release struct {
 	Version           string
-	PatchVersion      string            `json:"patch-version" yaml:"patch-version"`
+	ReleaseTag        string            `json:"release-tag" yaml:"release-tag" comment:"Not used for versions like nightly, next, etc"`
 	ImagePrefix       string            `json:"image-prefix" yaml:"image-prefix"`
 	ImageSuffix       string            `json:"image-suffix" yaml:"image-suffix"`
 	CodeFreeze        bool              `json:"code-freeze" yaml:"code-freeze"`
-	IsRC              bool              `json:"is-rc" yaml:"is-rc"`
-	RCNumber          int               `json:"rc-number" yaml:"rc-number"`
 	DockerFileOptions DockerFileOptions `json:"docker-file-options" yaml:"docker-file-options"`
 }
 
 func (r Release) FullVersion() string {
-	if r.Version == "main" || r.Version == "next" {
+	if slices.Contains(NON_RELEASE_VERSIONS, r.Version) {
 		return r.Version
 	}
 
-	version := r.PatchVersion
+	version := r.ReleaseTag
 
 	if !strings.HasPrefix(version, "v") {
 		version = "v" + version
-	}
-
-	if r.IsRC {
-		version += fmt.Sprintf("-RC-%d", r.RCNumber)
 	}
 
 	return version

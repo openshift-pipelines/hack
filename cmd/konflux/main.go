@@ -68,7 +68,7 @@ func main() {
 		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
 		versionConfig.Version.Version = *version
 		if versionConfig.Version.Version == "next" || versionConfig.Version.Version == "nightly" {
-			versionConfig.Version.PatchVersion = *version
+			versionConfig.Version.ReleaseTag = *version
 		}
 	}
 

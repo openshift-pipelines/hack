@@ -142,7 +142,7 @@ def load_release_configs():
         version = str(data.get("version", version_key))
         releases[version_key] = {
             "version": version,
-            "patch_version": str(data.get("patch-version", "")),
+            "release_tag": str(data.get("release-tag", "")),
             "code_freeze": data.get("code-freeze", False),
             "branches": data.get("branches", {}),
         }
@@ -883,7 +883,7 @@ def main():
 
         result["versions"][version_key] = {
             "version": version,
-            "patch_version": release["patch_version"],
+            "release_tag": release["release_tag"],
             "code_freeze": release["code_freeze"],
             "comp_yaml_url": comp_yaml_url,
             "components": components_data,

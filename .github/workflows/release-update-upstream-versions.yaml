@@ -40,11 +40,11 @@ jobs:
           VERSIONS=()
 
           for file in config/downstream/releases/*.yaml; do
-            # Get patch-version from the file
-            PATCH_VERSION=$(yq eval '.patch-version' "$file")
+            # Get release-tag from the file
+            RELEASE_TAG=$(yq eval '.release-tag' "$file")
 
-            # Check if patch-version is "next" or ends with -RC-\d+
-            if [[ "$PATCH_VERSION" == "next" ]] || [[ "$PATCH_VERSION" =~ -RC-[0-9]+$ ]]; then
+            # Check if release-tag is "next" or ends with -RC-\d+
+            if [[ "$RELEASE_TAG" == "next" ]] || [[ "$RELEASE_TAG" =~ -RC-[0-9]+$ ]]; then
               # Get the version field, or derive from filename
               VERSION=$(yq eval '.version' "$file")
 
