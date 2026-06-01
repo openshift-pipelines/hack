@@ -22,7 +22,7 @@ spec:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/"
       type: "RHEA"
     fbc:
-      stagedIndex: false
+      stagedIndex: true
       fromIndex: "registry-proxy.engineering.redhat.com/rh-osbs/iib-pub:{{ OCP_VERSION }}"
       targetIndex: "quay.io/redhat-prod/redhat----redhat-operator-index:{{ OCP_VERSION }}"
       publishingCredentials: "fbc-production-publishing-credentials-redhat-prod" # cred to publish built index

@@ -14,8 +14,8 @@ spec:
     mapping:
       defaults:
         tags:
-          - { { .Release.PatchVersion | trimPrefix "v" } }
-          - { { .Release.PatchVersion | trimPrefix "v" } }-{{ timestamp }}
+          - 1.21.1
+          - 1.21.1-{{ timestamp }}
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"

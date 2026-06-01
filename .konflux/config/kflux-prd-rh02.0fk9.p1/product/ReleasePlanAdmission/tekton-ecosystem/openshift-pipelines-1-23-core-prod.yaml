@@ -1,0 +1,207 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: application-developer
+  name: openshift-pipelines-1-23-core-prod
+  namespace: rhtap-releng-tenant
+  annotations:
+    rhel_target: el9
+spec:
+  applications:
+    - openshift-pipelines-core-1-23
+  origin: tekton-ecosystem-tenant
+  policy: registry-standard
+  data:
+    releaseNotes:
+      product_id: [ 604 ]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: "1.23"
+    mapping:
+      components:
+        - name: console-plugin-1-23-console-plugin
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-rhel9"
+          pushSourceContainer: true
+        - name: console-plugin-pf5-1-23-console-plugin
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-pf5-rhel9"
+          pushSourceContainer: true
+        - name: manual-approval-gate-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-controller-rhel9"
+          pushSourceContainer: true
+        - name: manual-approval-gate-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-webhook-rhel9"
+          pushSourceContainer: true
+        - name: multicluster-proxy-aae-1-23-multicluster-proxy-aae
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-multicluster-proxy-aae-rhel9"
+          pushSourceContainer: true
+        - name: opc-1-23-opc
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-opc-rhel9"
+          pushSourceContainer: true
+        - name: operator-1-23-operator
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-rhel9-operator"
+          pushSourceContainer: true
+        - name: operator-1-23-proxy
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-operator-proxy-rhel9"
+          pushSourceContainer: true
+        - name: operator-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-operator-webhook-rhel9"
+          pushSourceContainer: true
+        - name: pipelines-as-code-1-23-cli
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pipelines-as-code-cli-rhel9"
+          pushSourceContainer: true
+        - name: pipelines-as-code-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pipelines-as-code-controller-rhel9"
+          pushSourceContainer: true
+        - name: pipelines-as-code-1-23-watcher
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pipelines-as-code-watcher-rhel9"
+          pushSourceContainer: true
+        - name: pipelines-as-code-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pipelines-as-code-webhook-rhel9"
+          pushSourceContainer: true
+        - name: serve-tkn-cli-1-23-serve-tkn-cli
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-serve-tkn-cli-rhel9"
+          pushSourceContainer: true
+        - name: syncer-service-1-23-syncer-service
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-syncer-service-rhel9"
+          pushSourceContainer: true
+        - name: tekton-caches-1-23-cache
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-cache-rhel9"
+          pushSourceContainer: true
+        - name: tekton-kueue-1-23-scheduler
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-scheduler-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-chains-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-chains-controller-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-cli-1-23-tkn
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-cli-tkn-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-git-clone-1-23-git-init
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-hub-1-23-api
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-hub-api-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-hub-1-23-db-migration
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-hub-db-migration-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-hub-1-23-ui
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-hub-ui-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-controller-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-entrypoint
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-entrypoint-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-events
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-events-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-nop
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-nop-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-resolvers
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-resolvers-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-sidecarlogresults
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-sidecarlogresults-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-webhook-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pipeline-1-23-workingdirinit
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-workingdirinit-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pruner-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pruner-controller-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-pruner-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-pruner-webhook-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-results-1-23-api
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-results-api-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-results-1-23-retention-policy-agent
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-results-retention-policy-agent-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-results-1-23-watcher
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-results-watcher-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-triggers-1-23-controller
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-triggers-controller-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-triggers-1-23-core-interceptors
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-triggers-core-interceptors-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-triggers-1-23-eventlistenersink
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-triggers-eventlistenersink-rhel9"
+          pushSourceContainer: true
+        - name: tektoncd-triggers-1-23-webhook
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-triggers-webhook-rhel9"
+          pushSourceContainer: true
+      defaults:
+        tags:
+          - "{{ git_sha }}"
+          - "{{ git_short_sha }}"
+          - "v1.23.0"
+          - "v1.23.0-{{ timestamp }}"
+        pushSourceContainer: true
+    intention: production
+    enforceContainerFirstSecurityLabels: true
+  pipeline:
+    serviceAccountName: release-registry-prod
+    timeouts:
+      pipeline: "10h0m0s"
+      tasks: 10h0m0s
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/rh-advisories/rh-advisories.yaml"
