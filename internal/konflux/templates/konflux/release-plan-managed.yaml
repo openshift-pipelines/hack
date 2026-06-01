@@ -13,8 +13,8 @@ spec:
     mapping:
       defaults:
         tags:
-          - {{ .Release.PatchVersion }}
-          - {{ .Release.PatchVersion }}-{{"{{ timestamp }}"}}
+          - {{ .Release.FullVersion }}
+          - {{ .Release.FullVersion }}-{{"{{ timestamp }}"}}
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"
@@ -26,11 +26,11 @@ spec:
         platforms by abstracting away the underlying implementation details.
         Tekton introduces a number of standard custom resource definitions (CRDs)
         for defining CI/CD pipelines that are portable across Kubernetes distributions.
-      description: "The {{ .Release.PatchVersion | trimPrefix "v" }} release of Red Hat OpenShift Pipelines Operator."
+      description: "The {{ .Release.FullVersion | trimPrefix "v" }} release of Red Hat OpenShift Pipelines Operator."
       topic: |
-        The {{ .Release.PatchVersion | trimPrefix "v" }} GA release of Red Hat OpenShift Pipelines Operator..
+        The {{ .Release.FullVersion | trimPrefix "v" }} GA release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
-      synopsis: "Red Hat OpenShift Pipelines Release {{ .Release.PatchVersion | trimPrefix "v" }}"
+      synopsis: "Red Hat OpenShift Pipelines Release {{ .Release.FullVersion | trimPrefix "v" }}"
   collectors:
     serviceAccountName: tekton-ecosystem-collectors-sa
     secrets:
@@ -41,7 +41,7 @@ spec:
           - name: url
             value: https://issues.redhat.com
           - name: query
-            value: 'project = SRVKP AND fixVersion = "Pipelines {{ .Release.PatchVersion | trimPrefix "v" }}" AND component NOT IN (QA, Performance, p12n, Operator, "Tekton CLI", "OpenShift OPC") AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug)) AND "Epic Link" is EMPTY))'
+            value: 'project = SRVKP AND fixVersion = "Pipelines {{ .Release.FullVersion | trimPrefix "v" }}" AND component NOT IN (QA, Performance, p12n, Operator, "Tekton CLI", "OpenShift OPC") AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug)) AND "Epic Link" is EMPTY))'
           - name: secretName
             value: jira-collectors-secret
         timeout: 120

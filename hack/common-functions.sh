@@ -18,7 +18,7 @@ function finalize-rc-release() {
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
 
-  patch_version=$(yq ".patch-version" "${RELEASE_YAML}")
+  release_tag=$(yq ".release-tag" "${RELEASE_YAML}")
 
   # Only "finalize" RC versions, which have a version like "1.2.3-RC-1"
   if [[ ! "${release_tag}" =~ [0-9]+\.[0-9]+\.[0-9]+-RC-[0-9]+ ]]; then
@@ -26,8 +26,8 @@ function finalize-rc-release() {
     return
   fi
 
-  next_version=$(echo "${patch_version}" | grep --only-matching  '^[0-9]\+\.[0-9]\+\.[0-9]\+')
-  yq -i e ".patch-version = \"${next_version}\"" "${RELEASE_YAML}"
+  next_version=$(echo "${release_tag}" | grep --only-matching  '^[0-9]\+\.[0-9]\+\.[0-9]\+')
+  yq -i e ".release-tag = \"${next_version}\"" "${RELEASE_YAML}"
 
   echo "Finalized RC release: ${next_version}"
 }
@@ -61,21 +61,21 @@ function create-new-patch() {
   unfreeze-if-needed "$RELEASE_YAML"
 
   if [[ "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
-    patch_version=$(yq ".patch-version" "${RELEASE_YAML}")
-    echo "Current Patch Version $patch_version"
-    if [[ -z "$patch_version" || "$patch_version" == "null" ]]; then
+    release_tag=$(yq ".release-tag" "${RELEASE_YAML}")
+    echo "Current tag $release_tag"
+    if [[ -z "$release_tag" || "$release_tag" == "null" ]]; then
       # Always initialize a new version as x.y.0-RC-1
       next_version="${RELEASE_VERSION}.0-RC-1"
     else
-      last_num=$(echo "${patch_version}" | grep --only-matching "[0-9]\+$")
-      base_version=$(echo "${patch_version}" | grep -v --only-matching "[0-9]\+$")
+      last_num=$(echo "${release_tag}" | grep --only-matching "[0-9]\+$")
+      base_version=$(echo "${release_tag}" | grep -v --only-matching "[0-9]\+$")
       next_version="${base_version}$((last_num + 1))"
     fi
   else
       next_version="$RELEASE_VERSION"
   fi
-  echo "next patch Version: $next_version"
-  yq -i e ".patch-version = \"$next_version\"" "${RELEASE_YAML}"
+  echo "next tag: $next_version"
+  yq -i e ".release-tag = \"$next_version\"" "${RELEASE_YAML}"
 }
 
 function update-upstream-versions() {

@@ -1,5 +1,5 @@
 version: nightly
-patch-version: latest
+release-tag: latest
 image-suffix: "-rhel10"
 code-freeze: false
 docker-file-options:

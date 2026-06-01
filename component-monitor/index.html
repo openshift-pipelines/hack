@@ -778,7 +778,7 @@
       document.getElementById("components-label").style.display = "block";
       document.getElementById("version-info").innerHTML = `
         <div><span>Version:</span> <strong>${versionData.version}</strong></div>
-        <div><span>Patch:</span> <strong>${versionData.patch_version || "-"}</strong></div>
+        <div><span>Patch:</span> <strong>${versionData.release_tag || "-"}</strong></div>
         <div><span>Code Freeze:</span>
           <span class="code-freeze-badge ${versionData.code_freeze ? "active" : "inactive"}">
             ${versionData.code_freeze ? "Active" : "Inactive"}
@@ -877,7 +877,7 @@
         btn.appendChild(dot);
 
         const label = document.createElement("span");
-        const suffix = v.patch_version && v.patch_version !== v.version ? ` (${v.patch_version})` : "";
+        const suffix = v.release_tag&& v.release_tag!== v.version ? ` (${v.release_tag})` : "";
         label.textContent = v.version + suffix;
         btn.appendChild(label);
 
