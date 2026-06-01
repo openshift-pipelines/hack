@@ -4,6 +4,16 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 KONFLUX_YAML="$ROOT/config/downstream/konflux.yaml"
 REPO_DIR="$ROOT/config/downstream/repos/"
 
+function unfreeze-if-needed() {
+  local release_yaml=$1
+  local code_freeze
+  code_freeze=$(yq e '.code-freeze // false' "$release_yaml")
+  if [[ "$code_freeze" == "true" ]]; then
+    echo "code-freeze is true, setting to false in $release_yaml"
+    yq -i e '.code-freeze = false' "$release_yaml"
+  fi
+}
+
 function create-new-release() {
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
@@ -31,6 +41,7 @@ function create-new-release() {
 function create-new-patch(){
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
+  unfreeze-if-needed "$RELEASE_YAML"
 
   if [[ "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
     patch_version=$(yq ".patch-version" $RELEASE_YAML)
@@ -51,6 +62,7 @@ update-upstream-versions() {
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
   touch $RELEASE_YAML
+  unfreeze-if-needed "$RELEASE_YAML"
   echo "Updating upstream version for release : $RELEASE_VERSION in $RELEASE_YAML"
 
   for file in "$REPO_DIR"/*.yaml; do
