@@ -1,21 +1,21 @@
-# Generated for Konflux Application openshift-pipelines-index-4.22 by openshift-pipelines/hack. DO NOT EDIT
+# Generated for Konflux Application openshift-pipelines-index-4.14 by openshift-pipelines/hack. DO NOT EDIT
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlan
 metadata:
   labels:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
-    release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-22-fbc-stage
-  name: openshift-pipelines-index-4-22-1-22-stage
+    release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-22-fbc-prod
+  name: openshift-pipelines-1-22-fbc-prod-rp
 spec:
-  application: openshift-pipelines-index-4-22-1-22
+  application: openshift-pipelines-index-4-14-1-22
   target: rhtap-releng-tenant
   data:
     mapping:
       defaults:
         tags:
-          - 1.22.2
-          - 1.22.2-{{ timestamp }}
+          - { { .Release.PatchVersion | trimPrefix "v" } }
+          - { { .Release.PatchVersion | trimPrefix "v" } }-{{ timestamp }}
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"

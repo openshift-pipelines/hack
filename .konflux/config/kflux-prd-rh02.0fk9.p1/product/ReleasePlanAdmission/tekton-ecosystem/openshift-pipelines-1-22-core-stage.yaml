@@ -11,7 +11,8 @@ metadata:
   annotations:
     rhel_target: el9
 spec:
-  applications: [openshift-pipelines-core-1-22]
+  applications:
+    - openshift-pipelines-core-1-22
   origin: tekton-ecosystem-tenant
   policy: registry-standard-stage
   data:
