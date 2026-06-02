@@ -8,7 +8,7 @@ branches:
   manual-approval-gate:
     upstream: release-v0.8.0
   opc:
-    upstream: release-v1.22.x
+    upstream: release-v1.23.x
   pipelines-as-code:
     upstream: release-v0.42.x
   console-plugin-pf5:
