@@ -45,8 +45,7 @@ spec:
         tags:
           - "{{ "{{ git_sha }}" }}"
           - "{{ "{{ git_short_sha }}" }}"
-          - "{{.Release.PatchVersion  }}"
-          - "{{.Release.PatchVersion  }}{{ "-{{ timestamp }}" }}"
+          - "{{.Release.Version  }}{{ "-{{ timestamp }}" }}"
         pushSourceContainer: true
     intention: {{ $intention }}
     enforceContainerFirstSecurityLabels: true
