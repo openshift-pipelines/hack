@@ -30,8 +30,7 @@ spec:
         tags:
           - "{{ git_sha }}"
           - "{{ git_short_sha }}"
-          - "v1.22.2"
-          - "v1.22.2-{{ timestamp }}"
+          - "1.22-{{ timestamp }}"
         pushSourceContainer: true
     intention: staging
     enforceContainerFirstSecurityLabels: true
