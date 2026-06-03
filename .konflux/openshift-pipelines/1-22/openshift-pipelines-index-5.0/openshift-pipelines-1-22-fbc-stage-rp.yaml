@@ -14,8 +14,8 @@ spec:
     mapping:
       defaults:
         tags:
-          - 1.22.2
-          - 1.22.2-{{ timestamp }}
+          - v1.22.2
+          - v1.22.2-{{ timestamp }}
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"
