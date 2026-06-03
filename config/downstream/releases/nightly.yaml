@@ -1,6 +1,6 @@
 version: nightly
 patch-version: latest
-image-suffix: "-rhel9"
+image-suffix: "-rhel10"
 code-freeze: false
 docker-file-options:
   args:
