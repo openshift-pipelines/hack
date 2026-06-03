@@ -1,16 +1,17 @@
 package konflux
 
 type Config struct {
-	Organization string `yaml:"organization"`
-	Namespace    string `yaml:"namespace"`
-	Applications []string
-	Versions     []string
-	Repositories []Repository        `yaml:"repos"`
-	ImagePrefix  string              `yaml:"image-prefix"`
-	ImageSuffix  string              `yaml:"image-suffix"`
-	Product      string              `yaml:"product"`
-	RPADir       string              `yaml:"rpa-dir"`
-	Owners       map[string][]string `yaml:"-"`
+	Organization   string `yaml:"organization"`
+	Namespace      string `yaml:"namespace"`
+	Applications   []string
+	Versions       []string
+	Repositories   []Repository        `yaml:"repos"`
+	ImagePrefix    string              `yaml:"image-prefix"`
+	ImageSuffix    string              `yaml:"image-suffix"`
+	Product        string              `yaml:"product"`
+	RPADir         string              `yaml:"rpa-dir"`
+	PyxisConfigDir string              `yaml:"pyxis-config-dir"`
+	Owners         map[string][]string `yaml:"-"`
 }
 
 type Application struct {
