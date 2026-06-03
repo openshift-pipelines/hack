@@ -1,0 +1,50 @@
+# Generated for Konflux Application openshift-pipelines-bundle by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: application-developer
+  name: openshift-pipelines-1-21-bundle-stage
+  namespace: rhtap-releng-tenant
+  annotations:
+    rhel_target: el9
+spec:
+  applications:
+    - openshift-pipelines-bundle-1-21
+  origin: tekton-ecosystem-tenant
+  policy: registry-standard-stage
+  data:
+    releaseNotes:
+      product_id: [ 604 ]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: "1.21"
+    mapping:
+      components:
+        - name: operator-1-21-bundle
+          repositories:
+            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-operator-bundle"
+          pushSourceContainer: true
+      defaults:
+        tags:
+          - "{{ git_sha }}"
+          - "{{ git_short_sha }}"
+          - "1.21-{{ timestamp }}"
+        pushSourceContainer: true
+    intention: staging
+    enforceContainerFirstSecurityLabels: true
+  pipeline:
+    serviceAccountName: release-registry-staging
+    timeouts:
+      pipeline: "10h0m0s"
+      tasks: 10h0m0s
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/rh-advisories/rh-advisories.yaml"
