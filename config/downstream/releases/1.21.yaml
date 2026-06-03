@@ -35,3 +35,7 @@ branches:
     upstream: release-v0.1.x
   operator:
     upstream: release-v0.78.x
+  console-plugin:
+    upstream: release-v1.23.x
+  console-plugin-pf5:
+    upstream: release-v1.21.x
