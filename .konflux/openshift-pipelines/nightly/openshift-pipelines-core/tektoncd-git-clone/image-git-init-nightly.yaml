@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-git-init-rhel9
+    name: pipelines-git-init-rhel10
     visibility: public
   notifications:
     - config:

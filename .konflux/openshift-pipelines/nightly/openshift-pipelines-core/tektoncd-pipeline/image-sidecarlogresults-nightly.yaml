@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-sidecarlogresults-rhel9
+    name: pipelines-sidecarlogresults-rhel10
     visibility: public
   notifications:
     - config:

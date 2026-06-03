@@ -1,0 +1,33 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+repositories:
+  - image_type: Layered
+    base_rhel_version: rhel10
+    repository:
+      repository: openshift-pipelines/pipelines-triggers-controller-rhel10
+      release_categories:
+        - Generally Available
+      includes_multiple_content_streams: false
+      content_stream_tags:
+        - latest
+      build_categories:
+        - Standalone image
+      team_id: 5dea5deddd19c71643b82455
+      display_data:
+        name: pipelines-triggers-controller-rhel10
+        long_description: container image for openshift-pipelines controller Component
+      entitlement_enabled: false
+      engineering_ids:
+        - "604"
+      vendor_label: redhat
+      application_categories:
+        - Other
+      privileged_images_allowed: false
+      documentation_links:
+        - title: controller
+          type: Readme
+          url: https://github.com/openshift-pipelines/tektoncd-triggers.git
+      contacts:
+        - email_address: prbindal@redhat.com
+          type: Image Owner
+      use_latest: true
+      requires_terms: true

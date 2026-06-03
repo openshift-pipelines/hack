@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-resolvers-rhel9
+    name: pipelines-resolvers-rhel10
     visibility: public
   notifications:
     - config:
