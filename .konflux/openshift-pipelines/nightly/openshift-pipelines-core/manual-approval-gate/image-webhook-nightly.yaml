@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-manual-approval-gate-webhook-rhel9
+    name: pipelines-manual-approval-gate-webhook-rhel10
     visibility: public
   notifications:
     - config:

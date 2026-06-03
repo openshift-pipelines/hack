@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-chains-controller-rhel9
+    name: pipelines-chains-controller-rhel10
     visibility: public
   notifications:
     - config:

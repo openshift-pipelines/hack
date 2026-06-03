@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-nightly
 spec:
   image:
-    name: pipelines-cli-tkn-rhel9
+    name: pipelines-cli-tkn-rhel10
     visibility: public
   notifications:
     - config:
