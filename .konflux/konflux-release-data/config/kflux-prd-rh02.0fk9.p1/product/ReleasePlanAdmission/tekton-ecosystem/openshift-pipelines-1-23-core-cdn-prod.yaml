@@ -1,0 +1,83 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  labels:
+    release.appstudio.openshift.io/block-releases: "false"
+    pp.engineering.redhat.com/business-unit: application-developer
+  name: openshift-pipelines-1-23-core-cdn-prod
+  namespace: rhtap-releng-tenant
+  annotations:
+    rhel_target: el9
+spec:
+  applications:
+    - openshift-pipelines-core-1-23
+  origin: tekton-ecosystem-tenant
+  policy: registry-tekton-ecosystem-prod
+  data:
+    releaseNotes:
+      product_id: [604]
+      product_name: "Red Hat OpenShift Pipelines"
+      product_version: "1.23"
+    cdn:
+      env: production
+    mapping:
+      components:
+        - name: serve-tkn-cli-1-23-serve-tkn-cli
+          files:
+            - filename: tkn-linux-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-linux-amd64.tar.gz
+              arch: amd64
+              os: linux
+            - filename: tkn-linux-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-linux-arm64.tar.gz
+              arch: arm64
+              os: linux
+            - filename: tkn-linux-ppc64le.tar.gz
+              source: /var/www/html/tkn/tkn-linux-ppc64le.tar.gz
+              arch: ppc64le
+              os: linux
+            - filename: tkn-linux-s390x.tar.gz
+              source: /var/www/html/tkn/tkn-linux-s390x.tar.gz
+              arch: s390x
+              os: linux
+            - filename: tkn-macos-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-macos-amd64.tar.gz
+              arch: amd64
+              os: darwin
+            - filename: tkn-macos-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-macos-arm64.tar.gz
+              arch: arm64
+              os: darwin
+            - filename: tkn-windows-amd64.tar.gz
+              source: /var/www/html/tkn/tkn-windows-amd64.tar.gz
+              arch: amd64
+              os: windows
+            - filename: tkn-windows-arm64.tar.gz
+              source: /var/www/html/tkn/tkn-windows-arm64.tar.gz
+              arch: arm64
+              os: windows
+          contentGateway:
+            productName: "Cloud: OpenShift Pipelines"
+            productCode: "pipelines"
+            productVersionName: "1.23.0"
+            mirrorOpenshiftPush: true
+            contentType: "binary"
+      defaults:
+        pushSourceContainer: true
+    intention:  production
+  pipeline:
+    serviceAccountName: release-developer-portal
+    timeouts:
+      pipeline: "5h0m0s"
+      tasks: 5h0m0s
+    pipelineRef:
+      resolver: git
+      params:
+        - name: url
+          value: "https://github.com/konflux-ci/release-service-catalog.git"
+        - name: revision
+          value: production
+        - name: pathInRepo
+          value: "pipelines/managed/push-artifacts-to-cdn/push-artifacts-to-cdn.yaml"
