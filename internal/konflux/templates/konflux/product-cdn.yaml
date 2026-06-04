@@ -1,6 +1,6 @@
 ---
-versionName: "{{ .Release.PatchVersion | trimPrefix "v" }}"
-ga: {{ hasSuffix .Release.PatchVersion "0" }}
+versionName: "{{ .Release.FullVersion | trimPrefix "v" }}"
+ga: {{ hasSuffix .Release.FullVersion "0" }}
 termsAndConditions: "Anonymous Download" # "Basic"
 hidden: false
 invisible: false
