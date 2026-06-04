@@ -182,7 +182,7 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		}
 
 		if application.ShortName == "core" {
-			if err := generateFileFromTemplate("product-cdn.yaml", application, filepath.Join(cdnProductDir, fmt.Sprintf("%s.yaml", strings.TrimPrefix(application.Release.PatchVersion, "v"))), application); err != nil {
+			if err := generateFileFromTemplate("product-cdn.yaml", application, filepath.Join(cdnProductDir, fmt.Sprintf("%s.yaml", strings.TrimPrefix(application.Release.FullVersion(), "v"))), application); err != nil {
 				return err
 			}
 		}

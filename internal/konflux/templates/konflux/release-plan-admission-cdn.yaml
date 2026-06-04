@@ -71,7 +71,7 @@ spec:
           contentGateway:
             productName: "Cloud: OpenShift Pipelines"
             productCode: "pipelines"
-            productVersionName: "{{ .Release.PatchVersion | trimPrefix "v" }}"
+            productVersionName: "{{ .Release.FullVersion | trimPrefix "v" }}"
             mirrorOpenshiftPush: {{ $mirrorOpenshiftPush }}
             contentType: "binary"
       defaults:
