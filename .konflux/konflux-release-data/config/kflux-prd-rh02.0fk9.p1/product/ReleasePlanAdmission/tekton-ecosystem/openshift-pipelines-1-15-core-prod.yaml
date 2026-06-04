@@ -9,7 +9,7 @@ metadata:
   name: openshift-pipelines-1-15-core-prod
   namespace: rhtap-releng-tenant
   annotations:
-    rhel_target: el9
+    rhel_target: el8
 spec:
   applications:
     - openshift-pipelines-core-1-15
@@ -26,10 +26,6 @@ spec:
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-rhel8"
           pushSourceContainer: true
-        - name: console-plugin-pf5-1-15-console-plugin
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-pf5-rhel8"
-          pushSourceContainer: true
         - name: manual-approval-gate-1-15-controller
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-controller-rhel8"
@@ -37,14 +33,6 @@ spec:
         - name: manual-approval-gate-1-15-webhook
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-webhook-rhel8"
-          pushSourceContainer: true
-        - name: multicluster-proxy-aae-1-15-multicluster-proxy-aae
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-multicluster-proxy-aae-rhel8"
-          pushSourceContainer: true
-        - name: opc-1-15-opc
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-opc-rhel8"
           pushSourceContainer: true
         - name: operator-1-15-operator
           repositories:
@@ -77,18 +65,6 @@ spec:
         - name: serve-tkn-cli-1-15-serve-tkn-cli
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-serve-tkn-cli-rhel8"
-          pushSourceContainer: true
-        - name: syncer-service-1-15-syncer-service
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-syncer-service-rhel8"
-          pushSourceContainer: true
-        - name: tekton-caches-1-15-cache
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-cache-rhel8"
-          pushSourceContainer: true
-        - name: tekton-kueue-1-15-scheduler
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-scheduler-rhel8"
           pushSourceContainer: true
         - name: tektoncd-chains-1-15-controller
           repositories:
@@ -145,14 +121,6 @@ spec:
         - name: tektoncd-pipeline-1-15-workingdirinit
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-workingdirinit-rhel8"
-          pushSourceContainer: true
-        - name: tektoncd-pruner-1-15-controller
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-pruner-controller-rhel8"
-          pushSourceContainer: true
-        - name: tektoncd-pruner-1-15-webhook
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-pruner-webhook-rhel8"
           pushSourceContainer: true
         - name: tektoncd-results-1-15-api
           repositories:

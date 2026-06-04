@@ -9,7 +9,7 @@ metadata:
   name: openshift-pipelines-1-15-bundle-prod
   namespace: rhtap-releng-tenant
   annotations:
-    rhel_target: el9
+    rhel_target: el8
 spec:
   applications:
     - openshift-pipelines-bundle-1-15
