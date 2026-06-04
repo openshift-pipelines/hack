@@ -16,6 +16,7 @@ import (
 	"time"
 
 	k "github.com/openshift-pipelines/hack/internal/konflux"
+	"golang.org/x/mod/semver"
 	"gopkg.in/yaml.v2"
 )
 
@@ -286,6 +287,13 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 
 			if err != nil {
 				return []k.Application{}, err
+			}
+			log.Printf("Reading repository Version: %v-%v-%s", repo.MinVersion, application.Release.Version, repo.Name)
+			if repo.MinVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MinVersion) < 0 {
+				continue
+			}
+			if repo.MaxVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MaxVersion) > 0 {
+				continue
 			}
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)

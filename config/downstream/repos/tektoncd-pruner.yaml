@@ -1,5 +1,6 @@
 name: tektoncd-pruner
 upstream: tektoncd/pruner
+min-version: 1.20
 components:
   - name: controller
   - name: webhook

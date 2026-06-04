@@ -16,6 +16,7 @@ type Config struct {
 	Product        string              `yaml:"product"`
 	RPADir         string              `yaml:"rpa-dir"`
 	PyxisConfigDir string              `yaml:"pyxis-config-dir"`
+	CdnProductDir  string              `yaml:"cdn-product-dir"`
 	Owners         map[string][]string `yaml:"-"`
 }
 
@@ -50,6 +51,8 @@ type Repository struct {
 	UsePatchBranch   bool     `json:"use-patch-branch" yaml:"use-patch-branch"`
 	Owners           []string `json:"owners" yaml:"owners"`
 	PrefetchInput    string   `json:"prefetch-input" yaml:"prefetch-input"`
+	MinVersion       string   `json:"min-version" yaml:"min-version"`
+	MaxVersion       string   `json:"max-version" yaml:"max-version"`
 }
 type Branch struct {
 	Name           string

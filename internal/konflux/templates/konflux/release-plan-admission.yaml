@@ -20,7 +20,7 @@ metadata:
   name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-{{.ShortName}}-{{.Env}}
   namespace: rhtap-releng-tenant
   annotations:
-    rhel_target: el9
+    rhel_target: {{.Application.Release.ImageSuffix | trimPrefix "-rh"}}
 spec:
   applications:
     - {{.Name }}-{{.Release.Version | hyphenize}}
@@ -45,7 +45,7 @@ spec:
         tags:
           - "{{ "{{ git_sha }}" }}"
           - "{{ "{{ git_short_sha }}" }}"
-          - "{{.Release.FullVersion  }}{{ "-{{ timestamp }}" }}"
+          - "{{.Release.Version  }}{{ "-{{ timestamp }}" }}"
         pushSourceContainer: true
     intention: {{ $intention }}
     enforceContainerFirstSecurityLabels: true

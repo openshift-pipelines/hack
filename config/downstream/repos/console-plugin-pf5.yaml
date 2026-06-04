@@ -1,6 +1,7 @@
 repo: p12n-console-plugin-pf5
 upstream: openshift-pipelines/console-plugin
 no-prefix-upstream: true
+min-version: 1.21
 components:
   - name: console-plugin
     image-suffix: -pf5

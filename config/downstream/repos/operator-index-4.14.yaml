@@ -1,5 +1,6 @@
 name: operator
 prefetch-input: "NONE"
+max-version: 1.20
 components:
   - name: index-4.14
     nudges: [ "" ]

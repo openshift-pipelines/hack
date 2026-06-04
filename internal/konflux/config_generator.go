@@ -173,6 +173,7 @@ func generateKonfluxApplication(application Application, targetDir string) error
 	_, err := strconv.ParseFloat(application.Release.Version, 64)
 	if err == nil {
 		rpaTargetDir := filepath.Join(konfluxDir, application.Config.RPADir)
+		cdnProductDir := filepath.Join(konfluxDir, application.Config.CdnProductDir)
 		var templateFile string
 		if application.ShortName == "fbc" {
 			templateFile = "release-plan-admission-fbc.yaml"
@@ -180,8 +181,14 @@ func generateKonfluxApplication(application Application, targetDir string) error
 			templateFile = "release-plan-admission.yaml"
 		}
 
+		if application.ShortName == "core" {
+			if err := generateFileFromTemplate("product-cdn.yaml", application, filepath.Join(cdnProductDir, fmt.Sprintf("%s.yaml", strings.TrimPrefix(application.Release.PatchVersion, "v"))), application); err != nil {
+				return err
+			}
+		}
 		for env, _ := range releaseEnvironments {
 			rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
+			rpaCdnFile := fmt.Sprintf("%s-%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
 			releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
 			templateData := struct {
 				Application // Embedded (no field name)
@@ -192,6 +199,11 @@ func generateKonfluxApplication(application Application, targetDir string) error
 			}
 			if err := generateFileFromTemplate(templateFile, templateData, filepath.Join(rpaTargetDir, rpaFile), application); err != nil {
 				return err
+			}
+			if application.ShortName == "core" {
+				if err := generateFileFromTemplate("release-plan-admission-cdn.yaml", templateData, filepath.Join(rpaTargetDir, rpaCdnFile), application); err != nil {
+					return err
+				}
 			}
 			if err := generateFileFromTemplate("release-plan-managed.yaml", templateData, filepath.Join(targetDir, releasePlanFile), application); err != nil {
 				return err

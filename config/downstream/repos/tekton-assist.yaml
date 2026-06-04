@@ -1,5 +1,6 @@
 repo: p12n-tekton-assist
 upstream: openshift-pipelines/tekton-assist
 no-prefix-upstream: true
+min-version: 5.0
 components:
   - name: tekton-assist

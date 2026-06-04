@@ -1,5 +1,6 @@
 repo: p12n-tekton-caches
 upstream: openshift-pipelines/tekton-caches
 no-prefix-upstream: true
+min-version: 1.18
 components:
   - name: cache

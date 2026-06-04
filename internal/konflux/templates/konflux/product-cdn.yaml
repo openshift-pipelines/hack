@@ -1,0 +1,7 @@
+---
+versionName: "{{ .Release.PatchVersion | trimPrefix "v" }}"
+ga: {{ hasSuffix .Release.PatchVersion "0" }}
+termsAndConditions: "Anonymous Download" # "Basic"
+hidden: false
+invisible: false
+releaseDate: "2026-01-01"

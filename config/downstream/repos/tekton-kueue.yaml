@@ -1,6 +1,7 @@
 name: tekton-kueue
 upstream: konflux-ci/tekton-kueue
 no-prefix-upstream: true
+min-version: 1.22
 components:
   - name: scheduler
     prefetch-input: |

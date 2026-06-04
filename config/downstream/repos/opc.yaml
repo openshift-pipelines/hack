@@ -1,5 +1,6 @@
 repo: p12n-opc
 upstream: openshift-pipelines/opc
 no-prefix-upstream: true
+min-version: 1.18
 components:
   - name: opc
