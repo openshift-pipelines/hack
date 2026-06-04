@@ -38,10 +38,6 @@ spec:
           repositories:
             - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-webhook-rhel9"
           pushSourceContainer: true
-        - name: multicluster-proxy-aae-1-21-multicluster-proxy-aae
-          repositories:
-            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-multicluster-proxy-aae-rhel9"
-          pushSourceContainer: true
         - name: opc-1-21-opc
           repositories:
             - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-opc-rhel9"
@@ -78,17 +74,9 @@ spec:
           repositories:
             - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-serve-tkn-cli-rhel9"
           pushSourceContainer: true
-        - name: syncer-service-1-21-syncer-service
-          repositories:
-            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-syncer-service-rhel9"
-          pushSourceContainer: true
         - name: tekton-caches-1-21-cache
           repositories:
             - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-cache-rhel9"
-          pushSourceContainer: true
-        - name: tekton-kueue-1-21-scheduler
-          repositories:
-            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-scheduler-rhel9"
           pushSourceContainer: true
         - name: tektoncd-chains-1-21-controller
           repositories:
