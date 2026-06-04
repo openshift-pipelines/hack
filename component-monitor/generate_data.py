@@ -35,7 +35,7 @@ DEFAULT_IMAGE_SUFFIX = "-rhel9"
 
 SKIP_REPOS_ALWAYS = {"operator-index", "tekton-assist"}
 SKIP_REPOS_BEFORE_1_22 = {"tekton-kueue", "multicluster-proxy-aae", "syncer-service"}
-ALLOWED_VERSIONS = {"1.15", "1.20", "1.21", "1.22", "next"}
+ALLOWED_VERSIONS = {"1.15", "1.20", "1.21", "1.22", "1.23", "next"}
 VERSION_1_22 = 1.22
 UPSTREAM_BRANCH_OVERRIDES = {
     "git-init": "main",
