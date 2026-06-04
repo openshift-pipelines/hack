@@ -26,10 +26,6 @@ spec:
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-rhel9"
           pushSourceContainer: true
-        - name: console-plugin-pf5-1-20-console-plugin
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-pf5-rhel9"
-          pushSourceContainer: true
         - name: manual-approval-gate-1-20-controller
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-controller-rhel9"
@@ -37,10 +33,6 @@ spec:
         - name: manual-approval-gate-1-20-webhook
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-manual-approval-gate-webhook-rhel9"
-          pushSourceContainer: true
-        - name: multicluster-proxy-aae-1-20-multicluster-proxy-aae
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-multicluster-proxy-aae-rhel9"
           pushSourceContainer: true
         - name: opc-1-20-opc
           repositories:
@@ -78,17 +70,9 @@ spec:
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-serve-tkn-cli-rhel9"
           pushSourceContainer: true
-        - name: syncer-service-1-20-syncer-service
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-syncer-service-rhel9"
-          pushSourceContainer: true
         - name: tekton-caches-1-20-cache
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-cache-rhel9"
-          pushSourceContainer: true
-        - name: tekton-kueue-1-20-scheduler
-          repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-scheduler-rhel9"
           pushSourceContainer: true
         - name: tektoncd-chains-1-20-controller
           repositories:
