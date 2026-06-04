@@ -1,0 +1,8 @@
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
+---
+versionName: "1.23.0"
+ga: false
+termsAndConditions: "Anonymous Download" # "Basic"
+hidden: false
+invisible: false
+releaseDate: "2026-01-01"
