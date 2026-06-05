@@ -30,7 +30,7 @@ func main() {
 	var version = flag.String("version", "next", "Release version to generate config")
 	var dryRun = flag.Bool("dry-run", false, "do not commit or push any changes")
 	var validate = flag.Bool("validate", false, "validate release config component versions against tektoncd/operator and exit")
-	var generateTekton = flag.Bool("generate-tekton", true, "validate release config component versions against tektoncd/operator and exit")
+	var generateTekton = flag.Bool("generate-tekton", true, "generate repository (Tekton/GitHub) config changes; set to false to only generate Konflux config")
 	flag.Parse()
 	configDir := filepath.Dir(*configFile)
 

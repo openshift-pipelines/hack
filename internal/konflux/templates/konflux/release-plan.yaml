@@ -22,6 +22,6 @@ spec:
           value: pipelines/release-pipeline.yaml
     params:
       - name: release_version
-        value: "{{.Release.ReleaseTag}}"
+        value: "{{- if or (eq .Release.Version \"nightly\") (eq .Release.Version \"next\") -}}{{ .Release.ReleaseTag }}{{- else -}}{{ .Release.FullVersion }}{{- end -}}"
       - name: release_to_github
         value: "{{.ReleaseToGitHub}}"
