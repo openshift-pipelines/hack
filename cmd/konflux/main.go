@@ -30,6 +30,7 @@ func main() {
 	var version = flag.String("version", "next", "Release version to generate config")
 	var dryRun = flag.Bool("dry-run", false, "do not commit or push any changes")
 	var validate = flag.Bool("validate", false, "validate release config component versions against tektoncd/operator and exit")
+	var generateTekton = flag.Bool("generate-tekton", true, "validate release config component versions against tektoncd/operator and exit")
 	flag.Parse()
 	configDir := filepath.Dir(*configFile)
 
@@ -68,9 +69,6 @@ func main() {
 		}
 		versionConfig.Version.ImagePrefix = config.ImagePrefix + versionConfig.Version.ImagePrefix
 		versionConfig.Version.Version = *version
-		if versionConfig.Version.Version == "next" || versionConfig.Version.Version == "nightly" {
-			versionConfig.Version.ReleaseTag = *version
-		}
 	}
 
 	for _, applicationName := range config.Applications {
@@ -81,7 +79,7 @@ func main() {
 		}
 		for _, application := range applications {
 			log.Printf("Loaded application: %s", application.Name)
-			if err := k.GenerateConfig(application, *dryRun); err != nil {
+			if err := k.GenerateConfig(application, *dryRun, *generateTekton); err != nil {
 				log.Fatal(err)
 			}
 		}
@@ -289,12 +287,15 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 				return []k.Application{}, err
 			}
 			log.Printf("Reading repository Version: %v-%v-%s", repo.MinVersion, application.Release.Version, repo.Name)
-			if repo.MinVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MinVersion) < 0 {
+			_, err = strconv.ParseFloat(application.Release.Version, 64)
+
+			if err == nil && repo.MinVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MinVersion) < 0 {
 				continue
 			}
-			if repo.MaxVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MaxVersion) > 0 {
+			if err == nil && repo.MaxVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MaxVersion) > 0 {
 				continue
 			}
+
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)
 
