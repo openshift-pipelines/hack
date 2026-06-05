@@ -10,12 +10,14 @@ import (
 	"strings"
 )
 
-func GenerateConfig(application Application, dryRun bool) error {
+func GenerateConfig(application Application, dryRun, generateTekton bool) error {
 	if err := generateKonfluxConfig(application); err != nil {
 		return err
 	}
-	if err := generateRepositoryConfig(application, dryRun); err != nil {
-		return err
+	if generateTekton {
+		if err := generateRepositoryConfig(application, dryRun); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -189,7 +191,6 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		for env, _ := range releaseEnvironments {
 			rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
 			rpaCdnFile := fmt.Sprintf("%s-%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
-			releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
 			templateData := struct {
 				Application // Embedded (no field name)
 				Env         string
@@ -200,15 +201,19 @@ func generateKonfluxApplication(application Application, targetDir string) error
 			if err := generateFileFromTemplate(templateFile, templateData, filepath.Join(rpaTargetDir, rpaFile), application); err != nil {
 				return err
 			}
-			if application.ShortName == "core" {
-				if err := generateFileFromTemplate("release-plan-admission-cdn.yaml", templateData, filepath.Join(rpaTargetDir, rpaCdnFile), application); err != nil {
-					return err
-				}
-			}
+			releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
 			if err := generateFileFromTemplate("release-plan-managed.yaml", templateData, filepath.Join(targetDir, releasePlanFile), application); err != nil {
 				return err
 			}
-
+			if application.ShortName == "core" {
+				cdnReleasePlanFile := fmt.Sprintf("%s-%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
+				if err := generateFileFromTemplate("release-plan-admission-cdn.yaml", templateData, filepath.Join(rpaTargetDir, rpaCdnFile), application); err != nil {
+					return err
+				}
+				if err := generateFileFromTemplate("release-plan-cdn.yaml", templateData, filepath.Join(targetDir, cdnReleasePlanFile), application); err != nil {
+					return err
+				}
+			}
 		}
 
 	}
