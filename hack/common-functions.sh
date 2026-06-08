@@ -68,7 +68,7 @@ function create-new-patch() {
       next_version="${RELEASE_VERSION}.0-RC-1"
     else
       last_num=$(echo "${release_tag}" | grep --only-matching "[0-9]\+$")
-      base_version=$(echo "${release_tag}" | grep -v --only-matching "[0-9]\+$")
+      base_version=$(echo "${release_tag}" | sed "s/[0-9]\+$//")
       next_version="${base_version}$((last_num + 1))"
     fi
   else
