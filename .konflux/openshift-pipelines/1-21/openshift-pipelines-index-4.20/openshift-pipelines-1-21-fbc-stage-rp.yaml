@@ -6,7 +6,7 @@ metadata:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
     release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-21-fbc-stage
-  name: openshift-pipelines-1-21-fbc-stage-rp
+  name: openshift-pipelines-index-4-20-1-21-stage-rp
 spec:
   application: openshift-pipelines-index-4-20-1-21
   target: rhtap-releng-tenant
