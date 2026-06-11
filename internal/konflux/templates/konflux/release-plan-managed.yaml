@@ -5,7 +5,7 @@ metadata:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
     release.appstudio.openshift.io/releasePlanAdmission: {{.Config.Product}}-{{.Release.Version | hyphenize}}-{{.ShortName}}-{{.Env}}
-  name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-{{.ShortName}}-{{.Env}}-rp
+  name: {{.Name | hyphenize}}-{{hyphenize .Release.Version}}-{{.Env}}-rp
 spec:
   application: {{.Name | hyphenize}}-{{hyphenize .Release.Version}}
   target: rhtap-releng-tenant
