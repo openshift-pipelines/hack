@@ -43,7 +43,7 @@ spec:
     value: {{.Dockerfile}}
   - name: additional-tags
     value:
-      - "{{- .Application.Release.ReleaseTag}}"
+      - "{{- .Application.Release.FullVersion}}"
   {{- if contains "bundle" .Name  }}
   - name: build-platforms
     value:
