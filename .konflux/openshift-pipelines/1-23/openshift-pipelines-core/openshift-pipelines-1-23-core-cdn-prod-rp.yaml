@@ -1,21 +1,20 @@
-# Generated for Konflux Application openshift-pipelines-index-4.22 by openshift-pipelines/hack. DO NOT EDIT
+# Generated for Konflux Application openshift-pipelines-core by openshift-pipelines/hack. DO NOT EDIT
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlan
 metadata:
   labels:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
-    release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-23-fbc-prod
-  name: openshift-pipelines-index-4-22-1-23-prod-rp
+    release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-23-core-cdn-prod
+  name: openshift-pipelines-1-23-core-cdn-prod-rp
 spec:
-  application: openshift-pipelines-index-4-22-1-23
+  application: openshift-pipelines-core-1-23
   target: rhtap-releng-tenant
   data:
     mapping:
       defaults:
-        tags:
-          - v1.23.0
-          - v1.23.0-{{ timestamp }}
+        contentGateway:
+          productVersionName: "1.23.0"
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"
@@ -32,18 +31,4 @@ spec:
         The 1.23.0 GA release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       synopsis: "Red Hat OpenShift Pipelines Release 1.23.0"
-  collectors:
-    serviceAccountName: tekton-ecosystem-collectors-sa
-    secrets:
-      - jira-collectors-secret
-    items:
-      - name: jira-collector
-        params:
-          - name: url
-            value: https://issues.redhat.com
-          - name: query
-            value: 'project = SRVKP AND fixVersion = "Pipelines 1.23.0" AND component NOT IN (QA, Performance, p12n, Operator, "Tekton CLI", "OpenShift OPC") AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug)) AND "Epic Link" is EMPTY))'
-          - name: secretName
-            value: jira-collectors-secret
-        timeout: 120
-        type: jira
+
