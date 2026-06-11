@@ -1,6 +1,6 @@
 branches:
   git-init:
-    upstream: release-v1.2.x
+    upstream: release-v1.7.x
   manual-approval-gate:
     upstream: release-v0.9.0
   opc:
@@ -18,7 +18,7 @@ branches:
   tektoncd-cli:
     upstream: release-v0.45.0
   tektoncd-hub:
-    upstream: release-v1.24.0
+    upstream: release-v1.24.1
   operator:
     upstream: main
   tektoncd-pipeline:
