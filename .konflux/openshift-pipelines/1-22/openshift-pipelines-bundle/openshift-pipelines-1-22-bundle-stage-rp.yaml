@@ -6,7 +6,7 @@ metadata:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
     release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-22-bundle-stage
-  name: openshift-pipelines-1-22-bundle-stage-rp
+  name: openshift-pipelines-bundle-1-22-stage-rp
 spec:
   application: openshift-pipelines-bundle-1-22
   target: rhtap-releng-tenant
