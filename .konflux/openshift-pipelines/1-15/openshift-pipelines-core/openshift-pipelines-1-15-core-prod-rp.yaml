@@ -6,7 +6,7 @@ metadata:
     release.appstudio.openshift.io/auto-release: "false"
     release.appstudio.openshift.io/standing-attribution: "true"
     release.appstudio.openshift.io/releasePlanAdmission: openshift-pipelines-1-15-core-prod
-  name: openshift-pipelines-1-15-core-prod-rp
+  name: openshift-pipelines-core-1-15-prod-rp
 spec:
   application: openshift-pipelines-core-1-15
   target: rhtap-releng-tenant
