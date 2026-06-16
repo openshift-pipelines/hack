@@ -1,7 +1,7 @@
 version: 1.22
 release-tag: 1.22.3
 image-suffix: "-rhel9"
-code-freeze: false
+code-freeze: true
 branches:
   git-init:
     upstream: main
