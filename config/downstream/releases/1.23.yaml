@@ -6,11 +6,11 @@ branches:
   git-init:
     upstream: main
   manual-approval-gate:
-    upstream: release-v0.8.0
+    upstream: release-v0.9.0
   opc:
     upstream: release-v1.23.x
   pipelines-as-code:
-    upstream: release-v0.42.x
+    upstream: release-v0.48.x
   console-plugin-pf5:
     upstream: release-v1.22.x
   tekton-assist:
@@ -20,22 +20,22 @@ branches:
   tekton-kueue:
     upstream: release-v0.3.x
   tektoncd-chains:
-    upstream: release-v0.26.x
+    upstream: release-v0.27.x
   tektoncd-cli:
-    upstream: release-v0.44.1
+    upstream: release-v0.45.0
   tektoncd-hub:
-    upstream: release-v1.23.10
+    upstream: release-v1.24.1
   tektoncd-pipeline:
-    upstream: release-v1.9.x
+    upstream: release-v1.12.x
   tektoncd-pruner:
-    upstream: release-v0.3.x
+    upstream: release-v0.4.x
   tektoncd-results:
-    upstream: release-v0.18.x
+    upstream: release-v0.19.x
   tektoncd-triggers:
-    upstream: release-v0.35.x
+    upstream: release-v0.36.x
   syncer-service:
     upstream: release-v0.1.x
   multicluster-proxy-aae:
     upstream: release-v0.1.x
   operator:
-    upstream: release-v0.79.x
+    upstream: release-v0.80.x
