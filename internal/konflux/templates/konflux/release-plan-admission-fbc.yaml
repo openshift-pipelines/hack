@@ -38,7 +38,9 @@ spec:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/"
       type: "RHEA"
     fbc:
+      {{- if ne .Env "prod" }}
       stagedIndex: true
+      {{- end }}
       fromIndex: "{{$fromIndex}}:{{"{{ OCP_VERSION }}"}}"
       targetIndex: "{{$targetIndex}}"
       publishingCredentials: "{{$publishingCredentials}}" # cred to publish built index
