@@ -31,6 +31,7 @@ spec:
         The {{ .Release.FullVersion | trimPrefix "v" }} GA release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       synopsis: "Red Hat OpenShift Pipelines Release {{ .Release.FullVersion | trimPrefix "v" }}"
+  {{- if eq .ShortName "core" }}
   collectors:
     serviceAccountName: tekton-ecosystem-collectors-sa
     secrets:
@@ -46,3 +47,4 @@ spec:
             value: jira-collectors-secret
         timeout: 120
         type: jira
+  {{- end }}
