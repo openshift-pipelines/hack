@@ -32,18 +32,3 @@ spec:
         The 1.15.5 GA release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       synopsis: "Red Hat OpenShift Pipelines Release 1.15.5"
-  collectors:
-    serviceAccountName: tekton-ecosystem-collectors-sa
-    secrets:
-      - jira-collectors-secret
-    items:
-      - name: jira-collector
-        params:
-          - name: url
-            value: https://issues.redhat.com
-          - name: query
-            value: 'project = SRVKP AND fixVersion = "Pipelines 1.15.5" AND component NOT IN (QA, Performance, p12n, Operator, "Tekton CLI", "OpenShift OPC") AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug)) AND "Epic Link" is EMPTY))'
-          - name: secretName
-            value: jira-collectors-secret
-        timeout: 120
-        type: jira
