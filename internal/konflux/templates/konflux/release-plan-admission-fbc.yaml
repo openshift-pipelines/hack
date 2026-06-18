@@ -1,5 +1,6 @@
 {{- $dot := .}}
 {{- $intention := "staging"}}
+{{- $application := index .Applications 0}}
 {{- $fromIndex := "registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending"}}
 {{- $targetIndex := ""}}
 {{- $policy := printf "fbc-tekton-ecosystem-%s" .Env -}}
@@ -22,11 +23,13 @@ metadata:
   labels:
     release.appstudio.openshift.io/block-releases: "false"
     pp.engineering.redhat.com/business-unit: hybrid-platforms
-  name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-fbc-{{.Env}}
+  name: {{$application.Config.Product}}-{{$application.Release.Version | hyphenize}}-fbc-{{.Env}}
   namespace: rhtap-releng-tenant
 spec:
   applications:
+    {{- range $application := .Applications }}
     - {{hyphenize .Name }}-{{hyphenize .Release.Version }}
+    {{- end }}
   origin: tekton-ecosystem-tenant
   policy: fbc-tekton-ecosystem-{{.Env}}
   data:
