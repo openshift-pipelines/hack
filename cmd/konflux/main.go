@@ -71,19 +71,17 @@ func main() {
 		versionConfig.Version.Version = *version
 	}
 
+	var applications []k.Application
 	for _, applicationName := range config.Applications {
 		// Read application using the generic readResource function
-		applications, err := readApplications(configDir, applicationName, versionConfig, config)
+		apps, err := readApplications(configDir, applicationName, versionConfig, config)
 		if err != nil {
 			log.Fatal(err)
 		}
-		for _, application := range applications {
-			log.Printf("Loaded application: %s", application.Name)
-			if err := k.GenerateConfig(application, *dryRun, *generateTekton); err != nil {
-				log.Fatal(err)
-			}
-		}
-
+		applications = append(applications, apps...)
+	}
+	if err := k.GenerateConfig(applications, *dryRun, *generateTekton); err != nil {
+		log.Fatal(err)
 	}
 
 	log.Printf("Done:")
@@ -298,8 +296,6 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 
 			application.Components = append(application.Components, repo.Components...)
 			application.Repositories = append(application.Repositories, repo)
-
-			//log.Printf("Loaded repository: %s", repo.Name)
 		}
 		sort.Slice(application.Components, func(i, j int) bool {
 			c1 := strings.Compare(application.Components[i].Repository.Name, application.Components[j].Repository.Name)
@@ -382,7 +378,6 @@ func readRepository(dir, repoName string, app *k.Application, branch k.Branch, o
 
 // UpdateComponent function can be modified  if we want to override the fields at component level.
 func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error {
-	//log.Printf("Updating component: %s", c.Name)
 	version := *app.Release
 
 	c.Version = version
@@ -425,7 +420,6 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 
 	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Image, c.ImageSuffix)
 
-	log.Printf("Using  Image: %s", c.Image)
 	return nil
 }
 
