@@ -14,7 +14,7 @@ spec:
     mapping:
       defaults:
         contentGateway:
-          productVersionName: "1.21.2"
+          productVersionName: "1.21.3"
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"
@@ -26,9 +26,9 @@ spec:
         platforms by abstracting away the underlying implementation details.
         Tekton introduces a number of standard custom resource definitions (CRDs)
         for defining CI/CD pipelines that are portable across Kubernetes distributions.
-      description: "The 1.21.2 release of Red Hat OpenShift Pipelines Operator."
+      description: "The 1.21.3 release of Red Hat OpenShift Pipelines Operator."
       topic: |
-        The 1.21.2 GA release of Red Hat OpenShift Pipelines Operator..
+        The 1.21.3 GA release of Red Hat OpenShift Pipelines Operator..
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
-      synopsis: "Red Hat OpenShift Pipelines Release 1.21.2"
+      synopsis: "Red Hat OpenShift Pipelines Release 1.21.3"
 
