@@ -10,14 +10,22 @@ import (
 	"strings"
 )
 
-func GenerateConfig(application Application, dryRun, generateTekton bool) error {
-	if err := generateKonfluxConfig(application); err != nil {
-		return err
-	}
-	if generateTekton {
-		if err := generateRepositoryConfig(application, dryRun); err != nil {
+func GenerateConfig(applications []Application, dryRun, generateTekton bool) error {
+	log.Println("Generated  configuration", len(applications))
+
+	for _, application := range applications {
+		if err := generateKonfluxConfig(application); err != nil {
 			return err
 		}
+		if generateTekton {
+			if err := generateRepositoryConfig(application, dryRun); err != nil {
+				return err
+			}
+		}
+	}
+	log.Println("Generated RPA configuration", len(applications))
+	if err := generateRPA(applications); err != nil {
+		return err
 	}
 
 	return nil
@@ -174,23 +182,63 @@ func generateKonfluxApplication(application Application, targetDir string) error
 	}
 	_, err := strconv.ParseFloat(application.Release.Version, 64)
 	if err == nil {
-		rpaTargetDir := filepath.Join(konfluxDir, application.Config.RPADir)
 		cdnProductDir := filepath.Join(konfluxDir, application.Config.CdnProductDir)
-		var templateFile string
-		if application.ShortName == "fbc" {
-			templateFile = "release-plan-admission-fbc.yaml"
-		} else {
-			templateFile = "release-plan-admission.yaml"
-		}
-
 		if application.ShortName == "core" {
 			if err := generateFileFromTemplate("product-cdn.yaml", application, filepath.Join(cdnProductDir, fmt.Sprintf("%s.yaml", strings.TrimPrefix(application.Release.FullVersion(), "v"))), application); err != nil {
 				return err
 			}
 		}
-		for env, _ := range releaseEnvironments {
-			rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
-			rpaCdnFile := fmt.Sprintf("%s-%s-%s-%s-%s.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
+		if err := generateReleasePlan(application, targetDir); err != nil {
+			return err
+		}
+	}
+	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(targetDir, "service-account.yaml"), application); err != nil {
+		return err
+	}
+	if err := generateFileFromTemplate("role.yaml", application, filepath.Join(targetDir, "role.yaml"), application); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func generateReleasePlan(application Application, targetDir string) error {
+	for env, _ := range releaseEnvironments {
+		templateData := struct {
+			Application // Embedded (no field name)
+			Env         string
+		}{
+			Application: application,
+			Env:         env,
+		}
+		releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
+		if err := generateFileFromTemplate("release-plan-managed.yaml", templateData, filepath.Join(targetDir, releasePlanFile), application); err != nil {
+			return err
+		}
+		if application.ShortName == "core" {
+			cdnReleasePlanFile := fmt.Sprintf("%s-%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
+			if err := generateFileFromTemplate("release-plan-cdn.yaml", templateData, filepath.Join(targetDir, cdnReleasePlanFile), application); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func generateRPA(applications []Application) error {
+	for env, _ := range releaseEnvironments {
+		var fbcApplications []Application
+		for _, application := range applications {
+			var templateFile = "release-plan-admission.yaml"
+			if application.ShortName == "fbc" {
+				fbcApplications = append(fbcApplications, application)
+				continue
+			}
+			log.Printf("Generate RPA from application %s\n", application.Name)
+			config := application.Config
+			rpaTargetDir := filepath.Join(konfluxDir, config.RPADir)
+			rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", config.Product, hyphenize(application.Release.Version), application.ShortName, env)
+			rpaCdnFile := fmt.Sprintf("%s-%s-%s-%s-%s.yaml", config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
 			templateData := struct {
 				Application // Embedded (no field name)
 				Env         string
@@ -201,29 +249,38 @@ func generateKonfluxApplication(application Application, targetDir string) error
 			if err := generateFileFromTemplate(templateFile, templateData, filepath.Join(rpaTargetDir, rpaFile), application); err != nil {
 				return err
 			}
-			releasePlanFile := fmt.Sprintf("%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, env)
-			if err := generateFileFromTemplate("release-plan-managed.yaml", templateData, filepath.Join(targetDir, releasePlanFile), application); err != nil {
-				return err
-			}
 			if application.ShortName == "core" {
-				cdnReleasePlanFile := fmt.Sprintf("%s-%s-%s-%s-%s-rp.yaml", application.Config.Product, hyphenize(application.Release.Version), application.ShortName, "cdn", env)
 				if err := generateFileFromTemplate("release-plan-admission-cdn.yaml", templateData, filepath.Join(rpaTargetDir, rpaCdnFile), application); err != nil {
-					return err
-				}
-				if err := generateFileFromTemplate("release-plan-cdn.yaml", templateData, filepath.Join(targetDir, cdnReleasePlanFile), application); err != nil {
 					return err
 				}
 			}
 		}
-
+		if err := generateFbcRPA(fbcApplications, env); err != nil {
+			return err
+		}
 	}
-	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(targetDir, "service-account.yaml"), application); err != nil {
+	return nil
+}
+
+func generateFbcRPA(applications []Application, env string) error {
+	var application = applications[0] // To read common configuration from applications
+	var config = applications[0].Config
+	var rpaTargetDir = filepath.Join(konfluxDir, config.RPADir)
+
+	// Generate FBC RPA
+	templateData := struct {
+		Applications []Application // Embedded (no field name)
+		Env          string
+	}{
+		Applications: applications,
+		Env:          env,
+	}
+	rpaFile := fmt.Sprintf("%s-%s-%s-%s.yaml", config.Product, hyphenize(application.Release.Version), "fbc", env)
+	templateFile := "release-plan-admission-fbc.yaml"
+	if err := generateFileFromTemplate(templateFile, templateData, filepath.Join(rpaTargetDir, rpaFile), application); err != nil {
+		log.Fatal("Error while generating RPA file: ", err)
 		return err
 	}
-	if err := generateFileFromTemplate("role.yaml", application, filepath.Join(targetDir, "role.yaml"), application); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -282,6 +339,5 @@ func cleanupAutogenerated(ctx context.Context, application Application, dir stri
 			}
 		}
 	}
-
 	return nil
 }
