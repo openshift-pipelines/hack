@@ -23,7 +23,7 @@ jobs:
     outputs:
       auto-upgrade-versions: ${{steps.gather-versions.outputs.auto-upgrade-versions}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Generate upgrade matrix
         id: gather-versions
         run: |
