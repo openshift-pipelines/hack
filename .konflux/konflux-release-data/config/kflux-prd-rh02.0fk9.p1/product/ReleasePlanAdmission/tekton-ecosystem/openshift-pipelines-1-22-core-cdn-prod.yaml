@@ -61,7 +61,7 @@ spec:
           contentGateway:
             productName: "Cloud: OpenShift Pipelines"
             productCode: "pipelines"
-            productVersionName: "1.22.3"
+            productVersionName: "1.22.4"
             mirrorOpenshiftPush: true
             contentType: "binary"
       defaults:
