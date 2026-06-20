@@ -1,5 +1,5 @@
 version: 1.21
-release-tag: 1.21.3
+release-tag: 1.21.4
 image-suffix: "-rhel9"
 code-freeze: false
 branches:
