@@ -5,3 +5,10 @@ code-freeze: false
 docker-file-options:
   args:
     GO_BUILDER: "registry.access.redhat.com/ubi10/go-toolset:latest"
+    NJS_BUILDER: "registry.access.redhat.com/ubi10/nodejs-24:latest"
+    NGX_RUNTIME: "registry.access.redhat.com/ubi10/nginx-126:latest"
+branches:
+  console-plugin-pf5:
+    upstream: main
+  console-plugin:
+    upstream: master
