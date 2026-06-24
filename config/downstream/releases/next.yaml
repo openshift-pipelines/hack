@@ -33,4 +33,8 @@ branches:
     upstream: release-v0.1.x
   multicluster-proxy-aae:
     upstream: release-v0.1.x
+  console-plugin:
+    upstream: master
+  console-plugin-pf5:
+    upstream: release-v1.22.x
 release-tag: next
