@@ -68,6 +68,7 @@ function create-new-patch() {
       next_version="${RELEASE_VERSION}.0-RC-1"
     else
       last_num=$(echo "${release_tag}" | grep --only-matching "[0-9]\+$")
+      # shellcheck disable=SC2001
       base_version=$(echo "${release_tag}" | sed "s/[0-9]\+$//")
       next_version="${base_version}$((last_num + 1))"
     fi
@@ -81,7 +82,7 @@ function create-new-patch() {
 function update-upstream-versions() {
   RELEASE_VERSION=$1
   RELEASE_YAML="$ROOT/config/downstream/releases/${RELEASE_VERSION}.yaml"
-  touch $RELEASE_YAML
+  touch "$RELEASE_YAML"
   unfreeze-if-needed "$RELEASE_YAML"
   echo "Updating upstream version for release : $RELEASE_VERSION in $RELEASE_YAML"
 
@@ -97,7 +98,7 @@ function update-upstream-versions() {
     fi
 
     echo "Downstream: $downstream , Upstream: $upstream"
-    if LATEST=$(gh release view --repo $upstream --json tagName -q .tagName 2>/dev/null); then
+    if LATEST=$(gh release view --repo "$upstream" --json tagName -q .tagName 2>/dev/null); then
       echo "Latest release for $upstream : $LATEST"
     else
       echo "⚠ No releases found for $upstream"
@@ -109,8 +110,6 @@ function update-upstream-versions() {
     else
       BRANCH="release-${LATEST%.*}.x"
     fi
-    yq -i e ".branches.$downstream.upstream = \"$BRANCH\"" $RELEASE_YAML
+    yq -i e ".branches.$downstream.upstream = \"$BRANCH\"" "$RELEASE_YAML"
   done
 }
-
-
