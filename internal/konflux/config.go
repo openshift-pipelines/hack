@@ -49,10 +49,11 @@ type Repository struct {
 	Patches          []Patch
 	NoPrefixUpstream bool     `json:"no-prefix-upstream" yaml:"no-prefix-upstream"`
 	UsePatchBranch   bool     `json:"use-patch-branch" yaml:"use-patch-branch"`
-	Owners           []string `json:"owners" yaml:"owners"`
-	PrefetchInput    string   `json:"prefetch-input" yaml:"prefetch-input"`
-	MinVersion       string   `json:"min-version" yaml:"min-version"`
-	MaxVersion       string   `json:"max-version" yaml:"max-version"`
+	Owners                 []string `json:"owners" yaml:"owners"`
+	ExcludedSlackWorkflows []string `json:"excluded-slack-alert-workflows" yaml:"excluded-slack-alert-workflows"`
+	PrefetchInput          string   `json:"prefetch-input" yaml:"prefetch-input"`
+	MinVersion             string   `json:"min-version" yaml:"min-version"`
+	MaxVersion             string   `json:"max-version" yaml:"max-version"`
 }
 type Branch struct {
 	Name           string
