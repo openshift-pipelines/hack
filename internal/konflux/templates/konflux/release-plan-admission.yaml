@@ -1,5 +1,8 @@
 {{- $dot := .}}
 {{- $policy := "registry-standard" -}}
+{{- if eq .Config.Namespace "tekton-ecosystem-tenant" -}}
+  {{- $policy = "registry-tekton-ecosystem" -}}
+{{- end -}}
 {{- $intention := "production"}}
 {{- $serviceAccountName := "release-registry-prod" }}
 {{- $registry := "registry.redhat.io/openshift-pipelines" -}}
