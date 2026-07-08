@@ -14,7 +14,7 @@ spec:
   applications:
     - openshift-pipelines-bundle-1-22
   origin: tekton-ecosystem-tenant
-  policy: registry-standard-stage
+  policy: registry-tekton-ecosystem-stage
   data:
     releaseNotes:
       product_id: [ 604 ]
