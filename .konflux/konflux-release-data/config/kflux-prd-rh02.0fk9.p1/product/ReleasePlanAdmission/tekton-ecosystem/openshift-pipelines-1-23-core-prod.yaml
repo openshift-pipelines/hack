@@ -14,7 +14,7 @@ spec:
   applications:
     - openshift-pipelines-core-1-23
   origin: tekton-ecosystem-tenant
-  policy: registry-standard
+  policy: registry-tekton-ecosystem
   data:
     releaseNotes:
       product_id: [ 604 ]
