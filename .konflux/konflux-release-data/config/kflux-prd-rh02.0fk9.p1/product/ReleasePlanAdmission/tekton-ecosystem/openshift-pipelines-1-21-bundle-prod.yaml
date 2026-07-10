@@ -14,7 +14,7 @@ spec:
   applications:
     - openshift-pipelines-bundle-1-21
   origin: tekton-ecosystem-tenant
-  policy: registry-tekton-ecosystem
+  policy: registry-tekton-ecosystem-prod
   data:
     releaseNotes:
       product_id: [ 604 ]
