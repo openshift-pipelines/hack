@@ -1,13 +1,10 @@
 {{- $dot := .}}
-{{- $policy := "registry-standard" -}}
-{{- if eq .Config.Namespace "tekton-ecosystem-tenant" -}}
-  {{- $policy = "registry-tekton-ecosystem" -}}
-{{- end -}}
+{{- $policy := "registry-tekton-ecosystem" -}}
+{{- $policy = printf "%s-%s" $policy .Env -}}
 {{- $intention := "production"}}
 {{- $serviceAccountName := "release-registry-prod" }}
 {{- $registry := "registry.redhat.io/openshift-pipelines" -}}
 {{- if ne .Env "prod" -}}
-  {{- $policy = printf "%s-%s" $policy .Env -}}
   {{- $registry = "registry.stage.redhat.io/openshift-pipelines" -}}
   {{- $intention = "staging"}}
   {{- $serviceAccountName = "release-registry-staging"}}
