@@ -194,7 +194,7 @@ func getDockerFileLabels(component Component) map[string]string {
 		"io.k8s.description":   fmt.Sprintf("Red Hat OpenShift Pipelines %s %s", component.Repository.Name, component.Name),
 		"io.k8s.display-name":  fmt.Sprintf("Red Hat OpenShift Pipelines %s %s", component.Repository.Name, component.Name),
 		"io.openshift.tags":    fmt.Sprintf("tekton,openshift,%s,%s", component.Repository.Name, component.Name),
-		"cpe":                  fmt.Sprintf("cpe:/a:redhat:openshift_pipelines:%s::el9", component.Version.Version),
+		"cpe":                  fmt.Sprintf("cpe:/a:redhat:openshift_pipelines:%s::%s", component.Version.Version, strings.TrimPrefix(component.Version.ImageSuffix, "-rh")),
 		// Add any others here...
 	}
 
