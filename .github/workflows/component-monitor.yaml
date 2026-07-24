@@ -79,7 +79,7 @@ jobs:
 
       - name: Login to Konflux cluster
         if: inputs.enable_konflux != 'false'
-        uses: redhat-actions/oc-login@v1
+        uses: redhat-actions/oc-login@v2
         with:
           openshift_server_url: ${{ vars.KONFLUX_API_URL }}
           openshift_token: ${{ secrets.KONFLUX_TOKEN }}
