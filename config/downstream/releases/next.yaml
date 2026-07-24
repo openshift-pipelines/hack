@@ -4,7 +4,7 @@ branches:
   manual-approval-gate:
     upstream: release-v0.9.0
   opc:
-    upstream: release-v1.22.x
+    upstream: release-v1.23.x
   pipelines-as-code:
     upstream: release-v0.49.x
   tekton-assist:
