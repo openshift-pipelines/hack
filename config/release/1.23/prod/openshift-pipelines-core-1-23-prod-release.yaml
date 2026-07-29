@@ -1,0 +1,20 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-1-23-core-prod-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      type: "RHSA"
+    mapping:
+      components:
+        - name: console-plugin-pf5-1-23-console-plugin
+          repositories:
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-console-plugin-pf5-rhel9"
+      defaults:
+        tags:
+          - "v1.23.0"
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-core-1-23-prod-rp
+  snapshot: openshift-pipelines-core-1-23-20260714-071901-000
