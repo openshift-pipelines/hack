@@ -1,0 +1,16 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-1-23-bundle-prod-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  data:
+    releaseNotes:
+      type: "RHSA"
+    mapping:
+      defaults:
+        tags:
+          - "v1.23.0"
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-bundle-1-23-prod-rp
+  snapshot: openshift-pipelines-bundle-1-23-20260716-091020-000

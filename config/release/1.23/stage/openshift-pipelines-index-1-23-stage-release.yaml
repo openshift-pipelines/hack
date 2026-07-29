@@ -1,0 +1,90 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-14-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-14-1-23-20260714-075936-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-16-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-16-1-23-20260714-075938-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-18-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-18-1-23-20260714-075936-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-19-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-19-1-23-20260714-075937-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-20-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-20-1-23-20260714-075936-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-21-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-21-1-23-20260714-075938-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-22-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-22-1-23-20260714-075937-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-4-23-1-23-stage-rp
+  snapshot: openshift-pipelines-index-4-23-1-23-20260714-075936-000
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  generateName: openshift-pipelines-index-1-23-stage-release-
+  namespace: tekton-ecosystem-tenant
+spec:
+  gracePeriodDays: 10
+  releasePlan: openshift-pipelines-index-5-0-1-23-stage-rp
+  snapshot: openshift-pipelines-index-5-0-1-23-20260714-075936-000
