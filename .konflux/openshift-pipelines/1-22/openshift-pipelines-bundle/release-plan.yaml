@@ -10,7 +10,7 @@ metadata:
 spec:
   application: openshift-pipelines-bundle-1-22
   tenantPipeline:
-    serviceAccountName: release-registry-openshift-pipelines-bundle
+    serviceAccountName: konflux-bot-0
     pipelineRef:
       resolver: git
       params:
