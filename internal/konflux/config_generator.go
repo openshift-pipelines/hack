@@ -217,13 +217,6 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		}
 
 	}
-	if err := generateFileFromTemplate("service-account.yaml", application, filepath.Join(targetDir, "service-account.yaml"), application); err != nil {
-		return err
-	}
-	if err := generateFileFromTemplate("role.yaml", application, filepath.Join(targetDir, "role.yaml"), application); err != nil {
-		return err
-	}
-
 	return nil
 }
 
