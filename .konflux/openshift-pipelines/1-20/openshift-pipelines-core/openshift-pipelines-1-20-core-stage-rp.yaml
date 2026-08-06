@@ -33,7 +33,7 @@ spec:
         For more details see [product documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines).
       synopsis: "Red Hat OpenShift Pipelines Release 1.20.5"
   collectors:
-    serviceAccountName: konflux-bot-0
+    serviceAccountName: tekton-ecosystem-collectors-sa
     secrets:
       - jira-collectors-secret
     items:
