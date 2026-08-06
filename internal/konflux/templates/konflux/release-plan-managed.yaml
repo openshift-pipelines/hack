@@ -33,7 +33,7 @@ spec:
       synopsis: "Red Hat OpenShift Pipelines Release {{ .Release.FullVersion | trimPrefix "v" }}"
   {{- if eq .ShortName "core" }}
   collectors:
-    serviceAccountName: konflux-bot-0
+    serviceAccountName: tekton-ecosystem-collectors-sa
     secrets:
       - jira-collectors-secret
     items:
