@@ -2,6 +2,8 @@ version: "1.24"
 image-suffix: -rhel9
 release-tag: 1.24.0-RC-1
 branches:
+  console-plugin-pf5:
+    upstream: release-v1.22.x
   git-init:
     upstream: release-v1.7.x
   manual-approval-gate:
@@ -36,3 +38,4 @@ branches:
     upstream: release-v0.81.x
   tektoncd-hub:
     upstream: release-v1.24.2
+
