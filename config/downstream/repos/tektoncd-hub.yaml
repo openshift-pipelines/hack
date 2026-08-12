@@ -1,6 +1,7 @@
 name: tektoncd-hub
 upstream: openshift-pipelines/hub
 use-patch-branch: true
+max-version: 1.23
 components:
   - name: db-migration
   - name: api
