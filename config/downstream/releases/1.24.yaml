@@ -38,4 +38,3 @@ branches:
     upstream: release-v0.81.x
   tektoncd-hub:
     upstream: release-v1.24.2
-
