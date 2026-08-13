@@ -8,6 +8,8 @@ docker-file-options:
 branches:
   git-init:
     upstream: release-v1.0.x
+  console-plugin:
+    upstream: release-v1.15.x
   manual-approval-gate:
     upstream: release-v0.2.2
   opc:
