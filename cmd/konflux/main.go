@@ -292,7 +292,8 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			if err == nil && repo.MinVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MinVersion) < 0 {
 				continue
 			}
-			if err == nil && repo.MaxVersion != "" && semver.Compare("v"+application.Release.Version, "v"+repo.MaxVersion) > 0 {
+			// Skip Repo for Nightly and next if MaxVersion is defined
+			if repo.MaxVersion != "" && (err != nil || (semver.Compare("v"+application.Release.Version, "v"+repo.MaxVersion) > 0)) {
 				continue
 			}
 
