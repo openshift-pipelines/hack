@@ -36,7 +36,7 @@ spec:
           pushSourceContainer: true
         - name: operator-1-15-operator
           repositories:
-            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-operator-rhel8"
+            - url: "registry.stage.redhat.io/openshift-pipelines/pipelines-rhel8-operator"
           pushSourceContainer: true
         - name: operator-1-15-proxy
           repositories:
