@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-1-15
 spec:
   image:
-    name: pipelines-rhel9-operator
+    name: pipelines-operator-rhel8
     visibility: public
   notifications:
     - config:

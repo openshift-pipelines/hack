@@ -424,6 +424,21 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		c.Image = c.Name
 	}
 
+	// Version 1.15 uses rhel8: replace all rhel9 occurrences with rhel8
+	if version.Version == "1.15" {
+		c.ImagePrefix = strings.ReplaceAll(c.ImagePrefix, "rhel9", "rhel8")
+		c.ImageSuffix = strings.ReplaceAll(c.ImageSuffix, "rhel9", "rhel8")
+
+		// Special handling for operator component: fix image naming from pipelines-rhel8-operator to pipelines-operator-rhel8
+		if repo.Name == "operator" && c.Name == "operator" {
+			// Remove rhel8- prefix and ensure suffix is applied
+			c.ImagePrefix = strings.ReplaceAll(c.ImagePrefix, "rhel8-", "")
+			if c.ImageSuffix == "" {
+				c.ImageSuffix = "-rhel8"
+			}
+		}
+	}
+
 	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Image, c.ImageSuffix)
 
 	log.Printf("Using  Image: %s", c.Image)
