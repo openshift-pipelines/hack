@@ -1,13 +1,15 @@
 version: "1.15"
 image-suffix: -rhel8
 release-tag: 1.15.5
-code-freeze: false
+code-freeze: true
 docker-file-options:
   args:
     GO_BUILDER: "registry.access.redhat.com/ubi8/go-toolset:latest"
 branches:
   git-init:
     upstream: release-v1.0.x
+  console-plugin:
+    upstream: release-v1.15.x
   manual-approval-gate:
     upstream: release-v0.2.2
   opc:
