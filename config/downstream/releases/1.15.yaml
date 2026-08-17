@@ -1,5 +1,5 @@
 version: "1.15"
-image-suffix: -rhel8
+image-suffix: rhel8
 release-tag: 1.15.5
 code-freeze: true
 docker-file-options:

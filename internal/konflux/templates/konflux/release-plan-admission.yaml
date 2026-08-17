@@ -20,7 +20,7 @@ metadata:
   name: {{.Config.Product}}-{{.Release.Version | hyphenize}}-{{.ShortName}}-{{.Env}}
   namespace: rhtap-releng-tenant
   annotations:
-    rhel_target: {{.Application.Release.ImageSuffix | trimPrefix "-rh"}}
+    rhel_target: {{.Application.Release.ImageSuffix | trimPrefix "rh"}}
 spec:
   applications:
     - {{.Name }}-{{.Release.Version | hyphenize}}

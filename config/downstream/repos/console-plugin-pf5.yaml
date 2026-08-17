@@ -4,6 +4,6 @@ no-prefix-upstream: true
 min-version: 1.21
 components:
   - name: console-plugin
-    image-suffix: -pf5
+    image-suffix: pf5
     prefetch-input: |-
       [{"type": "rpm", "path": ".konflux/rpms"}, {"type": "yarn", "path": "upstream"}, {"type": "npm", "path": ".konflux/npm"}]

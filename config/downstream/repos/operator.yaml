@@ -3,7 +3,6 @@ upstream: tektoncd/operator
 prefetch-input: "NONE"
 components:
   - name: operator
-    image-prefix: rhel9-
     no-prefix-upstream: true
     no-image-suffix: true
   - name: webhook

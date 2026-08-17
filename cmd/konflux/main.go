@@ -20,10 +20,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const (
-	DefaultImageSuffix = "-rhel9"
-	DefaultImagePrefix = "pipeline-"
-)
+const ImageSeparator = "-"
 
 func main() {
 	var configFile = flag.String("config", "config/downstream/konflux.yaml", "path to config file")
@@ -407,30 +404,29 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		c.PrefetchInput = ""
 	}
 	if version.ImageSuffix != "None" && !c.NoImageSuffix {
-		c.ImageSuffix += version.ImageSuffix
-		if c.ImageSuffix == "" {
-			c.ImageSuffix = DefaultImageSuffix
-		}
+		c.ImageSuffix = joinNonEmpty(ImageSeparator, c.ImageSuffix, version.ImageSuffix)
 	}
 
 	// This is the case for git-init where we don't require upstream name because comet created is pipelines-git-init-rhel8
+	if c.Name == "operator" {
+		c.ImagePrefix = version.ImageSuffix
+	}
 	if !c.NoImagePrefix {
-		c.ImagePrefix = version.ImagePrefix + c.ImagePrefix
+		log.Printf("Version Prefix: %s", version.ImagePrefix)
+		log.Printf("Component Prefix: %s", c.ImagePrefix)
+
+		c.ImagePrefix = joinNonEmpty(ImageSeparator, version.ImagePrefix, c.ImagePrefix)
+		log.Printf("Component Prefix: %s", c.ImagePrefix)
+
 		if !(c.NoPrefixUpstream || repo.NoPrefixUpstream) && repo.Upstream != "" {
-			c.ImagePrefix += strings.Split(repo.Upstream, "/")[1] + "-"
+			c.ImagePrefix = joinNonEmpty(ImageSeparator, c.ImagePrefix, strings.Split(repo.Upstream, "/")[1])
 		}
 	}
 	if c.Image == "" {
 		c.Image = c.Name
 	}
 
-	// Version 1.15 uses rhel8: replace all rhel9 occurrences with rhel8
-	if version.Version == "1.15" {
-		c.ImagePrefix = strings.ReplaceAll(c.ImagePrefix, "rhel9", "rhel8")
-		c.ImageSuffix = strings.ReplaceAll(c.ImageSuffix, "rhel9", "rhel8")
-	}
-
-	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Image, c.ImageSuffix)
+	c.Image = joinNonEmpty(ImageSeparator, c.ImagePrefix, c.Image, c.ImageSuffix)
 
 	log.Printf("Using  Image: %s", c.Image)
 	return nil
@@ -452,4 +448,14 @@ func readOwners(dir string) (map[string][]string, error) {
 		return nil, fmt.Errorf("error while parsing owners %s: %w", filePath, err)
 	}
 	return owners, nil
+}
+
+func joinNonEmpty(sep string, items ...string) string {
+	var filtered []string
+	for _, s := range items {
+		if s != "" {
+			filtered = append(filtered, s)
+		}
+	}
+	return strings.Join(filtered, sep)
 }
