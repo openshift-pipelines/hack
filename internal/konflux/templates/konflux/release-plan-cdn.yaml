@@ -13,7 +13,7 @@ spec:
     mapping:
       defaults:
         contentGateway:
-          productVersionName: "{{ .Release.FullVersion | trimPrefix "v" }}"
+          productVersionName: "{{ .Release.BaseVersion }}"
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"

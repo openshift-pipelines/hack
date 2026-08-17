@@ -117,6 +117,16 @@ func (r Release) FullVersion() string {
 	return version
 }
 
+// BaseVersion returns the release tag without the "v" prefix and any "-RC-N"
+// suffix.
+func (r Release) BaseVersion() string {
+	v := r.FullVersion()
+	if idx := strings.Index(v, "-RC-"); idx != -1 {
+		v = v[:idx]
+	}
+	return strings.TrimPrefix(v, "v")
+}
+
 type ApplicationConfig struct {
 	Repositories    []string `json:"repos" yaml:"repos"`
 	Name            string
