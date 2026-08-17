@@ -8,6 +8,8 @@ components:
     no-image-suffix: true
   - name: webhook
   - name: proxy
+excluded-slack-alert-workflows:
+  - render-olm-catalog
 patches: []
 github:
   update-sources: |
