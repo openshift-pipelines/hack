@@ -14,7 +14,7 @@ spec:
     mapping:
       defaults:
         contentGateway:
-          productVersionName: "1.24.0-RC-1"
+          productVersionName: "1.24.0"
     releaseNotes:
       references:
         - "https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines"
