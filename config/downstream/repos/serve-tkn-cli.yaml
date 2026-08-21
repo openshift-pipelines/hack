@@ -4,3 +4,15 @@ components:
 
 tekton:
   watched-sources: '"***".pathChanged()'
+# TODO : Please remove this patch once we have 1.26.6 base image available here
+# registry.access.redhat.com/ubi9/go-toolset
+patches:
+  - name: patch-golang-1-26-5
+    script: |
+      # serve-tkn-cli uses Git submodules (cli, opc, pac) - apply Go downgrade to each
+      git submodule update --init --recursive || true
+       for component in cli opc pac; do
+        [ -f "sources/$component/go.mod" ] || continue
+        echo "▶ Processing sources/$component..."
+        sed -i "s/go 1.26.6/go 1.26.5/g" "sources/$component/go.mod"
+      done
