@@ -11,7 +11,7 @@ branches:
   multicluster-proxy-aae:
     upstream: release-v0.1.x
   opc:
-    upstream: release-v1.24.x
+    upstream: release-v1.23.x
   pipelines-as-code:
     upstream: release-v0.50.x
   syncer-service:
