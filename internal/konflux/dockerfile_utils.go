@@ -197,6 +197,9 @@ func getDockerFileLabels(component Component) map[string]string {
 		"cpe":                  fmt.Sprintf("cpe:/a:redhat:openshift_pipelines:%s::%s", component.Version.Version, strings.TrimPrefix(component.Version.ImageSuffix, "-rh")),
 		// Add any others here...
 	}
+	if component.Application.ShortName == "fbc" {
+		labels["operators.operatorframework.io.bundle.channels.v1"] = strings.Join([]string{"latest", "pipelines-" + component.Version.Version}, ",")
+	}
 
 	return labels
 }
