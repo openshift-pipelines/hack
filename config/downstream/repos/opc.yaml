@@ -4,3 +4,9 @@ no-prefix-upstream: true
 min-version: 1.18
 components:
   - name: opc
+# TODO : Please remove this patch once we have 1.26.6 base image available here
+# registry.access.redhat.com/ubi9/go-toolset
+patches:
+  - name: patch-golang-1-26-5
+    script: |
+      sed -i "s/go 1.26.6/go 1.26.5/g" go.mod
