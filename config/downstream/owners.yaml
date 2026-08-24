@@ -38,6 +38,8 @@ syncer-service:
   - "S0AS9T1JWHM"    # subteam
 multicluster-proxy-aae:
   - "S0AS9T1JWHM"    # subteam
+pipelines-multikueue-plugin:
+  - "S0AS9T1JWHM"    # subteam
 console-plugin-pf5:
   - "S075RLXAELT"    # subteam
 console-plugin:
