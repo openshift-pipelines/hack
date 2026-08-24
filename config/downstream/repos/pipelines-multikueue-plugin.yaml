@@ -1,0 +1,6 @@
+repo: p12n-pipelines-multikueue-plugin
+upstream: openshift-pipelines/pipelines-multikueue-plugin
+no-prefix-upstream: true
+min-version: 1.25
+components:
+  - name: multikueue-plugin
