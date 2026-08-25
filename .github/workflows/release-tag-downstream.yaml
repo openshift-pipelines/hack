@@ -1,0 +1,254 @@
+name: Release Tag Downstream Repos
+run-name: Tag downstream repos for ${{ inputs.tag || inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Downstream release version (e.g., "1.22", "1.23")'
+        required: true
+        type: string
+      tag:
+        description: 'Override tag name (leave empty to auto-derive as v{release-tag} from release config)'
+        required: false
+        type: string
+        default: ''
+      branch:
+        description: 'Override branch to tag (leave empty to use release-v{VERSION}.x)'
+        required: false
+        type: string
+        default: ''
+      repos:
+        description: |
+          Comma-separated repo config names to tag (leave empty for all).
+          Use names from config/downstream/repos/ e.g. "tektoncd-pipeline, operator, pipelines-as-code"
+        required: false
+        type: string
+        default: ''
+      dry-run:
+        description: 'Dry run - only print what would be tagged without creating tags'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: tag-downstream-${{ inputs.version }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tag-downstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hack repo
+        uses: actions/checkout@v6
+
+      - name: Install yq
+        run: |
+          YQ_VERSION="v4.52.4"
+          YQ_SHA256="0c4d965ea944b64b8fddaf7f27779ee3034e5693263786506ccd1c120f184e8c"
+          wget -q "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -O /tmp/yq
+          echo "$YQ_SHA256  /tmp/yq" | sha256sum --check --strict
+          sudo mv /tmp/yq /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Resolve tag, branch, and target repos
+        id: resolve
+        env:
+          VERSION: ${{ inputs.version }}
+          TAG_OVERRIDE: ${{ inputs.tag }}
+          BRANCH_OVERRIDE: ${{ inputs.branch }}
+          TARGET_REPOS: ${{ inputs.repos }}
+        run: |
+          set -euo pipefail
+
+          REPO_DIR="config/downstream/repos"
+          RELEASE_YAML="config/downstream/releases/${VERSION}.yaml"
+
+          if [[ ! -f "$RELEASE_YAML" ]]; then
+            echo "ERROR: Release config not found: $RELEASE_YAML"
+            exit 1
+          fi
+
+          # Determine tag: manual override or auto-derive from release config
+          if [[ -n "$TAG_OVERRIDE" ]]; then
+            TAG="$TAG_OVERRIDE"
+          else
+            RELEASE_TAG=$(yq '.release-tag' "$RELEASE_YAML")
+            if [[ -z "$RELEASE_TAG" || "$RELEASE_TAG" == "null" ]]; then
+              echo "ERROR: No release-tag found in $RELEASE_YAML"
+              exit 1
+            fi
+            TAG="v${RELEASE_TAG}"
+          fi
+
+          # Determine default branch pattern
+          if [[ -n "$BRANCH_OVERRIDE" ]]; then
+            BRANCH="$BRANCH_OVERRIDE"
+          else
+            BRANCH="release-v${VERSION}.x"
+          fi
+
+          echo "Tag: $TAG"
+          echo "Branch: $BRANCH"
+
+          # Parse target repos filter (comma-separated)
+          declare -A TARGET_FILTER
+          if [[ -n "$TARGET_REPOS" ]]; then
+            IFS=',' read -ra FILTER_LIST <<< "$TARGET_REPOS"
+            for item in "${FILTER_LIST[@]}"; do
+              trimmed=$(echo "$item" | xargs)
+              TARGET_FILTER[$trimmed]=1
+            done
+            echo "Filtering to repos: ${!TARGET_FILTER[*]}"
+          fi
+
+          # Resolve unique repo names (multiple configs can map to the same repo, e.g. operator)
+          NAMES=$(yq '.branches | keys | .[]' "$RELEASE_YAML")
+          declare -A SEEN_REPOS
+          UNIQUE_REPOS=()
+          for NAME in $NAMES; do
+            REPO_CONFIG="$REPO_DIR/${NAME}.yaml"
+            if [[ ! -f "$REPO_CONFIG" ]]; then
+              echo "WARN: config file $REPO_CONFIG not found, skipping $NAME"
+              continue
+            fi
+            REPO=$(yq '.repo // .name' "$REPO_CONFIG")
+            if [[ -z "${SEEN_REPOS[$REPO]:-}" ]]; then
+              SEEN_REPOS[$REPO]=1
+              if [[ ${#TARGET_FILTER[@]} -gt 0 ]] && [[ -z "${TARGET_FILTER[$NAME]:-}" ]] && [[ -z "${TARGET_FILTER[$REPO]:-}" ]]; then
+                continue
+              fi
+              UNIQUE_REPOS+=("$REPO")
+            fi
+          done
+
+          echo "Resolved ${#UNIQUE_REPOS[@]} unique repos to tag"
+
+          # Pass outputs to next step
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          {
+            echo "repos<<EOF"
+            printf '%s\n' "${UNIQUE_REPOS[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create tags on downstream repos
+        id: create-tags
+        env:
+          GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+          TAG: ${{ steps.resolve.outputs.tag }}
+          BRANCH: ${{ steps.resolve.outputs.branch }}
+          REPOS: ${{ steps.resolve.outputs.repos }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          set -euo pipefail
+
+          ORG="openshift-pipelines"
+
+          echo "Tag: $TAG"
+          echo "Branch: $BRANCH"
+          echo "Dry run: $DRY_RUN"
+          echo "---"
+
+          TOTAL=0
+          OK=0
+          SKIPPED=0
+          FAILED=0
+          RESULTS=""
+
+          while IFS= read -r REPO; do
+            [[ -z "$REPO" ]] && continue
+            TOTAL=$((TOTAL + 1))
+
+            FULL_REPO="$ORG/$REPO"
+
+            # Check if branch exists
+            if ! gh api "repos/$FULL_REPO/branches/$BRANCH" --silent 2>/dev/null; then
+              echo "SKIP $REPO: branch $BRANCH not found"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | ${TAG} | Skipped (no branch) |\n"
+              SKIPPED=$((SKIPPED + 1))
+              continue
+            fi
+
+            # Check if tag already exists
+            if gh api "repos/$FULL_REPO/git/ref/tags/$TAG" --silent 2>/dev/null; then
+              echo "SKIP $REPO: tag $TAG already exists"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | ${TAG} | Skipped (tag exists) |\n"
+              SKIPPED=$((SKIPPED + 1))
+              continue
+            fi
+
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "DRY-RUN: Would tag $FULL_REPO@$BRANCH as $TAG"
+              RESULTS="${RESULTS}| [${REPO}](https://github.com/${FULL_REPO}) | ${BRANCH} | ${TAG} | Dry-run |\n"
+              OK=$((OK + 1))
+              continue
+            fi
+
+            # Get the SHA of the branch HEAD
+            SHA=$(gh api "repos/$FULL_REPO/git/ref/heads/$BRANCH" --jq '.object.sha' 2>/dev/null)
+            if [[ -z "$SHA" || "$SHA" == "null" ]]; then
+              echo "FAILED $REPO: could not resolve HEAD SHA for branch $BRANCH"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | ${TAG} | Failed (no SHA) |\n"
+              FAILED=$((FAILED + 1))
+              continue
+            fi
+
+            # Create the tag
+            if gh api "repos/$FULL_REPO/git/refs" \
+              --method POST \
+              --field ref="refs/tags/$TAG" \
+              --field sha="$SHA" --silent 2>&1; then
+              echo "OK $REPO: tagged $TAG at $SHA ($BRANCH)"
+              TAG_URL="https://github.com/${FULL_REPO}/releases/tag/${TAG}"
+              RESULTS="${RESULTS}| [${REPO}](https://github.com/${FULL_REPO}) | ${BRANCH} | [${TAG}](${TAG_URL}) | OK |\n"
+              OK=$((OK + 1))
+            else
+              echo "FAILED $REPO: could not create tag $TAG"
+              RESULTS="${RESULTS}| ${REPO} | ${BRANCH} | ${TAG} | Failed |\n"
+              FAILED=$((FAILED + 1))
+            fi
+          done <<< "$REPOS"
+
+          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+          echo "ok=$OK" >> "$GITHUB_OUTPUT"
+          echo "skipped=$SKIPPED" >> "$GITHUB_OUTPUT"
+          echo "failed=$FAILED" >> "$GITHUB_OUTPUT"
+          {
+            echo "results<<EOF"
+            echo -e "$RESULTS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Generate summary
+        if: always()
+        env:
+          TAG: ${{ steps.resolve.outputs.tag }}
+          BRANCH: ${{ steps.resolve.outputs.branch }}
+          DRY_RUN: ${{ inputs.dry-run }}
+          TOTAL: ${{ steps.create-tags.outputs.total }}
+          OK: ${{ steps.create-tags.outputs.ok }}
+          SKIPPED: ${{ steps.create-tags.outputs.skipped }}
+          FAILED: ${{ steps.create-tags.outputs.failed }}
+          RESULTS: ${{ steps.create-tags.outputs.results }}
+        run: |
+          {
+            echo "## Release Tag Downstream Repos"
+            echo ""
+            echo "**Tag:** ${TAG} | **Branch:** ${BRANCH} | **Dry-run:** ${DRY_RUN}"
+            echo ""
+            echo "| Repo | Branch | Tag | Status |"
+            echo "|------|--------|-----|--------|"
+            echo "$RESULTS"
+            echo ""
+            echo "**Total:** ${TOTAL} | **OK:** ${OK} | **Skipped:** ${SKIPPED} | **Failed:** ${FAILED}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ "${FAILED:-0}" -gt 0 ]]; then
+            echo "::error::$FAILED repos failed to tag"
+            exit 1
+          fi
