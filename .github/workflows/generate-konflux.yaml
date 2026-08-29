@@ -66,6 +66,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
           GITHUB_TOKEN: ${{ secrets.OPENSHIFT_PIPELINES_ROBOT }}
+
+      # TODO: This should be removed since the previous step sends the pull requests now
       - name: Commit new changes
         if: github.event_name != 'pull_request'
         run: |
