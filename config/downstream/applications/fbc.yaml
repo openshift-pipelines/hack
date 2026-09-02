@@ -1,30 +1,30 @@
-#- name: openshift-pipelines-index
+#- name: index
 #  repos:
 #    - operator-index
-- name: openshift-pipelines-index-4.14
+- name: index-4.14
   repos:
     - operator-index-4.14
-- name: openshift-pipelines-index-4.16
+- name: index-4.16
   repos:
     - operator-index-4.16
-- name: openshift-pipelines-index-4.18
+- name: index-4.18
   repos:
     - operator-index-4.18
-- name: openshift-pipelines-index-4.19
+- name: index-4.19
   repos:
     - operator-index-4.19
-- name: openshift-pipelines-index-4.20
+- name: index-4.20
   repos:
     - operator-index-4.20
-- name: openshift-pipelines-index-4.21
+- name: index-4.21
   repos:
     - operator-index-4.21
-- name: openshift-pipelines-index-4.22
+- name: index-4.22
   repos:
     - operator-index-4.22
-- name: openshift-pipelines-index-4.23
+- name: index-4.23
   repos:
     - operator-index-4.23
-- name: openshift-pipelines-index-5.0
+- name: index-5.0
   repos:
     - operator-index-5.0

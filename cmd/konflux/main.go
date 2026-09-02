@@ -270,7 +270,7 @@ func readApplications(dir, applicationName string, versionConfig k.ReleaseConfig
 			applicationConfig.Namespace = config.Namespace
 		}
 		application := k.Application{
-			Name:            applicationConfig.Name,
+			Name:            strings.Join([]string{config.Product, applicationConfig.Name}, "-"),
 			ShortName:       applicationName,
 			Components:      []k.Component{},
 			Release:         &versionConfig.Version,

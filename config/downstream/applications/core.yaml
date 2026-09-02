@@ -1,4 +1,4 @@
-- name: openshift-pipelines-core
+- name: core
   repos:
     - git-init
     - manual-approval-gate
