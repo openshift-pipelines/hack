@@ -1,7 +1,6 @@
-name: tekton-kueue
-no-prefix-upstream: true
+name: pipelines-multikueue-plugin
 components:
-  - name: kueue
+  - name: controller
     dockerfile: Dockerfile
     prefetch-input: |
       {"type": "gomod", "path": "."}
