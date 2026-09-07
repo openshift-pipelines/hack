@@ -167,7 +167,7 @@ func MutateDockerFile(component Component, repoDir string) error {
 func getArgs(component Component) map[string]string {
 	// Define Default Args
 	args := map[string]string{
-		"GO_BUILDER": "registry.access.redhat.com/ubi9/go-toolset:latest",
+		"GO_BUILDER": "registry.access.redhat.com/ubi9/go-toolset:latest@sha256:5e68f09a652ac6627a83c57655e42e24575efb278b54336039c9308607fc6b21",
 		"VERSION":    component.Version.Version,
 	}
 	// Get Release Args
