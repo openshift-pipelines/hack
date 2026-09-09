@@ -8,6 +8,9 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -45,10 +48,12 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to reset %s branch: %s, %s", branch, err, out)
 	}
 	if len(out) == 0 {
-		if _, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/next"); err != nil {
-			if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/main"); err != nil {
-				return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
-			}
+		prevBranch, err := previousReleaseBranch(ctx, dir, branch)
+		if err != nil {
+			return dir, fmt.Errorf("failed to find previous release branch for %s: %s", branch, err)
+		}
+		if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/"+prevBranch); err != nil {
+			return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 		}
 		if out, err := run(ctx, dir, "git", "push", "-u", "origin", branch); err != nil {
 			return dir, fmt.Errorf("failed to create branch for PR: %s, %s", err, out)
@@ -61,6 +66,57 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 	}
 	return dir, nil
+}
+
+var releaseVersionRe = regexp.MustCompile(`^release-v(\d+)\.(\d+)\.x$`)
+
+// previousReleaseBranch finds the highest release-vX.Y.x branch in the remote
+// that is strictly older than targetBranch. Fails if the target is not a
+// versioned release branch or no older branch exists.
+func previousReleaseBranch(ctx context.Context, dir, targetBranch string) (string, error) {
+	m := releaseVersionRe.FindStringSubmatch(targetBranch)
+	if m == nil {
+		return "", fmt.Errorf("branch %q is not a versioned release branch (expected release-vX.Y.x)", targetBranch)
+	}
+	targetMajor, _ := strconv.Atoi(m[1])
+	targetMinor, _ := strconv.Atoi(m[2])
+
+	out, err := run(ctx, dir, "git", "ls-remote", "--heads", "origin", "release-v*.x")
+	if err != nil {
+		return "", fmt.Errorf("failed to list remote release branches: %s", err)
+	}
+
+	type version struct {
+		major, minor int
+		name         string
+	}
+	var candidates []version
+	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+		parts := strings.SplitN(line, "\t", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		name := strings.TrimPrefix(parts[1], "refs/heads/")
+		sm := releaseVersionRe.FindStringSubmatch(name)
+		if sm == nil {
+			continue
+		}
+		maj, _ := strconv.Atoi(sm[1])
+		min, _ := strconv.Atoi(sm[2])
+		if maj < targetMajor || (maj == targetMajor && min < targetMinor) {
+			candidates = append(candidates, version{maj, min, name})
+		}
+	}
+	if len(candidates) == 0 {
+		return "", fmt.Errorf("no previous release branch found for %s", targetBranch)
+	}
+	sort.Slice(candidates, func(i, j int) bool {
+		if candidates[i].major != candidates[j].major {
+			return candidates[i].major > candidates[j].major
+		}
+		return candidates[i].minor > candidates[j].minor
+	})
+	return candidates[0].name, nil
 }
 
 // metadataTrailer generates and returns a string of metadata about the github workflow running the command
