@@ -1,11 +1,11 @@
 version: "1.24"
 image-suffix: -rhel9
-release-tag: 1.24.0-RC-1
+release-tag: 1.24.0
 branches:
   console-plugin-pf5:
     upstream: release-v1.22.x
   git-init:
-    upstream: release-v1.7.x
+    upstream: main
   manual-approval-gate:
     upstream: release-v0.9.0
   multicluster-proxy-aae:
