@@ -6,7 +6,7 @@ branches:
   git-init:
     upstream: main
   manual-approval-gate:
-    upstream: release-v0.8.0
+    upstream: release-v0.8.1
   opc:
     upstream: release-v1.22.x
   console-plugin:
