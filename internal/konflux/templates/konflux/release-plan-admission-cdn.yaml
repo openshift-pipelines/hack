@@ -60,12 +60,12 @@ spec:
               source: /var/www/html/tkn/tkn-macos-arm64.tar.gz
               arch: arm64
               os: darwin
-            - filename: tkn-windows-amd64.tar.gz
-              source: /var/www/html/tkn/tkn-windows-amd64.tar.gz
+            - filename: tkn-windows-amd64.zip
+              source: /var/www/html/tkn/tkn-windows-amd64.zip
               arch: amd64
               os: windows
-            - filename: tkn-windows-arm64.tar.gz
-              source: /var/www/html/tkn/tkn-windows-arm64.tar.gz
+            - filename: tkn-windows-arm64.zip
+              source: /var/www/html/tkn/tkn-windows-arm64.zip
               arch: arm64
               os: windows
           contentGateway:
