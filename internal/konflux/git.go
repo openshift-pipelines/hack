@@ -8,10 +8,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
 const baseBranchPrefix = "hack/"
+
+var releaseVersionRe = regexp.MustCompile(`^release-v(\d+)\.(\d+)\.x$`)
 
 func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (string, error) {
 	branch := repo.Branch.Name
@@ -45,10 +49,12 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to reset %s branch: %s, %s", branch, err, out)
 	}
 	if len(out) == 0 {
-		if _, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/next"); err != nil {
-			if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/main"); err != nil {
-				return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
-			}
+		prevBranch, err := previousReleaseBranch(ctx, dir, branch)
+		if err != nil {
+			return dir, fmt.Errorf("failed to find previous release branch for %s: %s", branch, err)
+		}
+		if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/"+prevBranch); err != nil {
+			return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 		}
 		if out, err := run(ctx, dir, "git", "push", "-u", "origin", branch); err != nil {
 			return dir, fmt.Errorf("failed to create branch for PR: %s, %s", err, out)
@@ -61,6 +67,47 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 	}
 	return dir, nil
+}
+
+// previousReleaseBranch returns the source branch to use when creating targetBranch.
+//
+// Normal case: returns release-vX.(Y-1).x if it exists on the remote.
+//
+// New component case: if no release-v*.x branches exist on the remote at all,
+// the component is being onboarded for the first time. In that case "next" is
+// returned so the caller bootstraps from the development branch.
+//
+// Fails if targetBranch is not a versioned release branch, or if release
+// branches exist on the remote but the immediate predecessor is missing.
+func previousReleaseBranch(ctx context.Context, dir, targetBranch string) (string, error) {
+	m := releaseVersionRe.FindStringSubmatch(targetBranch)
+	if m == nil {
+		return "", fmt.Errorf("branch %q is not a versioned release branch (expected release-vX.Y.x)", targetBranch)
+	}
+	major, _ := strconv.Atoi(m[1])
+	minor, _ := strconv.Atoi(m[2])
+
+	prev := fmt.Sprintf("release-v%d.%d.x", major, minor-1)
+	out, err := run(ctx, dir, "git", "ls-remote", "--heads", "origin", prev)
+	if err != nil {
+		return "", fmt.Errorf("failed to check remote branch %s: %s", prev, err)
+	}
+	if len(out) > 0 {
+		return prev, nil
+	}
+
+	// Previous release branch not found. Check whether any release branches
+	// exist on the remote. If none do, this is a new component being onboarded
+	// and we fall back to next as the source.
+	out, err = run(ctx, dir, "git", "ls-remote", "--heads", "origin", "release-v*.x")
+	if err != nil {
+		return "", fmt.Errorf("failed to list remote release branches: %s", err)
+	}
+	if len(out) == 0 {
+		log.Printf("[%s] No release branches found on remote — new component detected, using 'next' as source branch", targetBranch)
+		return "next", nil
+	}
+	return "", fmt.Errorf("previous release branch %s not found on remote", prev)
 }
 
 // metadataTrailer generates and returns a string of metadata about the github workflow running the command
