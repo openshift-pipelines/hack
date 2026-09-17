@@ -1,0 +1,10 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  labels:
+    appstudio.openshift.io/application: openshift-pipelines-core-1-24
+  generateName: openshift-pipelines-core-1-24-prod-rp-
+  namespace: tekton-ecosystem-tenant
+spec:
+  releasePlan: openshift-pipelines-core-1-24-prod-rp
+  snapshot: openshift-pipelines-core-1-24-20260911-091130-000-n4
