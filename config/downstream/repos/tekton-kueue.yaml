@@ -4,5 +4,6 @@ no-prefix-upstream: true
 min-version: 1.22
 components:
   - name: scheduler
+    image: kueue
     prefetch-input: |
       {"type": "gomod", "path": "upstream"}
