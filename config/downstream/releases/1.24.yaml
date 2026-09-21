@@ -8,7 +8,7 @@ branches:
   git-init:
     upstream: main
   manual-approval-gate:
-    upstream: release-v0.9.0
+    upstream: release-v0.9.1
   multicluster-proxy-aae:
     upstream: release-v0.1.x
   opc:
