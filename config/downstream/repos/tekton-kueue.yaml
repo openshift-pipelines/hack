@@ -3,7 +3,7 @@ upstream: tektoncd/tekton-kueue
 no-prefix-upstream: true
 min-version: 1.22
 components:
-  - name: scheduler
-    image: kueue
+  - name: kueue
+    dockerfile: .konflux/dockerfiles/scheduler.Dockerfile
     prefetch-input: |
       {"type": "gomod", "path": "upstream"}
