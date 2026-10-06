@@ -1,6 +1,6 @@
 version: "1.24"
 image-suffix: -rhel9
-release-tag: 1.24.1
+release-tag: 1.24.2
 code-freeze: false
 branches:
   console-plugin-pf5:
