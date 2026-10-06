@@ -1,0 +1,23 @@
+# Generated for Konflux Application openshift-pipelines-index-4.14 by openshift-pipelines/hack. DO NOT EDIT
+---
+apiVersion: appstudio.redhat.com/v1beta2
+kind: IntegrationTestScenario
+metadata:
+  name: openshift-pipelines-index-4-14-1-24-release-tests-amd64
+spec:
+  application: openshift-pipelines-index-4-14-1-24
+  contexts:
+    - description: execute the integration test for a Snapshot created for a `push` event
+      name: push
+  params:
+    - name: INSTANCE_TYPE
+      value: m5.2xlarge
+  resolverRef:
+    params:
+      - name: url
+        value: https://github.com/openshift-pipelines/operator
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: .konflux/tekton/release-test-pipeline.yaml
+    resolver: git
