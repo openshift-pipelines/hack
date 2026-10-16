@@ -163,7 +163,10 @@ func generateKonfluxApplication(application Application, targetDir string) error
 		for arch, instanceType := range instanceTypes {
 			application.InstanceType = instanceType
 			application.InstanceArch = arch
-			if err := generateFileFromTemplate("release-tests.yaml", application, filepath.Join(targetDir, arch+"-release-tests.yaml"), application); err != nil {
+			if err := generateFileFromTemplate("acceptance-tests.yaml", application, filepath.Join(targetDir, arch+"-acceptance-tests.yaml"), application); err != nil {
+				return err
+			}
+			if err := generateFileFromTemplate("upgrade-tests.yaml", application, filepath.Join(targetDir, arch+"-upgrade-tests.yaml"), application); err != nil {
 				return err
 			}
 		}
