@@ -5,7 +5,7 @@ kind: IntegrationTestScenario
 metadata:
   labels:
     test.appstudio.openshift.io/optional: "true"
-  name: openshift-pipelines-index-4-22-1-15-release-tests-amd64
+  name: openshift-pipelines-index-4-22-1-15-upgrade-tests-amd64
 spec:
   application: openshift-pipelines-index-4-22-1-15
   contexts:
@@ -23,5 +23,5 @@ spec:
       - name: revision
         value: main
       - name: pathInRepo
-        value: .konflux/tekton/release-test-pipeline.yaml
+        value: .konflux/tekton/upgrade-test-pipeline.yaml
     resolver: git
