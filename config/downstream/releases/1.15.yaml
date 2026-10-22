@@ -11,7 +11,7 @@ branches:
   console-plugin:
     upstream: release-v1.15.x
   manual-approval-gate:
-    upstream: release-v0.2.2
+    upstream: release-v0.2.x
   opc:
     upstream: release-v1.15.x
   pipelines-as-code:
