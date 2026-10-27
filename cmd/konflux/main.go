@@ -424,12 +424,6 @@ func UpdateComponent(c *k.Component, repo k.Repository, app k.Application) error
 		c.Image = c.Name
 	}
 
-	// Version 1.15 uses rhel8: replace all rhel9 occurrences with rhel8
-	if version.Version == "1.15" {
-		c.ImagePrefix = strings.ReplaceAll(c.ImagePrefix, "rhel9", "rhel8")
-		c.ImageSuffix = strings.ReplaceAll(c.ImageSuffix, "rhel9", "rhel8")
-	}
-
 	c.Image = fmt.Sprintf("%s%s%s", c.ImagePrefix, c.Image, c.ImageSuffix)
 
 	log.Printf("Using  Image: %s", c.Image)
