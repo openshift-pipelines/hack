@@ -4,3 +4,12 @@ min-version: 1.20
 components:
   - name: controller
   - name: webhook
+# TODO : Please remove this patch once we have 1.27 base image available here
+# registry.access.redhat.com/ubi9/go-toolset
+patches:
+  - name: patch-golang-gomod
+    script: |
+      sed -i "s/go 1.27.3/go 1.26.10/g" go.mod
+  - name: patch-golang-vendor
+    script: |
+      sed -i "s/go 1.27.3/go 1.26.10/g" vendor/modules.txt

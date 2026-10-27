@@ -3,4 +3,16 @@ upstream: tektoncd/chains
 components:
   - name: controller
     prefetch-input: NONE
+# TODO : Please remove this patch once we have 1.27 base image available here
+# registry.access.redhat.com/ubi9/go-toolset
+patches:
+  - name: patch-golang-gomod
+    script: |
+      sed -i "s/go 1.27.3/go 1.26.10/g" go.mod
+  - name: patch-golang-vendor-1
+    script: |
+      sed -i "s/go 1.27.3/go 1.26.10/g" vendor/modules.txt
+  - name: patch-golang-vendor-2
+    script: |
+      sed -i "s/go 1.27$/go 1.26.10/" vendor/modules.txt
 
