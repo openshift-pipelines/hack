@@ -6,9 +6,9 @@ metadata:
   annotations:
     build.appstudio.openshift.io/request: configure-pac-no-mr
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build-multi-platform-oci-ta","bundle":"latest"}'
-  name: tekton-kueue-nightly-scheduler
+  name: tekton-kueue-nightly-kueue
 spec:
-  componentName: scheduler
+  componentName: kueue
   application: openshift-pipelines-core-nightly
   build-nudges-ref:
   - operator-nightly-bundle
