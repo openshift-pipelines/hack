@@ -86,9 +86,9 @@ spec:
           repositories:
             - url: "registry.redhat.io/openshift-pipelines/pipelines-cache-rhel9"
           pushSourceContainer: true
-        - name: tekton-kueue-1-24-scheduler
+        - name: tekton-kueue-1-24-kueue
           repositories:
-            - url: "registry.redhat.io/openshift-pipelines/pipelines-scheduler-rhel9"
+            - url: "registry.redhat.io/openshift-pipelines/pipelines-kueue-rhel9"
           pushSourceContainer: true
         - name: tektoncd-chains-1-24-controller
           repositories:
