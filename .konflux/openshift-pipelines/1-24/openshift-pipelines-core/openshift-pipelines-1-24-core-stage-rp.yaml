@@ -42,7 +42,7 @@ spec:
           - name: url
             value: https://issues.redhat.com
           - name: query
-            value: 'project = SRVKP AND fixVersion = "Pipelines 1.24.2" AND component NOT IN (QA, Performance, p12n, Operator, "Tekton CLI", "OpenShift OPC") AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug)) AND "Epic Link" is EMPTY))'
+            value: 'project = SRVKP AND fixVersion = "Pipelines 1.24.2" AND component NOT IN (QA, Performance, p12n) AND (status = "Release Pending" OR (status = Closed AND resolution = Done)) AND (labels is EMPTY OR labels != "release-testing-bug") AND (issuetype = Epic OR ((issuetype IN (Story, Bug, Vulnerability)) AND "Epic Link" is EMPTY))'
           - name: secretName
             value: jira-collectors-secret
         timeout: 120
