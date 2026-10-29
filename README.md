@@ -63,6 +63,47 @@ versions for unreleased versions which you can do by this workflow.
 After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
 
 ---
+## Konflux Repository Configuration
+
+Every repository built on Konflux has a configuration file in `config/downstream/repos/<repo>.yaml`.
+A repository declares one or more `components`, and each component maps to a Konflux component (and image).
+
+```yaml
+name: tekton-kueue
+upstream: tektoncd/tekton-kueue
+no-prefix-upstream: true
+min-version: 1.22
+components:
+  - name: kueue
+    prefetch-input: |
+      [{"type": "gomod", "path": "upstream"}, {"type": "rpm", "path": ".konflux/rpms"}]
+```
+
+### `dockerfile`
+
+Optional, set per component. When it is not set it defaults to
+`.konflux/dockerfiles/<component-name>.Dockerfile`.
+
+Only set it explicitly when the Dockerfile in the downstream repository does not follow that
+convention, otherwise leave it out so the component and its Dockerfile stay in sync.
+
+### `prefetch-input`
+
+Optional, set per component. It is passed to the build PipelineRun as the Cachi2 `prefetch-input`
+parameter. When neither the component nor the repository sets it, it defaults to
+`{"type": "rpm", "path": ".konflux/rpms"}`.
+
+A value set on the component replaces that default, so when a component needs more than one
+prefetch source, list all of them — including the RPM one, if the build needs RPMs:
+
+```yaml
+    prefetch-input: |
+      [{"type": "gomod", "path": "upstream"}, {"type": "rpm", "path": ".konflux/rpms"}]
+```
+
+Set the value to `NONE` (on the component or the repository) to disable prefetching completely.
+
+---
  
 
 TODO for automation:
