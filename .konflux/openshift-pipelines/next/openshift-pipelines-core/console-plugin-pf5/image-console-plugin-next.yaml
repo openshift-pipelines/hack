@@ -12,7 +12,7 @@ metadata:
     appstudio.redhat.com/application: openshift-pipelines-core-next
 spec:
   image:
-    name: pipelines-console-plugin-pf5
+    name: pipelines-console-plugin-pf5-rhel9
     visibility: public
   notifications:
     - config:
