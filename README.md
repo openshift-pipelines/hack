@@ -72,12 +72,26 @@ A repository declares one or more `components`, and each component maps to a Kon
 name: tekton-kueue
 upstream: tektoncd/tekton-kueue
 no-prefix-upstream: true
-min-version: 1.22
+min-version: 1.25
 components:
   - name: kueue
     prefetch-input: |
       [{"type": "gomod", "path": "upstream"}, {"type": "rpm", "path": ".konflux/rpms"}]
 ```
+
+### File name, `name` and version ranges
+
+The file name (`config/downstream/repos/<key>.yaml`) is the key the repository is referenced by:
+in the repository list of `config/downstream/applications/*.yaml` and in the `branches` map of
+`config/downstream/releases/*.yaml`. The GitHub repository that is actually built comes from the
+`name` field, which falls back to the file name when it is not set.
+
+Together with `min-version` and `max-version` this allows two configurations to describe the same
+repository for different release ranges. That is how a component is renamed without touching
+released versions — `tekton-scheduler.yaml` (`max-version: 1.24`) and `tekton-kueue.yaml`
+(`min-version: 1.25`) both build `openshift-pipelines/tekton-kueue`, but 1.24 and older keep the
+`scheduler` component and the `pipelines-scheduler-rhel9` image, while 1.25 and later get the
+`kueue` component and the `pipelines-kueue-rhel9` image.
 
 ### `dockerfile`
 
