@@ -63,6 +63,61 @@ versions for unreleased versions which you can do by this workflow.
 After PR is merged then new workflow will be triggered which will generate release configuration in all the Repos.
 
 ---
+## Konflux Repository Configuration
+
+Every repository built on Konflux has a configuration file in `config/downstream/repos/<repo>.yaml`.
+A repository declares one or more `components`, and each component maps to a Konflux component (and image).
+
+```yaml
+name: tekton-kueue
+upstream: tektoncd/tekton-kueue
+no-prefix-upstream: true
+min-version: 1.25
+components:
+  - name: kueue
+    prefetch-input: |
+      [{"type": "gomod", "path": "upstream"}, {"type": "rpm", "path": ".konflux/rpms"}]
+```
+
+### File name, `name` and version ranges
+
+The file name (`config/downstream/repos/<key>.yaml`) is the key the repository is referenced by:
+in the repository list of `config/downstream/applications/*.yaml` and in the `branches` map of
+`config/downstream/releases/*.yaml`. The GitHub repository that is actually built comes from the
+`name` field, which falls back to the file name when it is not set.
+
+Together with `min-version` and `max-version` this allows two configurations to describe the same
+repository for different release ranges. That is how a component is renamed without touching
+released versions — `tekton-scheduler.yaml` (`max-version: 1.24`) and `tekton-kueue.yaml`
+(`min-version: 1.25`) both build `openshift-pipelines/tekton-kueue`, but 1.24 and older keep the
+`scheduler` component and the `pipelines-scheduler-rhel9` image, while 1.25 and later get the
+`kueue` component and the `pipelines-kueue-rhel9` image.
+
+### `dockerfile`
+
+Optional, set per component. When it is not set it defaults to
+`.konflux/dockerfiles/<component-name>.Dockerfile`.
+
+Only set it explicitly when the Dockerfile in the downstream repository does not follow that
+convention, otherwise leave it out so the component and its Dockerfile stay in sync.
+
+### `prefetch-input`
+
+Optional, set per component. It is passed to the build PipelineRun as the Cachi2 `prefetch-input`
+parameter. When neither the component nor the repository sets it, it defaults to
+`{"type": "rpm", "path": ".konflux/rpms"}`.
+
+A value set on the component replaces that default, so when a component needs more than one
+prefetch source, list all of them — including the RPM one, if the build needs RPMs:
+
+```yaml
+    prefetch-input: |
+      [{"type": "gomod", "path": "upstream"}, {"type": "rpm", "path": ".konflux/rpms"}]
+```
+
+Set the value to `NONE` (on the component or the repository) to disable prefetching completely.
+
+---
  
 
 TODO for automation:
