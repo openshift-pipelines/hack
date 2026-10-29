@@ -3,7 +3,7 @@ repositories:
   - image_type: Layered
     base_rhel_version: rhel9
     repository:
-      repository: openshift-pipelines/pipelines-kueue-rhel9
+      repository: openshift-pipelines/pipelines-hub-db-migration-rhel9
       release_categories:
         - Generally Available
       includes_multiple_content_streams: false
@@ -13,8 +13,8 @@ repositories:
         - Standalone image
       team_id: 5dea5deddd19c71643b82455
       display_data:
-        name: pipelines-kueue-rhel9
-        long_description: container image for openshift-pipelines kueue Component
+        name: pipelines-hub-db-migration-rhel9
+        long_description: container image for openshift-pipelines db-migration Component
       entitlement_enabled: false
       engineering_ids:
         - "604"
@@ -23,9 +23,9 @@ repositories:
         - Other
       privileged_images_allowed: false
       documentation_links:
-        - title: kueue
+        - title: db-migration
           type: Readme
-          url: https://github.com/openshift-pipelines/tekton-kueue.git
+          url: https://github.com/openshift-pipelines/tektoncd-hub.git
       contacts:
         - email_address: prbindal@redhat.com
           type: Image Owner
