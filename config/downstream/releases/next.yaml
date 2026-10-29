@@ -1,3 +1,4 @@
+image-suffix: "-rhel9"
 docker-file-options:
   args:
     # Uncomment and set latest GO_BUILDER image to force update across all repos
