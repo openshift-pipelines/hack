@@ -20,7 +20,7 @@ branches:
     upstream: main
   tekton-caches:
     upstream: release-v0.3.x
-  tekton-kueue:
+  tekton-scheduler:
     upstream: release-v0.3.x
   tektoncd-chains:
     upstream: release-v0.27.x
