@@ -15,5 +15,5 @@ spec:
   source:
     git:
       url: https://github.com/openshift-pipelines/tekton-kueue.git
-      dockerfileUrl: .konflux/dockerfiles/scheduler.Dockerfile
+      dockerfileUrl: .konflux/dockerfiles/kueue.Dockerfile
       revision: nightly
