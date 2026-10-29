@@ -248,7 +248,7 @@ func generateKonfluxComponents(application Application, targetDir string) error 
 }
 
 func getPyxisDir(application Application) string {
-	if application.Release.Version == "nightly" && application.ShortName == "core" {
+	if application.ShortName == "core" {
 		return filepath.Join(konfluxDir, application.Config.PyxisConfigDir, strings.TrimPrefix(application.Release.ImageSuffix, "-"))
 	} else {
 		return ""
