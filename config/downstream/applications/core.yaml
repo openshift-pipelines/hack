@@ -6,6 +6,7 @@
 #    - tekton-assist
     - tekton-caches
     - tekton-kueue
+    - tekton-scheduler
     - tektoncd-chains
     - tektoncd-hub
     - tektoncd-pipeline

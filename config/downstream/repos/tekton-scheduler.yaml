@@ -1,0 +1,9 @@
+name: tekton-kueue
+upstream: tektoncd/tekton-kueue
+no-prefix-upstream: true
+min-version: 1.22
+max-version: 1.24
+components:
+  - name: scheduler
+    prefetch-input: |
+      {"type": "gomod", "path": "upstream"}

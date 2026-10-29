@@ -1,7 +1,7 @@
 name: tekton-kueue
 upstream: tektoncd/tekton-kueue
 no-prefix-upstream: true
-min-version: 1.22
+min-version: 1.25
 components:
   - name: kueue
     prefetch-input: |
