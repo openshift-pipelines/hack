@@ -3,16 +3,16 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: tekton-kueue-1-23-scheduler
+  name: tekton-kueue-1-23-kueue
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
     image-controller.appstudio.redhat.com/skip-repository-deletion: "true"
   labels:
-    appstudio.redhat.com/component: tekton-kueue-1-23-scheduler
+    appstudio.redhat.com/component: tekton-kueue-1-23-kueue
     appstudio.redhat.com/application: openshift-pipelines-core-1-23
 spec:
   image:
-    name: pipelines-scheduler-rhel9
+    name: pipelines-kueue-rhel9
     visibility: public
   notifications:
     - config:
