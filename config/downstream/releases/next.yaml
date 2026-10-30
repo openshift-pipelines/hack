@@ -28,7 +28,7 @@ branches:
   operator:
     upstream: main
   tektoncd-pipeline:
-    upstream: release-v1.17.x
+    upstream: release-v1.18.x
   tektoncd-pruner:
     upstream: release-v0.4.x
   tektoncd-results:
@@ -45,4 +45,6 @@ branches:
     upstream: release-v1.22.x
   pipelines-multikueue-plugin:
     upstream: release-release-v0.1.x
+  tekton-scheduler:
+    upstream: release-v0.4.x
 release-tag: next
