@@ -8,10 +8,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
 const baseBranchPrefix = "hack/"
+
+var releaseVersionRe = regexp.MustCompile(`^release-v(\d+)\.(\d+)\.x$`)
 
 func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (string, error) {
 	branch := repo.Branch.Name
@@ -45,10 +49,12 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to reset %s branch: %s, %s", branch, err, out)
 	}
 	if len(out) == 0 {
-		if _, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/next"); err != nil {
-			if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/main"); err != nil {
-				return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
-			}
+		prevBranch, err := previousReleaseBranch(ctx, dir, branch)
+		if err != nil {
+			return dir, fmt.Errorf("failed to find previous release branch for %s: %s", branch, err)
+		}
+		if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/"+prevBranch); err != nil {
+			return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 		}
 		if out, err := run(ctx, dir, "git", "push", "-u", "origin", branch); err != nil {
 			return dir, fmt.Errorf("failed to create branch for PR: %s, %s", err, out)
@@ -61,6 +67,66 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 	}
 	return dir, nil
+}
+
+// previousReleaseBranch returns the source branch to use when creating targetBranch.
+//
+// For minor releases, it tries in order:
+// 1. release-vX.(Y-1).x (the immediate predecessor)
+// 2. next (new component onboarding)
+// 3. nightly (fallback)
+//
+// For major version bumps (minor == 0), it fails immediately with a clear error
+// requiring manual branch creation.
+//
+// Only fails on actual errors; falls back gracefully when a branch simply doesn't exist.
+func previousReleaseBranch(ctx context.Context, dir, targetBranch string) (string, error) {
+	m := releaseVersionRe.FindStringSubmatch(targetBranch)
+	if m == nil {
+		return "", fmt.Errorf("branch %q is not a versioned release branch (expected release-vX.Y.x)", targetBranch)
+	}
+	major, _ := strconv.Atoi(m[1])
+	minor, _ := strconv.Atoi(m[2])
+
+	// Major version bumps are not supported
+	if minor == 0 {
+		return "", fmt.Errorf("major version bump detected (minor == 0) - not implemented, please create branch %s manually", targetBranch)
+	}
+
+	// Try the immediate predecessor release branch
+	prev := fmt.Sprintf("release-v%d.%d.x", major, minor-1)
+	out, err := run(ctx, dir, "git", "ls-remote", "--heads", "origin", prev)
+	if err != nil {
+		return "", fmt.Errorf("failed to check remote branch %s: %s", prev, err)
+	}
+	if len(out) > 0 {
+		log.Printf("[%s] Using previous release branch %s as source", targetBranch, prev)
+		return prev, nil
+	}
+
+	// Previous release not found - try next (new component onboarding)
+	log.Printf("[%s] Previous release branch %s not found, trying next (new component onboarding)", targetBranch, prev)
+	out, err = run(ctx, dir, "git", "ls-remote", "--heads", "origin", "next")
+	if err != nil {
+		return "", fmt.Errorf("failed to check remote branch next: %s", err)
+	}
+	if len(out) > 0 {
+		log.Printf("[%s] Using next as source branch for new component", targetBranch)
+		return "next", nil
+	}
+
+	// next not found - try nightly
+	log.Printf("[%s] Branch next not found, trying nightly", targetBranch)
+	out, err = run(ctx, dir, "git", "ls-remote", "--heads", "origin", "nightly")
+	if err != nil {
+		return "", fmt.Errorf("failed to check remote branch nightly: %s", err)
+	}
+	if len(out) > 0 {
+		log.Printf("[%s] Using nightly as source branch", targetBranch)
+		return "nightly", nil
+	}
+
+	return "", fmt.Errorf("no suitable source branch found for %s (tried %s, next, nightly)", targetBranch, prev)
 }
 
 // metadataTrailer generates and returns a string of metadata about the github workflow running the command
