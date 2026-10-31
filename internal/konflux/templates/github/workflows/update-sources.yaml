@@ -39,6 +39,14 @@ jobs:
             {{- end }}
           popd
         {{- end}}
+      - name: Configure Docker authentication
+        env:
+          DOCKER_CONFIG: /home/runner/.docker
+          DOCKER_JSON: {{"${{ secrets.DOCKER_REGISTRY_SECRET }}"}}
+        run: |
+          mkdir -p $DOCKER_CONFIG
+          echo "${DOCKER_JSON}" > $DOCKER_CONFIG/config.json
+
       - name: update-rpms
         continue-on-error: true
         run: |
