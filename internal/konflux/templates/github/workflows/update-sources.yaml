@@ -39,6 +39,7 @@ jobs:
             {{- end }}
           popd
         {{- end}}
+{{- if ne .PrefetchInput "NONE"}}
       - name: Configure Docker authentication
         env:
           DOCKER_CONFIG: /home/runner/.docker
@@ -66,6 +67,7 @@ jobs:
               python3 -m pip install https://github.com/konflux-ci/rpm-lockfile-prototype/archive/refs/tags/v0.21.0.tar.gz
               rpm-lockfile-prototype --image $BASE_IMAGE rpms.in.yaml
             "
+{{- end}}
       - name: Commit new changes
         run: |          
         
