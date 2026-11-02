@@ -8,10 +8,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
 const baseBranchPrefix = "hack/"
+
+var releaseVersionRe = regexp.MustCompile(`^release-v(\d+)\.(\d+)\.x$`)
 
 func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (string, error) {
 	branch := repo.Branch.Name
@@ -45,10 +49,12 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to reset %s branch: %s, %s", branch, err, out)
 	}
 	if len(out) == 0 {
-		if _, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/next"); err != nil {
-			if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/main"); err != nil {
-				return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
-			}
+		prevBranch, err := previousReleaseBranch(ctx, dir, branch)
+		if err != nil {
+			return dir, fmt.Errorf("failed to find previous release branch for %s: %s", branch, err)
+		}
+		if out, err := run(ctx, dir, "git", "switch", "-C", branch, "origin/"+prevBranch); err != nil {
+			return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 		}
 		if out, err := run(ctx, dir, "git", "push", "-u", "origin", branch); err != nil {
 			return dir, fmt.Errorf("failed to create branch for PR: %s, %s", err, out)
@@ -61,6 +67,41 @@ func cloneAndCheckout(ctx context.Context, repo Repository, targetDir string) (s
 		return dir, fmt.Errorf("failed to checkout branch for PR: %s, %s", err, out)
 	}
 	return dir, nil
+}
+
+// previousReleaseBranch returns the source branch to use when creating targetBranch.
+//
+// Returns the immediate predecessor release-vX.(Y-1).x branch. Fails if:
+// - targetBranch is not a versioned release branch
+// - Major version bump (minor == 0)
+// - Predecessor branch doesn't exist on remote
+//
+// No fallback to next/nightly - manual creation required if predecessor missing.
+func previousReleaseBranch(ctx context.Context, dir, targetBranch string) (string, error) {
+	m := releaseVersionRe.FindStringSubmatch(targetBranch)
+	if m == nil {
+		return "", fmt.Errorf("branch %q is not a versioned release branch (expected release-vX.Y.x)", targetBranch)
+	}
+	major, _ := strconv.Atoi(m[1])
+	minor, _ := strconv.Atoi(m[2])
+
+	// Major version bumps are not supported
+	if minor == 0 {
+		return "", fmt.Errorf("major version bump detected (minor == 0) - not implemented, please create branch %s manually", targetBranch)
+	}
+
+	// Check for the immediate predecessor release branch
+	prev := fmt.Sprintf("release-v%d.%d.x", major, minor-1)
+	out, err := run(ctx, dir, "git", "ls-remote", "--heads", "origin", prev)
+	if err != nil {
+		return "", fmt.Errorf("failed to check remote branch %s: %s", prev, err)
+	}
+	if len(out) == 0 {
+		return "", fmt.Errorf("previous release branch %s not found on remote - please create %s manually", prev, targetBranch)
+	}
+
+	log.Printf("[%s] Using previous release branch %s as source", targetBranch, prev)
+	return prev, nil
 }
 
 // metadataTrailer generates and returns a string of metadata about the github workflow running the command
