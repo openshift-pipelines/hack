@@ -28,6 +28,28 @@ After the initial PR is merged then new workflow will be triggered which will ge
 The initial release will be configured as a Release Candidate with a version like 1.23.0-RC-1.
 
 ---
+## Downstream Branch Creation
+
+When generating Konflux configuration for a new release version, the tool
+automatically creates the corresponding release branch (e.g. `release-v1.25.x`)
+in each downstream repository if it does not already exist.
+
+### Branch source selection
+
+The tool uses the immediate predecessor `release-v{major}.{minor-1}.x` as the
+source branch. This ensures new releases start from stable content rather than
+unreleased development work.
+
+**The tool will fail if:**
+- The target branch is not a versioned release branch (expected format: `release-vX.Y.x`)
+- Major version bump detected (`minor == 0`) — requires manual branch creation
+- Previous release branch doesn't exist on remote — requires manual creation
+
+**No automatic fallback**: If the predecessor branch is missing, you must create
+the target branch manually. This prevents accidentally creating release branches
+from development content (`next`/`nightly`).
+
+---
 ## Adding New Patch
 When planning a new patch release for a specific  minor verson then it is essential to tag the images appropriately.
 
