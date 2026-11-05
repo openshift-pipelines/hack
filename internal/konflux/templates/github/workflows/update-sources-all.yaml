@@ -9,6 +9,8 @@ concurrency:
 
 jobs:
   collect-branches:
+    # This line prevents the job from running if CodeFreeze is true
+    if: {{ not $.Application.Release.CodeFreeze }}
     runs-on: ubuntu-latest
     outputs:
       matrix: {{ "${{ steps.set-matrix.outputs.matrix }}" }}
