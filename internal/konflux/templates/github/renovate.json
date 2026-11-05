@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "baseBranches": {{ .BaseBranches | toJson }},
+  "extends": [
+    "github>konflux-ci/mintmaker-presets:refresh-rpm-lockfiles"
+  ],
+  "enabledManagers": [
+    "tekton",
+    "dockerfile",
+    "rpm-lockfile"
+  ],
+  "schedule": ["* * * * 0,6"],
+  "addLabels": [
+    "approved",
+    "lgtm",
+    "konflux",
+    "mintmaker"
+  ],
+  "ignorePaths": ["upstream/**"],
+  "packageRules": [
+{{- if .FrozenBranches }}
+    {
+      "matchBaseBranches": {{ .FrozenBranches | toJson }},
+      "enabled": false
+    },
+{{- end }}
+    {
+      "matchPackageNames": ["*"],
+      "automerge": true
+    }
+  ]
+}
