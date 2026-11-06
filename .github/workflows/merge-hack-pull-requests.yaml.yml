@@ -32,19 +32,41 @@ jobs:
 
           REPOS=$(yq -N e 'env(ORG_NAME) + "/" + (.repo // .name)' config/downstream/repos/*.yaml; echo "$ORG_NAME/hack" | sort -u)
 
+          # Collect release branches with code-freeze enabled (e.g. release-v1.24.x)
+          FROZEN_BRANCHES=""
+          for f in config/downstream/releases/*.yaml; do
+            if [ "$(yq e '."code-freeze" // false' "$f")" = "true" ]; then
+              version=$(yq e '.version' "$f")
+              if [[ "$version" =~ ^[0-9]+\.[0-9]+$ ]]; then
+                FROZEN_BRANCHES="$FROZEN_BRANCHES release-v${version}.x"
+              else
+                FROZEN_BRANCHES="$FROZEN_BRANCHES $version"
+              fi
+            fi
+          done
+          echo "Frozen branches:$FROZEN_BRANCHES"
+
           for REPO in $REPOS; do
             echo "Searching $REPO for PRs with label: $TARGET_LABEL"
 
-            PR_NUMS=$(gh pr list -R "$REPO" --label "$TARGET_LABEL" --json number --jq '.[].number')
+            PRS=$(gh pr list -R "$REPO" --label "$TARGET_LABEL" --json number,baseRefName,labels --jq '.[] | "\(.number) \(.baseRefName) \([(.labels // [])[].name] | join(","))"')
 
-            if [[ -z "$PR_NUMS" ]]; then
+            if [[ -z "$PRS" ]]; then
               echo "No PRs found in $REPO"
               continue
             fi
 
-            for p in $PR_NUMS; do
+            while read -r p base labels; do
+              if [[ " $FROZEN_BRANCHES " == *" $base "* ]]; then
+                echo "Skipping PR #$p in $REPO (base $base is code-frozen)"
+                continue
+              fi
+              if [[ ",$labels," == *",hold,"* || ",$labels," == *",do-not-merge/hold,"* ]]; then
+                echo "Skipping PR #$p in $REPO (hold label present)"
+                continue
+              fi
               echo "Attempting to merge PR #$p in $REPO..."
-              gh pr edit $p --add-label "lgtm" --add-label "approved" || true
+              gh pr edit $p -R "$REPO" --add-label "lgtm" --add-label "approved" || true
               gh pr merge "$p" -R "$REPO" --rebase --auto || true
-            done
+            done <<< "$PRS"
           done
