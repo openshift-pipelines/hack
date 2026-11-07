@@ -20,11 +20,11 @@ branches:
   tekton-kueue:
     upstream: release-v0.4.x
   tektoncd-chains:
-    upstream: release-v0.29.x
+    upstream: release-v0.30.x
   tektoncd-cli:
     upstream: release-v0.46.x
   tektoncd-hub:
-    upstream: release-v1.24.6
+    upstream: release-v1.24.8
   operator:
     upstream: main
   tektoncd-pipeline:
