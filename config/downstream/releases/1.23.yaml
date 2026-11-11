@@ -1,5 +1,5 @@
 version: 1.23
-release-tag: 1.23.4
+release-tag: 1.23.5
 image-suffix: "-rhel9"
 code-freeze: false
 docker-file-options:
