@@ -7,7 +7,7 @@ docker-file-options:
     GO_BUILDER: "registry.redhat.io/ubi9/go-toolset:latest@sha256:a2ad457dc7525635613d2355037239ca9bf4374ba3b59961d1cdaa4d5f1af7d8"
     NJS_BUILDER: "registry.redhat.io/ubi9/nodejs-22:latest@sha256:88f3404fb31987036052725243f2bce5f37c475f13596b74eec6447e701e3203"
     NGX_RUNTIME: "registry.access.redhat.com/ubi9/nginx-124:latest@sha256:4814ea8810dc77fc66cd39e4226441dcb67855294a63b0fe1eee67f206cfcefc"
-    UBI_RUNTIME: "registry.access.redhat.com/ubi9/ubi-minimal:latest@sha256:ecb40c7bdfa5b0bb71e978c98c7cf56ce38edf1f8fb3561078acbc4b13698c07"
+    UBI_RUNTIME: "registry.redhat.io/ubi9/ubi-minimal-pqc:latest@sha256:eb807555968d40a35c815329eec6ef52b56a8bb3e6f06c25f7440ead905f8c74"
 branches:
   git-init:
     upstream: main
