@@ -47,4 +47,8 @@ spec:
             value: jira-collectors-secret
         timeout: 120
         type: jira
+      - name: fixed-cve         
+        params: []
+        type: fixed-cve
+        timeout: 300
   {{- end }}
