@@ -1,6 +1,6 @@
 version: "1.25"
 image-suffix: -rhel9
-release-tag: 1.25.0-RC-1
+release-tag: 1.25.0
 branches:
   console-plugin-pf5:
     upstream: release-v1.22.x
@@ -20,20 +20,14 @@ branches:
     upstream: release-v0.1.x
   syncer-service:
     upstream: release-v0.1.x
-  tekton-assist:
-    upstream: release-v0.1.x
   tekton-caches:
     upstream: release-v0.4.x
   tekton-kueue:
-    upstream: release-v0.4.x
-  tekton-scheduler:
     upstream: release-v0.4.x
   tektoncd-chains:
     upstream: release-v0.30.x
   tektoncd-cli:
     upstream: release-v0.47.x
-  tektoncd-hub:
-    upstream: release-v1.24.8
   tektoncd-pipeline:
     upstream: release-v1.18.x
   tektoncd-pruner:
