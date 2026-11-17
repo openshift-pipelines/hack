@@ -2,14 +2,18 @@ version: "1.25"
 image-suffix: -rhel9
 release-tag: 1.25.0-RC-1
 branches:
+  console-plugin-pf5:
+    upstream: release-v1.22.x
   git-init:
-    upstream: release-v1.7.x
+    upstream: main
   manual-approval-gate:
     upstream: release-v0.9.3
   multicluster-proxy-aae:
     upstream: release-v0.1.x
   opc:
     upstream: release-v1.25.x
+  operator:
+    upstream: release-v0.82.x
   pipelines-as-code:
     upstream: release-v0.54.x
   pipelines-multikueue-plugin:
