@@ -27,10 +27,10 @@ spec:
   origin: {{.Config.Namespace}}
   policy: {{$policy}}
   data:
-    {{- if ne .Env "prod" -}}
+    {{- if ne .Env "prod" }}
     pyxis:
       appendTags: true
-    {{- end -}}
+    {{- end }}
     releaseNotes:
       product_id: [ 604 ]
       product_name: "Red Hat OpenShift Pipelines"
