@@ -15,8 +15,7 @@ spec:
     - openshift-pipelines-bundle-1-25
   origin: tekton-ecosystem-tenant
   policy: registry-tekton-ecosystem-prod
-  data:
-    releaseNotes:
+  data:releaseNotes:
       product_id: [ 604 ]
       product_name: "Red Hat OpenShift Pipelines"
       product_version: "1.25"
