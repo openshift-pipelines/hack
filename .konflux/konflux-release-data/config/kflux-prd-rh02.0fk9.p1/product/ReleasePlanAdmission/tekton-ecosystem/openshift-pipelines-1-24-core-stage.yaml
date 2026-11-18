@@ -16,6 +16,8 @@ spec:
   origin: tekton-ecosystem-tenant
   policy: registry-tekton-ecosystem-stage
   data:
+    pyxis:
+      appendTags: true
     releaseNotes:
       product_id: [ 604 ]
       product_name: "Red Hat OpenShift Pipelines"
