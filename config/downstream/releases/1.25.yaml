@@ -36,3 +36,6 @@ branches:
     upstream: release-v0.21.x
   tektoncd-triggers:
     upstream: release-v0.38.x
+docker-file-options:
+  args:
+    GO_BUILDER: registry.redhat.io/ubi9/go-toolset:latest@sha256:23c7cb17e9c53a65f9ab01f2edf1a4e07c9a9dc2258ed63d69e06925e7cea381
