@@ -3,3 +3,5 @@ upstream: tektoncd/cli
 use-patch-branch: false
 components:
   - name: tkn
+tekton:
+  watched-sources: '"upstream/***".pathChanged() || "sources/***".pathChanged() || ".gitmodules".pathChanged() || ".konflux/patches/***".pathChanged() || ".konflux/rpms/***".pathChanged()'
