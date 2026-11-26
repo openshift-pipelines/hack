@@ -58,6 +58,26 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ORG="openshift-pipelines"
           PLACEHOLDER_PATH=".konflux/patches/.placeholder"
+          RELEASE_FILE="config/downstream/releases/${VERSION}.yaml"
+
+          if [[ ! -f "$RELEASE_FILE" ]]; then
+            echo "ERROR: release config not found: $RELEASE_FILE"
+            exit 1
+          fi
+
+          # code-freeze is set in each config/downstream/releases/<version>.yaml
+          CODE_FREEZE=$(yq e '.code-freeze // false' "$RELEASE_FILE")
+          if [[ "$CODE_FREEZE" == "true" ]]; then
+            echo "Code freeze is set for version ${VERSION} in ${RELEASE_FILE}. Not triggering image rebuilds."
+            {
+              echo "## Trigger Image Rebuilds"
+              echo ""
+              echo "**Version:** ${VERSION} | **Branch:** ${BRANCH} | **Timestamp:** ${TIMESTAMP}"
+              echo ""
+              echo "Code freeze is set for version ${VERSION}. Image rebuilds were not triggered."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
 
           echo "Triggering image rebuilds on branch: $BRANCH"
           echo "Timestamp: $TIMESTAMP"

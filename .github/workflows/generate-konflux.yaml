@@ -23,11 +23,33 @@ jobs:
       - id: set-matrix
         name: set-matrix
         run: |
-          pushd config/downstream/releases
-          VERSIONS=$(ls *.yaml | jq -R -s -c 'split("\n")[:-1] | map(split(".yaml")[0])+ ["main"]')
-          popd
+          # A release under code-freeze is excluded from the matrix entirely, so no
+          # konflux config is regenerated for it. The freeze is lifted through the
+          # release-code-freeze workflow, which is deliberately not gated on this.
+          SKIPPED=()
+          ACTIVE=()
+          for f in config/downstream/releases/*.yaml; do
+            version=$(basename "$f" .yaml)
+            if [[ "$(yq e '.code-freeze // false' "$f")" == "true" ]]; then
+              SKIPPED+=("$version")
+              continue
+            fi
+            ACTIVE+=("$version")
+          done
+
+          VERSIONS=$(printf '%s\n' "${ACTIVE[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0)) + ["main"]')
           echo "Versions: ${VERSIONS}"
           echo "versions=${VERSIONS}" >> $GITHUB_OUTPUT
+
+          {
+            echo "## Generate konflux configurations"
+            echo ""
+            echo "**Generating for:** ${ACTIVE[*]:-(none)} main"
+            if [[ ${#SKIPPED[@]} -gt 0 ]]; then
+              echo ""
+              echo "**Skipped (code-freeze):** ${SKIPPED[*]}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
     outputs:
       versions: ${{ steps.set-matrix.outputs.versions }}
   update-projects:
