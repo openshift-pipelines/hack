@@ -4,10 +4,10 @@ image-suffix: "-rhel10"
 code-freeze: false
 docker-file-options:
   args:
-    GO_BUILDER: "registry.access.redhat.com/ubi10/go-toolset:latest@sha256:05f3da136a4dbe077f30606e2e53a4f5cab185989c98309823ea06a9a1c52a50"
-    NJS_BUILDER: "registry.access.redhat.com/ubi10/nodejs-24:latest@sha256:6cd9a91dbfbdba836beb153f2ed6ce46b418487d47b3cd5343511d4fa23a1ac4"
-    NGX_RUNTIME: "registry.access.redhat.com/ubi10/nginx-126:latest@sha256:3afad2ec89c97e03bdb1cdf77b055351894d5e05ad1712a8fd60fab3a7eed096"
-    UBI_RUNTIME: "registry.access.redhat.com/ubi10/ubi-minimal:latest@sha256:cc3d766e796fbb50d6fcd599f4bad4c231aeae41822c6e86e7da664a996221ca"
+    GO_BUILDER: "registry.access.redhat.com/ubi10/go-toolset:latest@sha256:b9f867772f02ef0c8167b1ac327b615c9c6b06be16f5a42ea322597633d1d25e"
+    NJS_BUILDER: "registry.access.redhat.com/ubi10/nodejs-24:latest@sha256:228c8675a62feb55f88dc9dee94d5a82e6f0e887ec47bd8f5e524a797a0984d7"
+    NGX_RUNTIME: "registry.access.redhat.com/ubi10/nginx-126:latest@sha256:8e85a835878b40710c812342de5a05d3e40d494440157962c9b17f4b04fef096"
+    UBI_RUNTIME: "registry.access.redhat.com/ubi10/ubi-minimal:latest@sha256:d63890a635f8f19177bce1775f74f587a47f4456844f1392456c4e3673a48753"
 branches:
   console-plugin-pf5:
     upstream: main
