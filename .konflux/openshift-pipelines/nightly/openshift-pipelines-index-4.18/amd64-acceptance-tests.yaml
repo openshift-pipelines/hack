@@ -14,8 +14,6 @@ spec:
   params:
     - name: INSTANCE_TYPE
       value: m5.2xlarge
-    - name: GIT_RELEASE_TESTS_BRANCH
-      value: release-vnightly
   resolverRef:
     params:
       - name: url
@@ -23,5 +21,5 @@ spec:
       - name: revision
         value: main
       - name: pathInRepo
-        value: .konflux/tekton/acceptance-test-pipeline.yaml
+        value: .konflux/tekton/acceptance-test-ginkgo-pipeline.yaml
     resolver: git
