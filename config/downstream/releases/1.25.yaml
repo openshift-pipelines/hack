@@ -1,6 +1,12 @@
 version: "1.25"
 image-suffix: -rhel9
 release-tag: 1.25.0
+docker-file-options:
+  args:
+    GO_BUILDER: "registry.redhat.io/ubi9/go-toolset:latest@sha256:23c7cb17e9c53a65f9ab01f2edf1a4e07c9a9dc2258ed63d69e06925e7cea381"
+    NJS_BUILDER: "registry.redhat.io/ubi9/nodejs-22:latest@sha256:fe0ceb2c5e0e01453e771b1bdbb016abf9917bd1fe56dc18a376ce9a7cc3dd74"
+    NGX_RUNTIME: "registry.redhat.io/ubi9/nginx-124:latest@sha256:25689563c913e06be2879b36394e8a156b7a96ad1fd45e2cfcbf91dc5c071f70"
+    UBI_RUNTIME: "registry.redhat.io/ubi9/ubi-minimal-pqc:latest@sha256:5e9a0970f73f4800445c3ce0ca0d6b7ea1a8c620b81e735d16432db09d6787bc"
 branches:
   console-plugin-pf5:
     upstream: release-v1.22.x
